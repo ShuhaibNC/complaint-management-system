@@ -55,7 +55,7 @@ ROOT_URLCONF = 'complaint_management_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,16 +69,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'complaint_management_system.wsgi.application'
 
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cms',    # from phpMyAdmin
+        'USER': 'root',   # from phpMyAdmin
+        'PASSWORD': 'cms123', 
+        'HOST': 'localhost',       # usually localhost
+        'PORT': '3306',            # default MySQL port
     }
 }
+
 
 
 # Password validation

@@ -4,4 +4,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse("<h1>Welcome to My Homepage!</h1>")
+    return render(request, 'home/index.html')
+def base(request):
+    return render(request, 'home/base.html')
