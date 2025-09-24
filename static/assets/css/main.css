@@ -2388,7 +2388,9 @@ input, select, textarea {
 		color: rgba(255, 255, 255, 0.5) !important;
 		opacity: 1.0;
 	}
-
+#description{
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 /* Box */
 
 	.box {
@@ -2450,6 +2452,7 @@ input, select, textarea {
 		.icon.alt {
 			text-decoration: none;
 		}
+		
 
 			.icon.alt:before {
 				-moz-osx-font-smoothing: grayscale;
