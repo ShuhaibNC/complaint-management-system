@@ -2511,7 +2511,9 @@ input, select, textarea {
 				}
 
 /* Image */
-
+.row{
+	font-family: cursive;
+}
 	.image {
 		border-radius: 4px;
 		border: 0;
