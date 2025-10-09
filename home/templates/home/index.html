@@ -1,112 +1,123 @@
 {% load static %}
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>CMS</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
-		<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
-	</head>
-	<body class="is-preload landing">
-		<div id="page-wrapper">
 
-			<!-- Header -->
-				<header id="header">
-					<h1 id="logo"><b><a href="/">CMS</a></b></h1>
-					<nav id="nav">
+<head>
+	<title>CMS</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+	<noscript>
+		<link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" />
+	</noscript>
+</head>
+
+<body class="is-preload landing">
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<h1 id="logo"><b><a href="/">CMS</a></b></h1>
+			<nav id="nav">
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li>
+						<a href="#">Services<img style="margin-bottom: -10px; margin-left: 5px;"
+								src="{% static '/images/arrow.svg' %}" width="30px" height="30px"></a>
 						<ul>
-							<li><a href="/">Home</a></li>
+							<li><a href="/register/register/">E-Complaint Registration</a></li>
+							<li><a href="/">Complaint Tracking</a></li>
+							<li><a href="/">Download Complaint</a></li>
 							<li>
-								<a href="#">Services</a>
+								<a href="#">Submenu</a>
 								<ul>
-									<li><a href="/register/register/">E-Complaint Registration</a></li>
-									<li><a href="/">Complaint Tracking</a></li>
-									<li><a href="/">Download Complaint</a></li>
-									<li>
-										<a href="#">Submenu</a>
-										<ul>
-											<li><a href="#">Option 1</a></li>
-											<li><a href="#">Option 2</a></li>
-											<li><a href="#">Option 3</a></li>
-											<li><a href="#">Option 4</a></li>
-										</ul>
-									</li>
+									<li><a href="#">Option 1</a></li>
+									<li><a href="#">Option 2</a></li>
+									<li><a href="#">Option 3</a></li>
+									<li><a href="#">Option 4</a></li>
 								</ul>
 							</li>
-							<li><a href="elements.html">About</a></li>
-							<li><a href="#" class="button primary">Sign Up</a></li>
-							<li><a href="#" class="button">Login</a></li>
 						</ul>
-					</nav>
+					</li>
+					<li><a href="elements.html">About</a></li>
+					<li><a href="#" class="button primary">Sign Up</a></li>
+					<li><a href="#" class="button">Login</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Banner -->
+		<section id="banner">
+			<div class="content">
+				<header>
+					<b>
+						<h2>COMPLAINT MANAGEMENT SYSTEM</h2>
+					</b>
+					<p style="font-family: Arial, Helvetica, sans-serif;">A smart and efficient platform to register,
+						track, <br>
+						and resolve complaints with ease.</p>
 				</header>
+				<span class="image"><img src="{% static 'images/Kerala_State_Police_Logo.png' %}" alt="" /></span>
+			</div>
+			<a href="#one" class="goto-next scrolly">Next</a>
+		</section>
 
-			<!-- Banner -->
-				<section id="banner">
-					<div class="content">
-						<header>
-							<b><h2>COMPLAINT MANAGEMENT SYSTEM</h2></b>
-							<p style="font-family: Arial, Helvetica, sans-serif;">A smart and efficient platform to register, track, <br>
-								and resolve complaints with ease.</p>
-						</header>
-						<span class="image"><img src="{% static 'images/Kerala_State_Police_Logo.png' %}" alt="" /></span>
-					</div>
-					<a href="#one" class="goto-next scrolly">Next</a>
-				</section>
+		<!-- One -->
+		<section id="one" class="spotlight style1 bottom">
+			<span class="image fit main"><img src="{% static 'images/cell.avif' %}" alt="" /></span>
+			<div class="content">
+				<div class="container">
+					<div class="row">
+						<div class="col-4 col-12-medium">
+							<header>
+								<h2 style="font-weight: bold;">Easily register and track your complaints <br>
+									online fast, simple, and transparent</h2>
 
-			<!-- One -->
-				<section id="one" class="spotlight style1 bottom">
-					<span class="image fit main"><img src="{% static 'images/cell.avif' %}" alt="" /></span>
-					<div class="content">
-						<div class="container">
-							<div class="row">
-								<div class="col-4 col-12-medium">
-									<header>
-										<h2 style="font-weight: bold;">Easily register and track your complaints <br>
-											online fast, simple, and transparent</h2>
-										
-									</header>
-								</div>
-								<div class="col-4 col-12-medium">
-									<p style="font-family: Arial, Helvetica, sans-serif;">Our online complaint management system allows users to seamlessly register issues,
-										 monitor their progress in real-time, 
-										 and ensure timely resolution through a transparent and efficient process</p>
-								</div>
-								<div class="col-4 col-12-medium">
-									<p style="font-family: Arial, Helvetica, sans-serif;">This online complaint management system is designed to provide a 
-										user-friendly platform where individuals can conveniently submit their complaints,
-										 receive acknowledgment, track the status of their issues at every stage, 
-										 and ensure they are addressed in a timely and transparent manner enhancing accountability, 
-										 communication, and overall satisfaction.</p>
-								</div>
-							</div>
+							</header>
+						</div>
+						<div class="col-4 col-12-medium">
+							<p style="font-family: Arial, Helvetica, sans-serif;">Our online complaint management system
+								allows users to seamlessly register issues,
+								monitor their progress in real-time,
+								and ensure timely resolution through a transparent and efficient process</p>
+						</div>
+						<div class="col-4 col-12-medium">
+							<p style="font-family: Arial, Helvetica, sans-serif;">This online complaint management
+								system is designed to provide a
+								user-friendly platform where individuals can conveniently submit their complaints,
+								receive acknowledgment, track the status of their issues at every stage,
+								and ensure they are addressed in a timely and transparent manner enhancing
+								accountability,
+								communication, and overall satisfaction.</p>
 						</div>
 					</div>
-					<a href="#two" class="goto-next scrolly">Next</a>
-				</section>
+				</div>
+			</div>
+			<a href="#two" class="goto-next scrolly">Next</a>
+		</section>
 
-			<!-- Two -->
-				<section id="two" class="spotlight style2 right">
-					<span class="image fit main"><img src="{% static 'images/jdt1.jpg' %}" alt="" /></span>
-					<div class="content">
-						<header>
-							<h2>JDT ISLAM COLLAGE OF ARTS AND SCIENCE</h2>
-							
-						</header>
-						<p>"Final year BCA project" This means the system was created as part of your last year 
-							academic requirement for the Bachelor of Computer Applications (BCA) course.<BR>
-								"Developed" : I and our team designed and built this system ourselves.<BR>
-									At JDT Islam College of Arts and Science" :This is the name of your college, <BR>
-										showing where the project was completed.</p>
-						<!-- <ul class="actions">
+		<!-- Two -->
+		<section id="two" class="spotlight style2 right">
+			<span class="image fit main"><img src="{% static 'images/jdt1.jpg' %}" alt="" /></span>
+			<div class="content">
+				<header>
+					<h2>JDT ISLAM COLLAGE OF ARTS AND SCIENCE</h2>
+
+				</header>
+				<p>"Final year BCA project" This means the system was created as part of your last year
+					academic requirement for the Bachelor of Computer Applications (BCA) course.<BR>
+					"Developed" : I and our team designed and built this system ourselves.<BR>
+					At JDT Islam College of Arts and Science" :This is the name of your college, <BR>
+					showing where the project was completed.</p>
+				<!-- <ul class="actions">
 							<li><a href="#" class="button">Learn More</a></li>
 						</ul> -->
-					</div>
-					<a href="#three" class="goto-next scrolly">Next</a>
-				</section>
+			</div>
+			<a href="#three" class="goto-next scrolly">Next</a>
+		</section>
 
-			<!-- Three -->
-				<!-- <section id="three" class="spotlight style3 left">
+		<!-- Three -->
+		<!-- <section id="three" class="spotlight style3 left">
 					<span class="image fit main bottom"><img src="{% static 'images/pic04.jpg' %}" alt="" /></span>
 					<div class="content">
 						<header>
@@ -121,36 +132,42 @@
 					<a href="#four" class="goto-next scrolly">Next</a>
 				</section> -->
 
-			<!-- Four -->
-				<section id="four" class="wrapper style1 special fade-up">
-					<div class="container">
-						<header class="major">
+		<!-- Four -->
+		<section id="four" class="wrapper style1 special fade-up">
+			<div class="container">
+				<!-- <header class="major">
 							<h2>Accumsan sed tempus adipiscing blandit</h2>
 							<p>Iaculis ac volutpat vis non enim gravida nisi faucibus posuere arcu consequat</p>
-						</header>
-						<div class="box alt">
-							<div class="row gtr-uniform">
-								<section class="col-4 col-6-medium col-12-xsmall">
-									<span class="icon solid alt major fa-chart-area"></span>
-									<h3>Ipsum sed commodo</h3>
-									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-								</section>
-								<section class="col-4 col-6-medium col-12-xsmall">
-									<span class="icon solid alt major fa-comment"></span>
-									<h3>Eleifend lorem ornare</h3>
-									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-								</section>
-								<section class="col-4 col-6-medium col-12-xsmall">
-									<span class="icon solid alt major fa-flask"></span>
-									<h3>Cubilia cep lobortis</h3>
-									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-								</section>
-								<section class="col-4 col-6-medium col-12-xsmall">
-									<span class="icon solid alt major fa-paper-plane"></span>
-									<h3>Non semper interdum</h3>
-									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-								</section>
-								<section class="col-4 col-6-medium col-12-xsmall">
+						</header> -->
+				<div class="box alt">
+					<div class="row gtr-uniform">
+						<section class="col-3 col-3-medium col-12-xsmall">
+							<img style="border-radius: 50%;" src="{% static '/images/adnan.jpg' %}" width="150px" height="150px">
+							<h3>MOHAMMED ADNAN A K</h3>
+							<p class="teamdesc">Team Leader</p>
+						</section>
+
+						<section class="col-3 col-3-medium col-12-xsmall">
+							<img style="border-radius: 50%;" src="{% static '/images/fadis.jpg' %}" width="150px" height="150px">
+							<h3>MUHAMMED FADHIS</h3>
+							<p class="teamdesc">Crew Member</p>
+						</section>
+
+						<section class="col-3 col-3-medium col-12-xsmall">
+							<span class="icon solid alt major"></span>
+							<h3>SAJAS</h3>
+							<p class="teamdesc">Crew Member</p>
+						</section>
+
+						<section class="col-3 col-3-medium col-12-xsmall">
+							<span class="icon solid alt major"></span>
+							<h3>RAHIL</h3>
+							<p class="teamdesc">Crew Member</p>
+						</section>
+					</div>
+				</div>
+
+				<!--	<section class="col-4 col-6-medium col-12-xsmall">
 									<span class="icon solid alt major fa-file"></span>
 									<h3>Odio laoreet accumsan</h3>
 									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
@@ -160,18 +177,18 @@
 									<h3>Massa arcu accumsan</h3>
 									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
 								</section>
-							</div>
-						</div>
-						<footer class="major">
-							<ul class="actions special">
-								<li><a href="#" class="button">Magna sed feugiat</a></li>
-							</ul>
-						</footer>
-					</div>
-				</section>
+							</div> -->
+			</div>
+			<footer class="major">
+				<ul class="actions special">
+					<li><a href="#" class="button">Learn more</a></li>
+				</ul>
+			</footer>
+	</div>
+	</section>
 
-			<!-- Five -->
-				<section id="five" class="wrapper style2 special fade">
+	<!-- Five -->
+	<!-- <section id="five" class="wrapper style2 special fade">
 					<div class="container">
 						<header>
 							<h2>Magna faucibus lorem diam</h2>
@@ -184,10 +201,10 @@
 							</div>
 						</form>
 					</div>
-				</section>
+				</section> -->
 
-			<!-- Footer -->
-				<footer id="footer">
+	<!-- Footer -->
+	<!-- <footer id="footer">
 					<ul class="icons">
 						<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
 						<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
@@ -199,20 +216,21 @@
 					<ul class="copyright">
 						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 					</ul>
-				</footer>
+				</footer> -->
 
-		</div>
+	</div>
 
-		<!-- Scripts -->
-			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
-<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
-<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
-<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
-<script src="{% static 'assets/js/browser.min.js' %}"></script>
-<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
-<script src="{% static 'assets/js/util.js' %}"></script>
-<script src="{% static 'assets/js/main.js' %}"></script>
+	<!-- Scripts -->
+	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
+	<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
+	<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+	<script src="{% static 'assets/js/browser.min.js' %}"></script>
+	<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+	<script src="{% static 'assets/js/util.js' %}"></script>
+	<script src="{% static 'assets/js/main.js' %}"></script>
 
 
-	</body>
+</body>
+
 </html>
