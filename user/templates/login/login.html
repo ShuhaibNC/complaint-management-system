@@ -1,0 +1,26 @@
+{% extends "home/base.html" %}
+{% block title %}Login{% endblock %}
+{% block log %}<a href="/signup" class="button primary">Sign Up</a>{% endblock %}
+{% block header %}<h2 style="font-weight: bold;">Login</h2>{% endblock %}
+{% block content %}
+<div class="container" style="max-width:600px; margin:40px auto; padding:20px; border-radius:10px; box-shadow:0 2px 10px #0000001a;background-color: #272832;">
+    {% block major %}
+    {% endblock %}
+    <h2 style="text-align:center;color: #e44c65;font-weight: bold;">LOGIN</h2>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
+
+        <button type="submit" style="width:100%; padding:12px; background-color:#404253; color:white; border:none; border-radius:5px; margin-top:10px; font-size:16px; cursor:pointer;" required>
+            Login
+        </button>
+        <center><a href="/reset_password" style="color: #e44c65; margin-top: 10px; display: block;">Forgot Password?</a></center>
+        <center><a href="/signup">Don't have an account? Click here</a></center>
+        <center><label>{{ info }}</label></center>
+    </form>
+</div>
+{% endblock %}

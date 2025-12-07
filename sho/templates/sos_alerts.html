@@ -1,0 +1,35 @@
+{% extends "home/base.html" %}
+{% block title %}Register{% endblock %}
+{% block major %}
+{% endblock %}
+{% block content %}
+<h2>SOS Alerts</h2>
+<p>This is the SOS Alerts page for the {{ request.session.external_username }}.</p>
+<table border="1" style="border-collapse: collapse; width: 70%; text-align: left;">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Created At</th>
+            <th>Username</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in objects %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.latitude }}</td>
+            <td>{{ item.longitude }}</td>
+            <td>{{ item.created_at }}</td>
+            <td>{{ item.username }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No data available</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

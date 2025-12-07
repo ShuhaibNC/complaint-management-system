@@ -1,9 +1,9 @@
 {% load static %}
 <!DOCTYPE HTML>
 <html>
-
 <head>
 	<title>F-Box</title>
+	<link rel="icon" type="image/png" href="{% static 'images/Kerala_State_Police_Logo.png' %}"/>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
@@ -11,16 +11,28 @@
 		<link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" />
 	</noscript>
 </head>
-
 <body class="is-preload landing">
 	<div id="page-wrapper">
-
-		<!-- Header -->
 		<header id="header">
-			<h1 id="logo"><b><a href="/" style="font-weight: bold;">F-BOX</a></b></h1>
+			<h1 id="logo"><b><a href="/home" style="font-weight: bold;">F-BOX</a></b></h1>
 			<nav id="nav">
 				<ul>
-					<li><a href="/">Home</a></li>
+					<li><label id="sos-status">Hello, welcome {{ username }}.</label></li>
+					{% if request.session.external_username != "sho" %}
+					<li>
+					<a href="#" id="sos-btn">
+						<img style="margin-bottom: -22px; margin-right: -20px;" width="58px" height="55px" src="{% static 'images/sos_button.png' %}" alt="">
+					</a>
+					</li>
+					{% else %}
+					{% endif %}
+					<!-- <li><b><a href="/" class="button primary" style="font-family: Arial;">SOS</a></b></li> -->
+					<li><a href="/home">Home</a></li>
+					{% if request.session.external_username == "sho" %}
+					<li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
+					<li><a href="/manage_complaint">Manage Complaints</a></li>
+					<li><a href="/manage_feedback">Manage Feedback</a></li>
+					{% else %}
 					<li>
 						<a href="#">Services<img style="margin-bottom: -10px; margin-left: 5px;"
 								src="{% static '/images/arrow.svg' %}" width="30px" height="30px"></a>
@@ -39,11 +51,13 @@
 							</li>
 						</ul>
 					</li>
-					<li><a href="elements.html">About</a></li>
-					<li><a href="/signup" class="button primary">Sign Up</a></li>
-					<li><a href="#" class="button">Login</a></li>
+					{% endif %}
+
+					<li><a href="about.html">About</a></li>
+					<li><a href="/" class="button">Logout</a></li>
 				</ul>
-			</nav>
+			</nav><br>
+			<marquee style="background-color: #81818137;color: #ffffff;font-weight: bold;">🔔 Notification: 🆕 SOS Feature just rolled out</marquee>
 		</header>
 
 		<!-- Banner -->
@@ -104,14 +118,11 @@
 					<h2>JDT ISLAM COLLAGE OF ARTS AND SCIENCE</h2>
 
 				</header>
-				<p>"Final year BCA project" This means the system was created as part of your last year
+				<p>"Final year BCA project" This means the system was created as part of last year
 					academic requirement for the Bachelor of Computer Applications (BCA) course.<BR>
 					"Developed" : I and our team designed and built this system ourselves.<BR>
-					At JDT Islam College of Arts and Science" :This is the name of your college, <BR>
+					At JDT Islam College of Arts and Science"<BR>
 					showing where the project was completed.</p>
-				<!-- <ul class="actions">
-							<li><a href="#" class="button">Learn More</a></li>
-						</ul> -->
 			</div>
 			<a href="#three" class="goto-next scrolly">Next</a>
 		</section>
@@ -142,27 +153,35 @@
 				<div class="box alt">
 					<div class="row gtr-uniform">
 						<section class="col-3 col-3-medium col-12-xsmall">
+							<a href="/portfolio_adnan/">
 							<img style="border-radius: 50%;" src="{% static '/images/adnan.jpg' %}" width="150px" height="150px">
 							<h3>MOHAMMED ADNAN A K</h3>
-							<p class="teamdesc">Team Leader</p>
+							<p class="teamdesc">Team Lead</p>
+							</a>
 						</section>
 
 						<section class="col-3 col-3-medium col-12-xsmall">
+							<a href="/portfolio_fadhis">
 							<img style="border-radius: 50%;" src="{% static '/images/fadis.jpg' %}" width="150px" height="150px">
 							<h3>MUHAMMED FADHIS</h3>
 							<p class="teamdesc">Crew Member</p>
+							</a>
 						</section>
 
 						<section class="col-3 col-3-medium col-12-xsmall">
+							<a href="/portfolio_sajas">
 							<img style="border-radius: 50%;" src="{% static '/images/sajas.jpg' %}" width="150px" height="150px">
 							<h3>MOHAMMED SAJAS T</h3>
 							<p class="teamdesc">Crew Member</p>
+							</a>
 						</section>
 
 						<section class="col-3 col-3-medium col-12-xsmall">
+							<a href="/portfolio_rahil">
 							<img style="border-radius: 50%;" src="{% static '/images/rahil.jpg' %}" width="150px" height="150px">
 							<h3>MUHAMMED RAHIL P.P</h3>
 							<p class="teamdesc">Crew Member</p>
+							</a>
 						</section>
 					</div>
 				</div>
@@ -180,9 +199,17 @@
 							</div> -->
 			</div>
 			<footer class="major">
-				<ul class="actions special">
-					<li><a href="#" class="button">Learn more</a></li>
-				</ul>
+				{% if request.session.external_username != "sho" %}
+				<center>
+    <textarea id="feedback_text" rows="5" required placeholder="Enter your anonymous feedback here..."
+              style="width:40%; padding:10px; margin: 8px 0; border:1px solid #ccc; border-radius:5px;"></textarea>
+    <br>
+    <button id="feedback_btn" class="button primary" style="margin: 8px;">Send Feedback</button>
+    <p id="feedback_status" style="font-weight:bold; color:green;"></p>
+				</center>
+				{% else %}
+				{% endif %}
+
 			</footer>
 	</div>
 	</section>
@@ -229,6 +256,116 @@
 	<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 	<script src="{% static 'assets/js/util.js' %}"></script>
 	<script src="{% static 'assets/js/main.js' %}"></script>
+	<script>
+	const sosBtn = document.getElementById("sos-btn");
+const statusText = document.getElementById("sos-status");
+
+sosBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    if (!navigator.geolocation) {
+        statusText.textContent = "Geolocation not supported.";
+        return;
+    }
+
+    statusText.textContent = "Getting your location...";
+
+    navigator.geolocation.getCurrentPosition(
+        (pos) => {
+
+            const latitude = pos.coords.latitude;
+            const longitude = pos.coords.longitude;
+
+            // Change 1: After 1 second show sending location
+            setTimeout(() => {
+                statusText.textContent = "Preparing SOS message...";
+            }, 1000);
+
+            // Change 2: After 2 seconds send request text
+            setTimeout(() => {
+                statusText.textContent = "Sending location to CMS...";
+            }, 1000);
+
+            // Now send to server immediately (don't wait)
+            fetch("{% url 'sos' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    latitude: latitude,
+                    longitude: longitude,
+                }),
+            })
+            .then((res) => res.json())
+            .then((data) => {
+
+                // Delay result by 3 seconds total
+                setTimeout(() => {
+                    if (data.ok) {
+                        statusText.textContent = "SOS Request Sent Successfully";
+                    } else {
+                        statusText.textContent = "Server Error: " + data.error;
+                    }
+                }, 2000);
+            })
+            .catch((err) => {
+                console.error("Fetch error:", err);
+
+                setTimeout(() => {
+                    statusText.textContent = "Network Error: " + err.message;
+                }, 1000);
+            });
+        },
+        (err) => {
+            statusText.textContent = "Geolocation error: " + err.message;
+        }
+    );	
+});
+
+</script>
+
+<script>
+document.getElementById("feedback_btn").addEventListener("click", function () {
+    const message = document.getElementById("feedback_text").value.trim();
+    const statusBox = document.getElementById("feedback_status");
+
+    if (!message) {
+        statusBox.style.color = "red";
+        statusBox.textContent = "Feedback cannot be empty.";
+        return;
+    }
+
+    statusBox.style.color = "black";
+    statusBox.textContent = "Sending...";
+
+    fetch("{% url 'feedback' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: new URLSearchParams({ feedback: message })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            statusBox.style.color = "green";
+            statusBox.textContent = "Feedback submitted successfully!";
+            document.getElementById("feedback_text").value = ""; // clear box
+        } else {
+            statusBox.style.color = "red";
+            statusBox.textContent = data.error;
+        }
+    })
+    .catch(err => {
+        statusBox.style.color = "red";
+        statusBox.textContent = "Network error. Try again.";
+    });
+});
+</script>
+
 
 
 </body>
