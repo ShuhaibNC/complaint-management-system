@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     username = request.session.get('external_username')
-    return render(request, 'home/index.html', {'username': username})
+    return render(request, 'home/index.html')
 def base(request):
     return render(request, 'home/base.html')
 def portfolio_adnan(request):
@@ -19,6 +19,7 @@ def portfolio_sajas(request):
     return render(request, 'home/portfolio_sajas.html')
 def portfolio_rahil(request):
     return render(request, 'home/portfolio_rahil.html')
+
 
 @csrf_exempt
 @require_POST

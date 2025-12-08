@@ -10,6 +10,7 @@
 	<noscript>
 		<link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" />
 	</noscript>
+	{% block extra_head %}{% endblock %}
 </head>
 <body class="is-preload landing">
 	<div id="page-wrapper">
@@ -17,21 +18,30 @@
 			<h1 id="logo"><b><a href="/home" style="font-weight: bold;">F-BOX</a></b></h1>
 			<nav id="nav">
 				<ul>
-					<li><label id="sos-status">Hello, welcome {{ username }}.</label></li>
-					{% if request.session.external_username != "sho" %}
+					<li><label id="sos-status">Hello, welcome {{ request.session.external_username }}.</label></li>
+					{% if request.session.external_username == "sho" or request.session.external_username == "cm" %}
+					<li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
+					<li><a href="/home">Home</a></li>
+					{% else %}
 					<li>
 					<a href="#" id="sos-btn">
 						<img style="margin-bottom: -22px; margin-right: -20px;" width="58px" height="55px" src="{% static 'images/sos_button.png' %}" alt="">
 					</a>
 					</li>
-					{% else %}
+					<li><a href="/home">Home</a></li>
 					{% endif %}
 					<!-- <li><b><a href="/" class="button primary" style="font-family: Arial;">SOS</a></b></li> -->
-					<li><a href="/home">Home</a></li>
-					{% if request.session.external_username == "sho" %}
-					<li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
-					<li><a href="/manage_complaint">Manage Complaints</a></li>
+					{% if request.session.external_username == "sho" or request.session.external_username == "cm" %}
+					{% if request.session.external_username == "cm" %}
+					<li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
+					{% else %}
+					<li><a href="/manage_complaint">Manage Complaint</a></li>
+					{% endif %}
 					<li><a href="/manage_feedback">Manage Feedback</a></li>
+					<li><a href="/user_support_manager">User Support Manager</a></li>
+					{% else %}
+					{% endif %}
+					{% if request.session.external_username == "sho" or request.session.external_username == "cm" %}
 					{% else %}
 					<li>
 						<a href="#">Services<img style="margin-bottom: -10px; margin-left: 5px;"
@@ -41,19 +51,18 @@
 							<li><a href="/">Complaint Tracking</a></li>
 							<li><a href="/">Download Complaint</a></li>
 							<li>
-								<a href="#">Submenu</a>
+								<a href="#">Others</a>
 								<ul>
-									<li><a href="#">Option 1</a></li>
-									<li><a href="#">Option 2</a></li>
-									<li><a href="#">Option 3</a></li>
-									<li><a href="#">Option 4</a></li>
+									<li><a href="#">Other 1</a></li>
+									<li><a href="#">Other 2</a></li>
+									<li><a href="#">Other 3</a></li>
+									<li><a href="#">Other 4</a></li>
 								</ul>
 							</li>
 						</ul>
 					</li>
-					{% endif %}
-
 					<li><a href="about.html">About</a></li>
+					{% endif %}
 					<li><a href="/" class="button">Logout</a></li>
 				</ul>
 			</nav><br>
