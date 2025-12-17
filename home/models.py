@@ -7,6 +7,7 @@ class SOSAlert(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
+    email = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"SOS from {self.username} at {self.latitude}, {self.longitude}"

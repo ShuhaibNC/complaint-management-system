@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import json
 from django.http import HttpResponse, JsonResponse
 from .models import SOSAlert, Feedback
+from user.models import SignupRecord
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
@@ -20,7 +21,6 @@ def portfolio_sajas(request):
 def portfolio_rahil(request):
     return render(request, 'home/portfolio_rahil.html')
 
-
 @csrf_exempt
 @require_POST
 def sos(request):
@@ -29,7 +29,7 @@ def sos(request):
 
         lat = data.get("latitude")
         lng = data.get("longitude")
-
+        username = request.session.get("external_username")
         if lat is None or lng is None:
             return JsonResponse({"ok": False, "error": "Missing latitude or longitude"}, status=400)
 
@@ -38,11 +38,20 @@ def sos(request):
     except Exception as e:
         print("ERROR PARSING:", repr(e))
         return JsonResponse({"ok": False, "error": "Invalid data"}, status=400)
+    
+    email = None
 
+    if username:
+        try:
+            user = SignupRecord.objects.get(username=username)
+            email = user.email
+        except SignupRecord.DoesNotExist:
+            pass
     alert = SOSAlert.objects.create(
         latitude=lat,
         longitude=lng,
-        username=request.session.get("external_username")
+        username=username,
+        email=email,
     )
 
     return JsonResponse({"ok": True, "id": alert.id})
