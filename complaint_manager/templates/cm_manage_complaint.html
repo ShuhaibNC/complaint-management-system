@@ -17,8 +17,7 @@
             <th>Date of incident</th>
             <th>Image</th>
             <th>Created at</th>
-            <th>Download</th>
-            <th>Forward complaint</th>
+            <th>Document</th>
         </tr>
     </thead>
     <tbody>
@@ -39,8 +38,7 @@
                 {% endif %}
             </td>
             <td>{{ item.created_at }}</td>
-            <td><button class="button" style="background-color: #4CAF50;color: white;cursor: pointer;border-radius: 4px;">Download</button></td>
-            <td><button class="button" style="background-color: #4CAF50;color: white;cursor: pointer;border-radius: 4px;">Forward</button></td>
+            <td><button class="button" style="background-color: #4CAF50;color: white;cursor: pointer;border-radius: 4px;">Document</button></td>
         </tr>
         {% empty %}
         <tr>

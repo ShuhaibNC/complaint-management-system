@@ -8,8 +8,17 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
-    username = request.session.get('external_username')
-    return render(request, 'home/index.html')
+    username = request.session.get("external_username")
+
+    role = None
+    if username:
+        try:
+            user = SignupRecord.objects.get(username=username)
+            role = user.role
+        except SignupRecord.DoesNotExist:
+            role = None
+
+    return render(request, 'home/index.html', {'role' : role})
 def base(request):
     return render(request, 'home/base.html')
 def portfolio_adnan(request):

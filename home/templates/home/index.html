@@ -15,11 +15,11 @@
 <body class="is-preload landing">
 	<div id="page-wrapper">
 		<header id="header">
-			<h1 id="logo"><b><a href="/home" style="font-weight: bold;">F-BOX</a></b></h1>
+			<h1 id="logo"><b><a href="#" style="font-weight: bold;">F-BOX</a></b></h1>
 			<nav id="nav">
 				<ul>
 					<li><label id="sos-status">Hello, welcome {{ request.session.external_username }}.</label></li>
-					{% if request.session.external_username == "sho" or request.session.external_username == "cm" %}
+					{% if role == "sho" or role == "cm" %}
 					<li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
 					<li><a href="/home">Home</a></li>
 					{% else %}
@@ -30,10 +30,9 @@
 					</li>
 					<li><a href="/home">Home</a></li>
 					{% endif %}
-					<!-- <li><b><a href="/" class="button primary" style="font-family: Arial;">SOS</a></b></li> -->
-					{% if request.session.external_username == "sho" or request.session.external_username == "cm" %}
-					{% if request.session.external_username == "cm" %}
-					<li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
+					{% if role == "sho" or role == "cm" %}
+					{% if role == "cm" %}
+					<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
 					{% else %}
 					<li><a href="/manage_complaint">Manage Complaint</a></li>
 					{% endif %}
@@ -41,7 +40,7 @@
 					<li><a href="/user_support_manager">User Support Manager</a></li>
 					{% else %}
 					{% endif %}
-					{% if request.session.external_username == "sho" or request.session.external_username == "cm" %}
+					{% if role == "sho" or role == "cm" %}
 					{% else %}
 					<li>
 						<a href="#">Services<img style="margin-bottom: -10px; margin-left: 5px;"
@@ -208,7 +207,7 @@
 							</div> -->
 			</div>
 			<footer class="major">
-				{% if request.session.external_username != "sho" %}
+				{% if role != "sho" %}
 				<center>
     <textarea id="feedback_text" rows="5" required placeholder="Enter your anonymous feedback here..."
               style="width:40%; padding:10px; margin: 8px 0; border:1px solid #ccc; border-radius:5px;"></textarea>

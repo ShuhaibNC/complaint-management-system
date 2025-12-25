@@ -4,6 +4,7 @@ class SignupRecord(models.Model):
     username = models.CharField(max_length=150)
     email = models.EmailField(blank=True)
     password_hash = models.CharField(max_length=255)
+    role = models.CharField(max_length=150, null=True, default="user")
 
     def __str__(self):
         return self.username
