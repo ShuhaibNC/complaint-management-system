@@ -23,9 +23,9 @@ def login(request):
             request.session['external_username'] = user.username
             return redirect("home")
         else:
-            return render(request, "login/login.html", {"info": "Password or username is incorrect."})
+            return render(request, "login.html", {"info": "Password or username is incorrect."})
 
-    return render(request, "login/login.html")
+    return render(request, "login.html")
 
 def signup(request):
     if request.method == "POST":
@@ -35,7 +35,7 @@ def signup(request):
 
         # minimal validation
         if not username or not raw_password:
-            return render(request, "register/signup.html", {"info": "Username and password required."})
+            return render(request, "signup.html", {"info": "Username and password required."})
 
         hashed = make_password(raw_password)   # hashes password safely
 
@@ -45,12 +45,13 @@ def signup(request):
             password_hash=hashed
         )
 
-        return render(request, "register/signup.html", {"info": "Signup Success."})
-    return render(request, "register/signup.html")
+        return render(request, "signup.html", {"info": "Signup Success."})
+    return render(request, "signup.html")
 
 @csrf_protect
 def register_complaint(request):
     if request.method == "POST":
+        username = request.session.get("external_username")
         fname = request.POST.get("fname", "").strip()
         lname = request.POST.get("lname", "").strip()
         email = request.POST.get("email", "").strip()
@@ -67,11 +68,12 @@ def register_complaint(request):
                 date_of_incident = None
 
         if not fname or not lname or not email or not description:
-            return render(request, "register/complaint_register.html", {
+            return render(request, "complaint_register.html", {
                 "info": "Please fill all required fields."
             })
 
         Complaint.objects.create(
+            username=username,
             first_name=fname,
             last_name=lname,
             email=email,
@@ -81,6 +83,10 @@ def register_complaint(request):
             image=image_file,
         )
 
-        return render(request, "register/complaint_register.html", {"info": "Complaint registered successfully."})
+        return render(request, "complaint_register.html", {"info": "Complaint registered successfully."})
 
-    return render(request, "register/complaint_register.html")
+    return render(request, "complaint_register.html")
+
+def track_complaint(request):
+    data = Complaint.objects.all().order_by('-created_at')
+    return render(request, 'complaint_tracking.html', {'objects': data})

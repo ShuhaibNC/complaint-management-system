@@ -1,0 +1,207 @@
+{% extends "home/base.html" %}
+{% block title %}Complaint Tracking for {{ request.session.external_username }} {% endblock %}
+{% block major %}
+{% endblock %}
+{% block content %}
+<h2>Track Complaint for {{ request.session.external_username }}</h2>
+<header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</header>
+<style>
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: #0f1115;
+  color: #e5e7eb;
+  font-family: system-ui, sans-serif;
+}
+
+.list-card {
+  background: #161a20;
+  border: 1px solid #262a33;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, border .15s;
+}
+
+.list-card:hover {
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+  box-shadow: 0 14px 28px rgba(0,0,0,.38);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #aeb4c3;
+}
+
+.card-header strong {
+  color: #e5e7eb;
+}
+
+.card-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 14px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.card-info strong {
+  color: #d1d5db;
+}
+
+.card-image img {
+  border-radius: 10px;
+  border: 1px solid #2a2f39;
+  width: 100px;
+}
+
+.card-expand{
+  background: #262d37;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 12px 26px rgba(0,0,0,.35);
+}
+
+/* backbone line */
+.progressbar{
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  height: 90px;          /* gives room for labels below */
+}
+
+.progressbar::before{
+  content: "";
+  position: absolute;
+  top: 45px;             /* center line */
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: #7c7c7c;
+  border-radius: 20px;
+}
+
+/* steps */
+.progress-step{
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+/* icons sit exactly on the line */
+.progress-step .icon{
+  position: absolute;
+  top: 45px;             
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #111827;
+  border: 3px solid #e44c65;
+  /* color: #1e90ff; */
+  color: #e44c65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.progress-step.active .icon{
+  background: #e44c65;
+  color: #fff;
+}
+
+/* labels are below the backbone */
+.progress-step span{
+  position: absolute;
+  top: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  color: #d1d5db;
+}
+
+</style>
+
+<div>
+  {% for item in objects %}
+    <div class="list-card" onclick="toggleExpand(this)">
+      <div class="card-header">
+        <div><strong>ID:</strong> {{ item.id }}</div>
+        <span>Created at {{ item.created_at }}</span>
+      </div>
+
+      <div class="card-info">
+        <div><strong>Username:</strong> {{ item.username }}</div>
+        <div><strong>Full name:</strong> {{ item.first_name }} {{ item.last_name }}</div>
+        <div><strong>Description:</strong> {{ item.description }}</div>
+        <div><strong>Date of incident:</strong> {{ item.date_of_incident }}</div>
+        <div><strong>Status:</strong> Unavailable</div>
+
+        <div class="card-image">
+          {% if item.image %}
+            <img src="{{ item.image.url }}" alt="Image">
+          {% else %}
+            No Image
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card-expand">
+
+  <div class="progressbar">
+
+    <div class="progress-step active">
+      <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+      <span>Received</span>
+    </div>
+
+    <div class="progress-step active">
+      <div class="icon"><i class="fa-solid fa-gears"></i></div>
+      <span>Processing</span>
+    </div>
+
+    <div class="progress-step active">
+      <div class="icon"><i class="fa-solid fa-clipboard-check"></i></div>
+      <span>Checking</span>
+    </div>
+
+    <div class="progress-step">
+      <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <span>Investigating</span>
+    </div>
+
+    <div class="progress-step">
+      <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+      <span>Complaint Resolved</span>
+    </div>
+
+  </div>
+
+</div>
+
+    </div>
+  {% empty %}
+    <p>No data available</p>
+  {% endfor %}
+</div>
+
+<script>
+function toggleExpand(card) {
+  const section = card.querySelector(".card-expand");
+  section.classList.toggle("open");
+}
+</script>
+
+{% endblock %}
