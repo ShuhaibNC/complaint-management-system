@@ -70,6 +70,14 @@ body {
   padding: 28px;
   border-radius: 18px;
   box-shadow: 0 12px 26px rgba(0,0,0,.35);
+  display: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .25s ease;
+}
+.card-expand.open {
+  display: block;
+  max-height: 500px;
 }
 
 /* backbone line */
