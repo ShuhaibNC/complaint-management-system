@@ -1,20 +1,9 @@
-<<<<<<< HEAD
-{% extends "home/base.html" %}
-{% block title %}Register{% endblock %}
-{% block header %}
-
-<h2 style="font-weight: bold;">E-Complaint Registration Form</h2>{% endblock %}
-=======
->>>>>>> 0e80f5b7649aac621ef1d1d0d219800963604dc8
-{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
-<<<<<<< HEAD
-        
-        <label for="phone">Phone Number:</label>
-        <input id="phone" name="phone" required placeholder="+91 0000000000" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;">
-=======
     :root {
         --bg-gradient: linear-gradient(135deg, #1e0a3d 0%, #91124d 50%, #e91e63 100%);
         --card-bg: rgba(15, 15, 20, 0.98); 
@@ -23,9 +12,12 @@
         --accent-glow: #60a5fa;           
         --accent-neon: #00d4ff;           
         --text-bright: #ffffff;          
-        --text-sub: #cbd5e1;              
+        --text-sub: #cbd5e1;        
+            
     }
->>>>>>> 0e80f5b7649aac621ef1d1d0d219800963604dc8
+    body {
+        margin: 0;  
+    }
 
     .main-wrapper {
         background: var(--bg-gradient);
@@ -39,34 +31,9 @@
         align-items: center;
     }
 
-<<<<<<< HEAD
-        
-        <label for="date">Date of Incident:</label>
-        <input type="date" id="date" name="date" required style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;color: #ccc;">
-
-        <label for="image">Upload Image:</label>
-        <input type="file" id="image" name="image" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;color: #ccc;">
-        <label for="station">Select Police Station:</label>
-<select name="district" id="district" required>
-  <option value="" disabled selected>Select a district</option>
-    <option value="kasaragod_police">kasaragod_police</option>
-    <option value="kannur">Kannur </option>
-    <option value="wayanad">Wayanad</option>
-    <option value="kozhikode">Kozhikode</option>
-    <option value="malappuram">Malappuram</option>
-    <option value="palakkad">Palakkad</option>
-    <option value="thrissur">Thrissur</option>
-    <option value="ernakulam">Ernakulam (Kochi)</option>
-    <option value="idukki">Idukki</option>
-    <option value="kottayam">Kottayam</option>
-    <option value="alappuzha">Alappuzha</option>
-    <option value="pathanamthitta">Pathanamthitta</option>
-    <option value="kollam">Kollam</option>
-    <option value="thiruvananthapuram">Thiruvananthapuram</option>
-</select>
-=======
     .complaint-card {
-        background-color: var(--card-bg);
+        background-color: #292733;
+        margin-top: 3em;
         width: 100%;
         max-width: 600px;
         padding: 50px;
@@ -103,7 +70,6 @@
     .form-group {
         margin-bottom: 25px;
     }
->>>>>>> 0e80f5b7649aac621ef1d1d0d219800963604dc8
 
     label {
         display: block;
@@ -119,7 +85,7 @@
     input, textarea, select {
         width: 100%;
         padding: 16px 20px;
-        background-color: var(--input-bg);
+        background-color: #292733;
         border: 1px solid var(--border-color);
         border-radius: 12px;
         font-size: 15px;
@@ -203,6 +169,16 @@
     }
 </style>
 
+<header id="header">
+					<h1 id="logo"><a href="/" style="font-weight: bold;">F-Box</a></h1>
+					<nav id="nav">
+						<ul>
+							<li><a href="/../">Home</a></li>
+							<li>{% block log %}<a href="/" class="button">Logout</a>{% endblock %}</li>
+						</ul>
+					</nav>
+				</header>
+
 <div class="main-wrapper">
     <div class="complaint-card">
         <div class="card-header">
@@ -214,29 +190,32 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" required placeholder="Enter full name">
+                <label>First Name</label>
+                <input type="text" id="fname" name="fname" required placeholder="Enter first name">
             </div>
-
+        <div class="form-group">
+             <label>Last Name</label>
+                <input id="lname" type="text" name="lname" required placeholder="Enter last name">
+            </div>
             <div style="display: flex; gap: 20px;">
                 <div class="form-group" style="flex: 1;">
                     <label>Email ID</label>
-                    <input type="email" name="email" required placeholder="name@email.com">
+                    <input id="email" type="email" name="email" required placeholder="name@email.com">
                 </div>
                 <div class="form-group" style="flex: 1;">
                     <label>Phone</label>
-                    <input type="text" name="phone" required placeholder="Mobile number">
+                    <input id="phone" type="text" name="phone" required placeholder="Mobile number">
                 </div>
             </div>
 
             <div style="display: flex; gap: 20px;">
                 <div class="form-group" style="flex: 1;">
                     <label>Date of Incident</label>
-                    <input type="date" name="date" required>
+                    <input id="date" type="date" name="date" required>
                 </div>
                 <div class="form-group" style="flex: 1;">
                     <label>District</label>
-                    <select name="district" required>
+                    <select id="district" name="district" required>
                         <option value="" disabled selected>Select District</option>
                         <optgroup label="Kerala Districts">
                             <option value="kasaragod">Kasaragod</option>
@@ -260,12 +239,12 @@
 
             <div class="form-group">
                 <label>Incident Details</label>
-                <textarea name="description" rows="5" required placeholder="Describe what happened..."></textarea>
+                <textarea id="description" name="description" rows="5" required placeholder="Describe what happened..."></textarea>
             </div>
 
             <div class="form-group">
                 <label>Supporting Evidence</label>
-                <input type="file" name="attachment" style="padding: 10px;">
+                <input id="image" type="file" name="image" style="padding: 10px;">
                 <span class="info-tag">Optional: Photos, Documents, or Screenshots.</span>
             </div>
 
@@ -281,4 +260,3 @@
         </form>
     </div>
 </div>
-{% endblock %}

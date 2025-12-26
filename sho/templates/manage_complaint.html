@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 <h2>Manage Complaints for {{ district }}</h2>
-<p>District wise Recieve, Document, Download and Forward complaint for.</p>
+<p>District wise Recieve, Download and Forward complaint for.</p>
 <table border="1" style="border: 1;border-collapse: collapse; width: 70%; text-align: left;">
     <thead>
         <tr>
@@ -39,8 +39,18 @@
                 {% endif %}
             </td>
             <td>{{ item.created_at }}</td>
-            <td><button class="button" style="background-color: #4CAF50;color: white;cursor: pointer;border-radius: 4px;">Download</button></td>
-            <td><button class="button" style="background-color: #4CAF50;color: white;cursor: pointer;border-radius: 4px;">Forward</button></td>
+            <td>
+  <a href="{% url 'download_pdf' item.id %}"
+     class="button"
+     style="background-color:#4c61afff;color:white;cursor:pointer;border-radius:4px;text-decoration:none;">
+     Download
+  </a>
+</td>
+            <td><a href="{% url 'forward_complaint' item.id %}"
+     class="button"
+     style="background-color:#4c61afff;color:white;cursor:pointer;border-radius:4px;text-decoration:none;">
+     Forward
+  </a></td>
         </tr>
         {% empty %}
         <tr>

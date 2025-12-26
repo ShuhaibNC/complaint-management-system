@@ -3,32 +3,35 @@
 {% block major %}
 {% endblock %}
 {% block content %}
-<h2>Manage Complaints</h2>
-<p>Document and Forward complaint for {{ request.session.external_username }}.</p>
-<table border="1" style="border: 1;border-collapse: collapse; width: 70%; text-align: left;">
+<h2>Hello, {{ request.session.external_username }}</h2>
+<p>Your Complaints</p>
+<table  border="1" style="border: 1;border-collapse: collapse; width: 70%; text-align: left;">
     <thead>
         <tr>
             <th>ID</th>
+            <th>Username</th>
             <th>Firstname</th>
             <th>Lastname</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>District</th>
             <th>Description</th>
             <th>Date of incident</th>
             <th>Image</th>
             <th>Created at</th>
-            <th>Document</th>
-            <th>Update</th>
+            <th>Download</th>
         </tr>
     </thead>
     <tbody>
         {% for item in objects %}
         <tr>
             <td>{{ item.id }}</td>
+            <td>{{ item.username }}</td>
             <td>{{ item.first_name }}</td>
             <td>{{ item.last_name }}</td>
             <td>{{ item.email }}</td>
             <td>{{ item.phone }}</td>
+            <td>{{ item.district }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.date_of_incident }}</td>
             <td>
@@ -40,19 +43,13 @@
             </td>
             <td>{{ item.created_at }}</td>
             <td>
-  <a href="{% url 'document_pdf' item.id %}"
+  <a href="{% url 'download_pdf' item.id %}"
      class="button"
      style="background-color:#4c61afff;color:white;cursor:pointer;border-radius:4px;text-decoration:none;">
-     Document
+     Download
   </a>
 </td>
- <td>
-  <a href="{% url 'update_complaint' item.id %}"
-     class="button"
-     style="background-color:#4c61afff;color:white;cursor:pointer;border-radius:4px;text-decoration:none;">
-     Update Complaint
-  </a>
-</td>
+
         </tr>
         {% empty %}
         <tr>

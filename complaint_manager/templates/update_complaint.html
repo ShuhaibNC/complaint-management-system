@@ -1,16 +1,18 @@
 {% extends "home/base.html" %}
-{% block title %}Complaint Tracking for {{ request.session.external_username }}{% endblock %}
+{% block title %}Update complaint status{% endblock %}
 {% block major %}{% endblock %}
 {% block content %}
 
-<h2>Track Complaint for {{ request.session.external_username }}</h2>
+<h2>Update Complaint Status</h2>
 
 <header>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </header>
 
 <style>
-:root { color-scheme: dark; }
+:root {
+  color-scheme: dark;
+}
 
 body {
   background: #0f1115;
@@ -26,7 +28,6 @@ body {
   margin-bottom: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,.25);
   transition: transform .15s, box-shadow .15s, border .15s;
-  cursor: pointer;
 }
 
 .list-card:hover {
@@ -37,9 +38,14 @@ body {
 
 .card-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   font-size: 14px;
   color: #aeb4c3;
+}
+
+.card-header strong {
+  color: #e5e7eb;
 }
 
 .card-info {
@@ -50,31 +56,24 @@ body {
   font-size: 14px;
 }
 
+.card-info strong {
+  color: #d1d5db;
+}
+
 .card-image img {
-  width: 100px;
   border-radius: 10px;
   border: 1px solid #2a2f39;
+  width: 100px;
 }
 
-.card-expand {
-  background: #262d37;
-  padding: 28px;
-  border-radius: 18px;
-  margin-top: 10px;
-  display: none;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .25s ease;
-}
+/* PROGRESS BAR */
 
-.card-expand.open { display: block; max-height: 500px; }
-
-/* progress bar */
 .progressbar {
   display: flex;
   justify-content: space-between;
   position: relative;
   height: 90px;
+  margin-top: 10px;
 }
 
 .progressbar::before {
@@ -92,6 +91,7 @@ body {
   position: relative;
   width: 100%;
   text-align: center;
+  cursor: pointer;
 }
 
 .progress-step .icon {
@@ -106,11 +106,15 @@ body {
   border: 3px solid #e44c65;
   color: #e44c65;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  font-size: 18px;
 }
 
-.progress-step.active .icon { background: #e44c65; color: white; }
+.progress-step.active .icon {
+  background: #e44c65;
+  color: #fff;
+}
 
 .progress-step span {
   position: absolute;
@@ -118,13 +122,13 @@ body {
   left: 50%;
   transform: translateX(-50%);
   font-size: 13px;
+  color: #d1d5db;
 }
 </style>
 
 <div>
   {% for item in objects %}
-
-  <div class="list-card" onclick="toggleExpand(this)" data-status="{{ item.status }}">
+  <div class="list-card" data-id="{{ item.id }}">
 
     <div class="card-header">
       <div><strong>ID:</strong> {{ item.id }}</div>
@@ -140,79 +144,92 @@ body {
 
       <div class="card-image">
         {% if item.image %}
-          <img src="{{ item.image.url }}" alt="Complaint image">
+          <img src="{{ item.image.url }}" alt="Image">
         {% else %}
-          No image
+          No Image
         {% endif %}
       </div>
     </div>
 
-    <div class="card-expand">
-      <div class="progressbar">
+    <div class="progressbar">
 
-        <div class="progress-step" data-stage="Received">
-          <div class="icon"><i class="fa-solid fa-envelope"></i></div>
-          <span>Received</span>
-        </div>
-
-        <div class="progress-step" data-stage="Processing">
-          <div class="icon"><i class="fa-solid fa-gears"></i></div>
-          <span>Processing</span>
-        </div>
-
-        <div class="progress-step" data-stage="Checking">
-          <div class="icon"><i class="fa-solid fa-clipboard-check"></i></div>
-          <span>Checking</span>
-        </div>
-
-        <div class="progress-step" data-stage="Investigating">
-          <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-          <span>Investigating</span>
-        </div>
-
-        <div class="progress-step" data-stage="Complaint Resolved">
-          <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
-          <span>Complaint Resolved</span>
-        </div>
-
+      <div class="progress-step" data-status="Received">
+        <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+        <span>Received</span>
       </div>
+
+      <div class="progress-step" data-status="Processing">
+        <div class="icon"><i class="fa-solid fa-gears"></i></div>
+        <span>Processing</span>
+      </div>
+
+      <div class="progress-step" data-status="Checking">
+        <div class="icon"><i class="fa-solid fa-clipboard-check"></i></div>
+        <span>Checking</span>
+      </div>
+
+      <div class="progress-step" data-status="Investigating">
+        <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <span>Investigating</span>
+      </div>
+
+      <div class="progress-step" data-status="Complaint Resolved">
+        <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+        <span>Complaint Resolved</span>
+      </div>
+
     </div>
 
   </div>
-
   {% empty %}
     <p>No data available</p>
   {% endfor %}
 </div>
 
+<form style="display:none;">
+  {% csrf_token %}
+</form>
+
 <script>
-function toggleExpand(card) {
-  const section = card.querySelector(".card-expand");
-  section.classList.toggle("open");
+function getCSRFToken() {
+  return document.querySelector("[name=csrfmiddlewaretoken]").value;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  const cards = document.querySelectorAll(".list-card");
+document.addEventListener("click", function(e) {
+  const step = e.target.closest(".progress-step");
+  if (!step) return;
 
-  const order = [
-    "Received",
-    "Processing",
-    "Checking",
-    "Investigating",
-    "Complaint Resolved"
-  ];
+  const bar = step.closest(".progressbar");
+  const steps = Array.from(bar.querySelectorAll(".progress-step"));
+  const idx = steps.indexOf(step);
 
-  cards.forEach(card => {
-    const savedStatus = card.dataset.status?.trim();
-    const bar = card.querySelector(".progressbar");
-    const steps = Array.from(bar.querySelectorAll(".progress-step"));
-    const idx = order.indexOf(savedStatus);
-
-    steps.forEach((s, i) => {
-      if (idx >= 0 && i <= idx) s.classList.add("active");
-      else s.classList.remove("active");
-    });
+  steps.forEach((s, i) => {
+    if (i <= idx) s.classList.add("active");
+    else s.classList.remove("active");
   });
+
+  const statusText = step.dataset.status;
+  const card = step.closest(".list-card");
+  const complaintId = card.dataset.id;
+
+  fetch("{% url 'update_status' %}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCSRFToken()
+    },
+    body: JSON.stringify({
+      id: complaintId,
+      status: statusText
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (!data.success) {
+      alert("Update failed: " + (data.error || "unknown"));
+    }
+  })
+  .catch(() => alert("Network error"));
 });
 </script>
 
