@@ -2,8 +2,6 @@
 {% block title %}Register{% endblock %}
 {% block header %}
 
-
-}
 <h2 style="font-weight: bold;">E-Complaint Registration Form</h2>{% endblock %}
 {% block content %}
 <div class="container" style="max-width:600px; margin:40px auto; padding:20px; border-radius:10px; box-shadow:0 2px 10px #0000001a;background-color: #272832;">
@@ -21,7 +19,7 @@
 
         
         <label for="phone">Phone Number:</label>
-        <input id="phone" name="phone" placeholder="+91 0000000000" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;">
+        <input id="phone" name="phone" required placeholder="+91 0000000000" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;">
 
         
         <label for="description">Complaint Description:</label>
@@ -29,37 +27,27 @@
 
         
         <label for="date">Date of Incident:</label>
-        <input type="date" id="date" name="date" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;color: #ccc;">
+        <input type="date" id="date" name="date" required style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;color: #ccc;">
 
         <label for="image">Upload Image:</label>
         <input type="file" id="image" name="image" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;background-color: transparent;color: #ccc;">
         <label for="station">Select Police Station:</label>
-
-
-<select name="district" id="district">
+<select name="district" id="district" required>
   <option value="" disabled selected>Select a district</option>
-  
-  
     <option value="kasaragod_police">kasaragod_police</option>
     <option value="kannur">Kannur </option>
     <option value="wayanad">Wayanad</option>
     <option value="kozhikode">Kozhikode</option>
     <option value="malappuram">Malappuram</option>
-  
- 
     <option value="palakkad">Palakkad</option>
     <option value="thrissur">Thrissur</option>
     <option value="ernakulam">Ernakulam (Kochi)</option>
     <option value="idukki">Idukki</option>
- 
-
- 
     <option value="kottayam">Kottayam</option>
     <option value="alappuzha">Alappuzha</option>
     <option value="pathanamthitta">Pathanamthitta</option>
     <option value="kollam">Kollam</option>
     <option value="thiruvananthapuram">Thiruvananthapuram</option>
- 
 </select>
 
         

@@ -60,6 +60,9 @@ def register_complaint(request):
         date_str = request.POST.get("date", "")
         image_file = request.FILES.get("image")
 
+        # get district from select
+        district = request.POST.get("district", "").strip()
+
         date_of_incident = None
         if date_str:
             try:
@@ -81,11 +84,15 @@ def register_complaint(request):
             description=description,
             date_of_incident=date_of_incident,
             image=image_file,
+            district=district,
         )
 
-        return render(request, "complaint_register.html", {"info": "Complaint registered successfully."})
+        return render(request, "complaint_register.html", {
+            "info": "Complaint registered successfully."
+        })
 
     return render(request, "complaint_register.html")
+
 
 def track_complaint(request):
     data = Complaint.objects.all().order_by('-created_at')

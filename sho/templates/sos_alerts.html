@@ -75,10 +75,12 @@ body{
     </div>
 
     <div class="card-body">
+      <div><h3 style='color:red;'>Detected Informations on {{ item.created_at }}</h3></div>
       <div><strong>User:</strong> {{ item.username }}</div>
       <div><strong>Email:</strong> {{ item.email }}</div>
-      <div><strong>Latitude:</strong> {{ item.latitude }}</div>
-      <div><strong>Longitude:</strong> {{ item.longitude }}</div>
+      <div><strong>Detected District:</strong> {{ item.district }}</div>
+      <div><strong>Latitude:</strong> {{ item.latitude }} <strong>Longitude:</strong> {{ item.longitude }}</div>
+      <div><strong>Location:</strong></div>
 
       <div class="map-box" id="map-{{ item.id }}"></div>
 

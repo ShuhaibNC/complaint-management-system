@@ -2,6 +2,7 @@ from django.db import models
 
 class SignupRecord(models.Model):
     username = models.CharField(max_length=150)
+    district = models.CharField(max_length=30, blank=True)
     email = models.EmailField(blank=True)
     password_hash = models.CharField(max_length=255)
     role = models.CharField(max_length=150, null=True, default="user")
@@ -15,6 +16,7 @@ class Complaint(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20, blank=True)
+    district = models.CharField(max_length=30, blank=True)
     description = models.TextField()
     date_of_incident = models.DateField(null=True, blank=True)
     image = models.ImageField(upload_to="complaints/", null=True, blank=True)

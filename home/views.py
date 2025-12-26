@@ -6,6 +6,7 @@ from user.models import SignupRecord
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from geopy.geocoders import Nominatim
 
 def index(request):
     username = request.session.get("external_username")
@@ -38,7 +39,24 @@ def sos(request):
 
         lat = data.get("latitude")
         lng = data.get("longitude")
+
         username = request.session.get("external_username")
+        geolocator = Nominatim(user_agent="coord_to_district_example")
+        location = geolocator.reverse((lat, lng), language="en")
+
+        if not location:
+            return None
+
+        address = location.raw.get("address", {})
+
+        # Different countries use different fields
+        district = (
+            address.get("state_district")
+            or address.get("county")
+            or address.get("district")
+            or address.get("region")
+        )
+
         if lat is None or lng is None:
             return JsonResponse({"ok": False, "error": "Missing latitude or longitude"}, status=400)
 
@@ -61,6 +79,7 @@ def sos(request):
         longitude=lng,
         username=username,
         email=email,
+        district=district
     )
 
     return JsonResponse({"ok": True, "id": alert.id})

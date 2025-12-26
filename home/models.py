@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class SOSAlert(models.Model):
     username = models.CharField(max_length=255, null=True, blank=True)
+    district = models.CharField(max_length=50, blank=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
