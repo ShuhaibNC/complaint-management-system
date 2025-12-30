@@ -19,7 +19,7 @@
 			<nav id="nav">
 				<ul>
 					<li><label id="sos-status">Hello, welcome {{ request.session.external_username }}.</label></li>
-					{% if role == "sho" or role == "cm" %}
+					{% if role == "sho" or role == "cm" or role == "sm" %}
 					<li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
 					<li><a href="/home">Home</a></li>
 					{% else %}
@@ -30,9 +30,12 @@
 					</li>
 					<li><a href="/home">Home</a></li>
 					{% endif %}
-					{% if role == "sho" or role == "cm" %}
+					{% if role == "sho" or role == "cm" or role == "sm" %}
 					{% if role == "cm" %}
 					<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
+					{% elif role == "sm" %}
+					<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
+					<li><a href="/manage_users" class="button">Manage Users</a></li>
 					{% else %}
 					<li><a href="/manage_complaint">Manage Complaint</a></li>
 					{% endif %}
@@ -40,7 +43,7 @@
 					<li><a href="/user_support_manager">User Support Manager</a></li>
 					{% else %}
 					{% endif %}
-					{% if role == "sho" or role == "cm" %}
+					{% if role == "sho" or role == "cm" or role == "sm" %}
 					{% else %}
 					<li>
 						<a href="#">Services<img style="margin-bottom: -10px; margin-left: 5px;"

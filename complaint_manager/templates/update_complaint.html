@@ -128,7 +128,8 @@ body {
 
 <div>
   {% for item in objects %}
-  <div class="list-card" data-id="{{ item.id }}">
+  <div class="list-card" data-id="{{ item.id }}" data-status="{{ item.status }}">
+
 
     <div class="card-header">
       <div><strong>ID:</strong> {{ item.id }}</div>
@@ -191,6 +192,29 @@ body {
 </form>
 
 <script>
+  document.addEventListener("DOMContentLoaded", function() {
+  const cards = document.querySelectorAll(".list-card");
+
+  const order = [
+    "Received",
+    "Processing",
+    "Checking",
+    "Investigating",
+    "Complaint Resolved"
+  ];
+
+  cards.forEach(card => {
+    const savedStatus = card.dataset.status?.trim();
+    const bar = card.querySelector(".progressbar");
+    const steps = Array.from(bar.querySelectorAll(".progress-step"));
+    const idx = order.indexOf(savedStatus);
+
+    steps.forEach((s, i) => {
+      if (idx >= 0 && i <= idx) s.classList.add("active");
+      else s.classList.remove("active");
+    });
+  });
+});
 function getCSRFToken() {
   return document.querySelector("[name=csrfmiddlewaretoken]").value;
 }

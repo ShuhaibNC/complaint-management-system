@@ -9,6 +9,8 @@ urlpatterns = [
     path('', include('user.urls')),
     path('', include('sho.urls')),
     path('', include('complaint_manager.urls')),
+    path('', include('system_manager.urls')),
+    
 ]
 
 if settings.DEBUG:

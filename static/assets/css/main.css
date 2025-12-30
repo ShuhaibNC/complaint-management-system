@@ -4110,3 +4110,19 @@ input, select, textarea {
 					}
 
 	}
+
+/* Strong borders for all tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table, th, td {
+  border: .5px solid rgba(255, 255, 255, 0.3);
+}
+
+th, td {
+  
+  word-wrap: break-word;
+  white-space: normal;
+}

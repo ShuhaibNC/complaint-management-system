@@ -1,0 +1,71 @@
+{% extends "home/base.html" %}
+{% block title %}Manage Users{% endblock %}
+{% block major %}
+{% endblock %}
+{% block content %}
+
+<h2>User Management</h2>
+<p>View all registered users and change their roles.</p>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>District</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Save</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <form method="post" action="{% url 'update_user_role' user.id %}">
+            {% csrf_token %}
+
+            <td>{{ user.id }}</td>
+
+            <td>{{ user.username }}</td>
+
+            <!-- Editable District -->
+            <td>
+                <input
+                    type="text"
+                    name="district"
+                    value="{{ user.district }}"
+                    style="padding:4px; width:120px;"
+                />
+            </td>
+
+            <td>{{ user.email }}</td>
+
+            <!-- Editable Current Role -->
+            <td>
+                <input
+                    type="text"
+                    name="role"
+                    value="{{ user.role }}"
+                    style="padding:4px; width:120px;"
+                />
+            </td>
+
+            <!-- Update column: only button -->
+            <td>
+                <button
+                    type="submit"
+                    style="padding:4px 10px;background:#4c61af;color:white;border:none;border-radius:4px;cursor:pointer;">
+                    Save
+                </button>
+            </td>
+
+        </form>
+    </tr>
+
+    {% empty %}
+    <tr>
+        <td colspan="6">No users found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+{% endblock %}
