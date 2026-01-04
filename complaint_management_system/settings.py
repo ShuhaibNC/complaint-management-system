@@ -28,7 +28,9 @@ SECRET_KEY = 'django-insecure-57c515soux2(e^&l4=8af))t#sl*)=necdtrn!m%cvmem_xpo^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "*"
+]
 
 
 # Application definition
@@ -78,24 +80,17 @@ WSGI_APPLICATION = 'complaint_management_system.wsgi.application'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cms',    # from phpMyAdmin
-        'USER': 'root',   # from phpMyAdmin
-        'PASSWORD': 'cms123', 
-        'HOST': 'localhost',       # usually localhost
-        'PORT': '3306',            # default MySQL port
+        'NAME': 'cms',
+        'USER': 'root',
+        'PASSWORD': '123', 
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
-
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {

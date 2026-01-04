@@ -83,7 +83,7 @@ def sos(request):
         longitude=lng,
         username=username,
         email=email,
-        district=district
+        district=district.lower()
     )
 
     return JsonResponse({"ok": True, "id": alert.id})

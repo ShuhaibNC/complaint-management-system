@@ -77,7 +77,7 @@ def register_complaint(request):
         date_of_incident = None
         if date_str:
             try:
-                date_of_incident = datetime.strptime(date_str, "%Y-%m-%d").date()
+                date_of_incident = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
             except ValueError:
                 date_of_incident = None
 
