@@ -19,44 +19,62 @@
 			<h1 id="logo"><b><a href="#" style="font-weight: bold;">F-BOX</a></b></h1>
 			<nav id="nav">
 				<ul>
-					<li><label id="sos-status">Hello, welcome {{ request.session.external_username }}.</label></li>
-					{% if role == "sho" or role == "cm" or role == "sm" %}
-					<li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
-					<li><a href="/home">Home</a></li>
-					{% else %}
-					<li>
-					<a href="#" id="sos-btn">
-						<img style="margin-bottom: -22px; margin-right: -20px;" width="58px" height="55px" src="{% static 'images/sos_button.png' %}" alt="">
-					</a>
-					</li>
-					<li><a href="/home">Home</a></li>
-					{% endif %}
-					{% if role == "sho" or role == "cm" or role == "sm" %}
-					{% if role == "cm" %}
-					<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
-					{% elif role == "sm" %}
-					<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
-					<li><a href="/manage_users" class="button">Manage Users</a></li>
-					{% else %}
-					<li><a href="/manage_complaint">Manage Complaint</a></li>
-					{% endif %}
-					<li><a href="/manage_feedback">Manage Feedback</a></li>
-					{% else %}
-					{% endif %}
-					{% if role == "sho" or role == "cm" or role == "sm" %}
-					{% else %}
-					<li>
-						<a href="#">Services<img style="margin-bottom: -10px; margin-left: 5px;"
-								src="{% static '/images/arrow.svg' %}" width="30px" height="30px"></a>
-						<ul>
-							<li><a href="/complaint">E-Complaint Registration</a></li>
-							<li><a href="/track_complaint">Complaint Tracking</a></li>
-							<li><a href="/download_complaint">Download Complaint</a></li>
-						</ul>
-					</li>
-					{% endif %}
-					<li><a href="/" class="button">Logout</a></li>
-				</ul>
+    <li><label id="sos-status">Hello, welcome {{ request.session.external_username }}.</label></li>
+
+    {# SOS LINKS #}
+    {% if role == "sm" %}
+        <li><a href="/system_manager/sos_alerts" class="button primary">SOS Alerts</a></li>
+        <li><a href="/home">Home</a></li>
+
+    {% elif role == "sho" or role == "cm" %}
+        <li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
+        <li><a href="/home">Home</a></li>
+
+    {% else %}
+        <li>
+            <a href="#" id="sos-btn">
+                <img style="margin-bottom: -22px; margin-right: -20px;" width="58" height="55"
+                     src="{% static 'images/sos_button.png' %}" alt="">
+            </a>
+        </li>
+        <li><a href="/home">Home</a></li>
+    {% endif %}
+
+    {# MANAGEMENT LINKS #}
+    {% if role == "sho" or role == "cm" or role == "sm" %}
+        {% if role == "cm" %}
+            <li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
+
+        {% elif role == "sm" %}
+            <li><a href="/manage_complaint_sm" class="button">Manage Complaint</a></li>
+            <li><a href="/manage_users" class="button">Manage Users</a></li>
+
+        {% else %}
+            <li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
+        {% endif %}
+
+        <li><a href="/manage_feedback">Manage Feedback</a></li>
+
+    {% endif %}
+
+    {# PUBLIC SERVICES MENU #}
+    {% if role != "sho" and role != "cm" and role != "sm" %}
+        <li>
+            <a href="#">Services
+                <img style="margin-bottom: -10px; margin-left: 5px;"
+                     src="{% static '/images/arrow.svg' %}" width="30" height="30">
+            </a>
+            <ul>
+                <li><a href="/complaint">E-Complaint Registration</a></li>
+                <li><a href="/track_complaint">Complaint Tracking</a></li>
+                <li><a href="/download_complaint">Download Complaint</a></li>
+            </ul>
+        </li>
+    {% endif %}
+
+    <li><a href="/" class="button">Logout</a></li>
+</ul>
+
 			</nav><br>
 			<marquee style="background-color: #81818137;color: #ffffff;font-weight: bold;">🔔 Notification: 🆕 Smart SOS System just rolled out</marquee>
 		</header>

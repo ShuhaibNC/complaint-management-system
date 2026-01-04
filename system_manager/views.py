@@ -1,5 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from user.models import SignupRecord
+from user.models import Complaint
+from home.models import SOSAlert
+
+def sm_sos_alerts(request):
+    data = SOSAlert.objects.order_by('-created_at')
+    return render(request, 'sos_alerts.html', {'objects': data})
+
+def manage_complaint_sm(request):
+    data = Complaint.objects.order_by('-created_at')
+    return render(request, 'sm_manage_complaint.html', {'objects': data})
 
 def manage_users(request):
     users = SignupRecord.objects.all()

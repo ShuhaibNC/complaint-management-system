@@ -4126,3 +4126,43 @@ th, td {
   word-wrap: break-word;
   white-space: normal;
 }
+
+@media screen and (max-width: 736px) {
+  #header {
+    display: block;
+  }
+}
+@media screen and (max-width: 736px) {
+
+  #nav ul li {
+    display: block;
+    width: 100%;
+  }
+
+  #nav a,
+  #nav label {
+    display: block;
+    padding: 10px 14px;
+    font-size: 14px;
+    white-space: normal;
+  }
+
+  #nav .button {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  #nav img {
+    height: 36px;
+    width: 36px;
+    margin: 0;
+    vertical-align: middle;
+  }
+  #nav #sos-status {
+  padding-right: 10px;
+  font-weight: 500;
+}
+
+}
+
+
