@@ -5,7 +5,11 @@ from complaint_manager.models import Complaint as CMComplaint
 from home.models import Feedback
 
 def sos_alerts(request):
-    data = SOSAlert.objects.all().order_by('-created_at')
+    username = request.session.get("external_username")
+    district = SignupRecord.objects.filter(username=username)\
+                                   .values_list("district", flat=True)\
+                                   .first()
+    data = SOSAlert.objects.filter(district=district).order_by('-created_at')
     return render(request, 'sos_alerts.html', {'objects': data})
 
 def manage_complaint(request):

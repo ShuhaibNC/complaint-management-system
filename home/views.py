@@ -10,7 +10,6 @@ from geopy.geocoders import Nominatim
 
 def index(request):
     username = request.session.get("external_username")
-
     role = None
     if username:
         try:
@@ -20,14 +19,19 @@ def index(request):
             role = None
 
     return render(request, 'home/index.html', {'role' : role})
+
 def base(request):
     return render(request, 'home/base.html')
+
 def portfolio_adnan(request):
     return render(request, 'home/portfolio_adnan.html')
+
 def portfolio_fadhis(request):
     return render(request, 'home/portfolio_fadhis.html')
+
 def portfolio_sajas(request):
     return render(request, 'home/portfolio_sajas.html')
+
 def portfolio_rahil(request):
     return render(request, 'home/portfolio_rahil.html')
 
