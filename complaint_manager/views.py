@@ -12,10 +12,15 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from .models import Complaint
+from user.models import SignupRecord
 
 
 def manage_complaint_cm(request):
-    data = Complaint.objects.all().order_by('-created_at')
+    username = request.session.get("external_username")
+    district = SignupRecord.objects.filter(username=username)\
+                                   .values_list("district", flat=True)\
+                                   .first()
+    data = Complaint.objects.filter(district=district).order_by('-created_at')
     return render(request, 'cm_manage_complaint.html', {'objects': data})
 
 def document_pdf(request, complaint_id):
