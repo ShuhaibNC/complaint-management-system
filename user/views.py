@@ -24,7 +24,7 @@ def login(request):
         try:
             user = SignupRecord.objects.get(username=username)
         except SignupRecord.DoesNotExist:
-            return render(request, "login/login.html", {"info": "Password or username is incorrect."})
+            return render(request, "login.html", {"info": "Password or username is incorrect."})
         if check_password(raw_password, user.password_hash):
             request.session['external_user_id'] = user.id
             request.session['external_username'] = user.username
@@ -107,7 +107,7 @@ def register_complaint(request):
 
 def track_complaint(request):
     username = request.session.get("external_username")
-    cmdata = CMData.objects.filter(username=username).order_by('-created_at')
+    cmdata = Complaint.objects.filter(username=username).order_by('-created_at')
     return render(request, 'complaint_tracking.html', {'objects': cmdata})
 
 def download_complaint(request):
