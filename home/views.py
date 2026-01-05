@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from geopy.geocoders import Nominatim
+from system_manager.models import Notification
 
 def index(request):
     username = request.session.get("external_username")
@@ -17,8 +18,8 @@ def index(request):
             role = user.role
         except SignupRecord.DoesNotExist:
             role = None
-
-    return render(request, 'home/index.html', {'role' : role})
+    notification = Notification.objects.all()
+    return render(request, 'home/index.html', {'role' : role, 'notification': notification})
 
 def base(request):
     return render(request, 'home/base.html')

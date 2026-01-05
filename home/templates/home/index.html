@@ -48,6 +48,7 @@
         {% elif role == "sm" %}
             <li><a href="/manage_complaint_sm" class="button">Manage Complaint</a></li>
             <li><a href="/manage_users" class="button">Manage Users</a></li>
+			 <li><a href="/manage_notification" class="button">Manage Notification</a></li>
 
         {% else %}
             <li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
@@ -76,7 +77,12 @@
 </ul>
 
 			</nav><br>
-			<marquee style="background-color: #81818137;color: #ffffff;font-weight: bold;">🔔 Notification: 🆕 Smart SOS System just rolled out</marquee>
+			{% if notification %}
+    {% for noti in notification %}
+	<marquee style="background-color: #81818137;color: #ffffff;font-weight: bold;">{{ noti.message }}</marquee>
+    {% endfor %}
+{% endif %}
+			
 		</header>
 
 		<!-- Banner -->
