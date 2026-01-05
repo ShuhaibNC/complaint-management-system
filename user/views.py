@@ -106,8 +106,8 @@ def register_complaint(request):
 
 
 def track_complaint(request):
-    data = Complaint.objects.all().order_by('-created_at')
-    cmdata = CMData.objects.all().order_by('-created_at')
+    username = request.session.get("external_username")
+    cmdata = CMData.objects.filter(username=username).order_by('-created_at')
     return render(request, 'complaint_tracking.html', {'objects': cmdata})
 
 def download_complaint(request):

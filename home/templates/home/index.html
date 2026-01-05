@@ -72,7 +72,7 @@
         </li>
     {% endif %}
 
-    <li><a href="/" class="button">Logout</a></li>
+    <li><a href="/" class="button primary">Logout</a></li>
 </ul>
 
 			</nav><br>
@@ -276,18 +276,113 @@
 	<script src="{% static 'assets/js/util.js' %}"></script>
 	<script src="{% static 'assets/js/main.js' %}"></script>
 	<script>
-	const sosBtn = document.getElementById("sos-btn");
-const statusText = document.getElementById("sos-status");
+	// Enhance titleBar with SOS button and Sign Up button on mobile
+	$(document).ready(function() {
+		setTimeout(function() {
+			var $titleBar = $('#titleBar');
+			if ($titleBar.length) {
+				// Add SOS button to titleBar if it exists in nav
+				var $sosBtn = $('#nav #sos-btn');
+				if ($sosBtn.length && !$titleBar.find('.sos-btn-mobile').length) {
+					var sosImgSrc = $sosBtn.find('img').attr('src');
+					$titleBar.append(
+						'<a href="#" class="sos-btn-mobile" id="sos-btn-mobile" style="position: absolute; right: 80px; top: 0; height: 44px; width: 44px; display: flex; align-items: center; justify-content: center; z-index: 10002;"><img src="' + sosImgSrc + '" alt="SOS" style="max-width: 50px; max-height: 50px;"></a>'
+					);
+				}
 
-sosBtn.addEventListener("click", (event) => {
-    event.preventDefault();
+				// Add Sign Up/Logout button to titleBar
+				var $logBtn = $('#nav').find('a.button.primary, #nav a[href="/signup"], #nav a.button:contains("Sign Up"), #nav a.button:contains("Login"), #nav a.button:contains("Logout")');
+				if ($logBtn.length && !$titleBar.find('.log-btn-mobile').length) {
+					var logHref = $logBtn.attr('href');
+					var logText = $logBtn.text().trim();
+					if (logText && (logText.includes('Sign Up') || logText.includes('Login') || logText.includes('Logout'))) {
+						$titleBar.append(
+							'<a href="' + logHref + '" class="log-btn-mobile" style="position: absolute; top: 0; height: 44px; line-height: 44px; padding: 0 10px; color: #ffffff; text-decoration: none; font-size: 0.85em; z-index: 10002;background:#e44c65;">' + logText + '</a>'
+						);
+					}
+				}
+			}
+		}, 150);
+	});
 
-    if (!navigator.geolocation) {
-        statusText.textContent = "Geolocation not supported.";
-        return;
-    }
+	// Enhance mobile menu to include labels and images, and remove duplicate SOS buttons
+	$(document).ready(function() {
+		// Wait for navPanel to be created, then enhance it
+		setTimeout(function() {
+			var $navPanel = $('#navPanel');
+			if ($navPanel.length) {
+				// Remove Logout button from navPanel if it exists (it will be in titleBar instead)
+				$navPanel.find('a').each(function() {
+					var $link = $(this);
+					var linkText = $link.text().trim();
+					if (linkText === 'Logout' || $link.attr('href') === '/') {
+						// Check if this is the logout button (href="/" and text="Logout")
+						if ($link.attr('href') === '/' && linkText === 'Logout') {
+							$link.remove();
+						}
+					}
+				});
 
-    statusText.textContent = "Getting your location...";
+				// Remove all empty SOS button links from navPanel (SOS button is in titleBar, not in side panel)
+				$navPanel.find('a[href="#"]').each(function() {
+					var $link = $(this);
+					var linkText = $link.text().trim();
+					var hasOnlyIndent = $link.children().length > 0 && $link.children().filter(function() {
+						return $(this).hasClass('indent-0') || $(this).hasClass('indent-1') || $(this).hasClass('indent-2');
+					}).length === $link.children().length;
+					// Remove all empty SOS button links (has # href and no meaningful content)
+					if ($link.attr('href') === '#' && (linkText === '' || hasOnlyIndent) && $link.find('img').length === 0) {
+						$link.remove();
+					}
+				});
+
+				// Find the SOS status label from original nav
+				var $originalStatus = $('#nav #sos-status');
+				if ($originalStatus.length && $originalStatus.text().trim()) {
+					var statusText = $originalStatus.text();
+					// Add status as first item in mobile menu if not already there
+					if ($navPanel.find('.sos-status-mobile').length === 0) {
+						$navPanel.find('nav').prepend(
+							'<div class="sos-status-mobile" style="color: rgba(255, 255, 255, 0.9); padding: 0.75em 0.5em; border-bottom: solid 1px rgba(255, 255, 255, 0.1); font-size: 0.9em; line-height: 1.5; word-wrap: break-word;">' + statusText + '</div>'
+						);
+					}
+				}
+
+				// Enhance links with images in mobile menu (but skip SOS button duplicates)
+				$navPanel.find('a').each(function() {
+					var $link = $(this);
+					var href = $link.attr('href');
+					if (href && href !== '#') {
+						var $originalLink = $('#nav').find('a[href="' + href + '"]');
+						if ($originalLink.length) {
+							// Check if original link has an image
+							var $img = $originalLink.find('img');
+							if ($img.length && !$link.find('img').length) {
+								var imgSrc = $img.attr('src');
+								var imgAlt = $img.attr('alt') || '';
+								// Add image before text
+								$link.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" style="max-width: 30px; max-height: 30px; vertical-align: middle; margin-right: 8px; display: inline-block;">');
+							}
+						}
+					}
+				});
+			}
+		}, 100);
+	});
+
+	// SOS Button functionality (works for both desktop and mobile buttons)
+	function handleSOSClick(event) {
+		event.preventDefault();
+		const statusText = document.getElementById("sos-status");
+
+		if (!navigator.geolocation) {
+			if (statusText) statusText.textContent = "Geolocation not supported.";
+			$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Geolocation not supported.");
+			return;
+		}
+
+		if (statusText) statusText.textContent = "Getting your location...";
+		$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Getting your location...");
 
     navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -295,15 +390,15 @@ sosBtn.addEventListener("click", (event) => {
             const latitude = pos.coords.latitude;
             const longitude = pos.coords.longitude;
 
-            // Change 1: After 1 second show sending location
-            setTimeout(() => {
-                statusText.textContent = "Preparing SOS message...";
-            }, 1000);
+		setTimeout(() => {
+			if (statusText) statusText.textContent = "Preparing SOS message...";
+			$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Preparing SOS message...");
+		}, 1000);
 
-            // Change 2: After 2 seconds send request text
-            setTimeout(() => {
-                statusText.textContent = "Sending location to CMS...";
-            }, 1000);
+		setTimeout(() => {
+			if (statusText) statusText.textContent = "Sending location to CMS...";
+			$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Sending location to CMS...");
+		}, 2000);
 
             // Now send to server immediately (don't wait)
             fetch("{% url 'sos' %}", {
@@ -319,28 +414,50 @@ sosBtn.addEventListener("click", (event) => {
             .then((res) => res.json())
             .then((data) => {
 
-                // Delay result by 3 seconds total
-                setTimeout(() => {
-                    if (data.ok) {
-                        statusText.textContent = "SOS Request Sent Successfully";
-                    } else {
-                        statusText.textContent = "Server Error: " + data.error;
-                    }
-                }, 2000);
-            })
-            .catch((err) => {
-                console.error("Fetch error:", err);
+		setTimeout(() => {
+			if (data.ok) {
+				if (statusText) statusText.textContent = "SOS Request Sent Successfully";
+				$('#navPanel .sos-status-mobile').text("SOS Request Sent Successfully");
+			} else {
+				if (statusText) statusText.textContent = "Server Error: " + data.error;
+				$('#navPanel .sos-status-mobile').text("Server Error: " + data.error);
+			}
+		}, 2000);
+	})
+	.catch((err) => {
+		console.error("Fetch error:", err);
+		setTimeout(() => {
+			if (statusText) statusText.textContent = "Network Error: " + err.message;
+			$('#navPanel .sos-status-mobile').text("Network Error: " + err.message);
+		}, 1000);
+	});
+		},
+		(err) => {
+			if (statusText) statusText.textContent = "Geolocation error: " + err.message;
+			$('#navPanel .sos-status-mobile').text("Geolocation error: " + err.message);
+		}
+	);	
+	}
 
-                setTimeout(() => {
-                    statusText.textContent = "Network Error: " + err.message;
-                }, 1000);
-            });
-        },
-        (err) => {
-            statusText.textContent = "Geolocation error: " + err.message;
-        }
-    );	
-});
+	// Attach SOS functionality to both desktop and mobile buttons
+	const sosBtn = document.getElementById("sos-btn");
+	const sosBtnMobile = document.getElementById("sos-btn-mobile");
+	const statusText = document.getElementById("sos-status");
+	
+	if (sosBtn) {
+		sosBtn.addEventListener("click", handleSOSClick);
+	}
+	if (sosBtnMobile) {
+		sosBtnMobile.addEventListener("click", handleSOSClick);
+	}
+
+	// Update mobile menu status when it changes
+	if (statusText) {
+		var observer = new MutationObserver(function(mutations) {
+			$('#navPanel .sos-status-mobile').text(statusText.textContent);
+		});
+		observer.observe(statusText, { childList: true, characterData: true, subtree: true });
+	}
 
 </script>
 
