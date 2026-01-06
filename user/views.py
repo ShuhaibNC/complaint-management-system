@@ -65,8 +65,8 @@ def register_complaint(request):
         lname = request.POST.get("lname", "").strip()
         email = request.POST.get("email", "").strip()
         phone = request.POST.get("phone", "").strip()
-    if len(phone) != 10:
-        return render(request, "complaint_register.html", {
+        if len(phone) != 10 or not phone.isdigit():
+            return render(request, "complaint_register.html", {
                 "info": "Please enter a valid phone number"
             })
         description = request.POST.get("description", "").strip()
