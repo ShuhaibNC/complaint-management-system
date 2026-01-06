@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from user.models import SignupRecord
-from user.models import Complaint
+from complaint_manager.models import Complaint
 from home.models import SOSAlert
 from .models import Notification
 

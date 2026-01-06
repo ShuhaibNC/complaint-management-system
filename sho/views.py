@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from home.models import SOSAlert
-from user.models import Complaint, SignupRecord
+from user.models import SignupRecord
 from complaint_manager.models import Complaint as CMComplaint
 from home.models import Feedback
 
@@ -21,7 +21,7 @@ def manage_complaint(request):
                                    .first()
 
     # filter complaints by that district
-    objects = Complaint.objects.filter(district=district).order_by('-created_at')
+    objects = CMComplaint.objects.filter(district=district,forward=False).order_by('-created_at')
 
     return render(
         request,
@@ -37,19 +37,9 @@ def manage_feedback(request):
     return render(request, 'manage_feedback.html', {'objects': data})
 
 def forward_complaint(request, complaint_id):
-    complaint = get_object_or_404(Complaint, id=complaint_id)
+    complaint = get_object_or_404(CMComplaint, id=complaint_id)
 
-
-    CMComplaint.objects.create(
-        username=complaint.username,
-        first_name=complaint.first_name,
-        last_name=complaint.last_name,
-        email=complaint.email,
-        phone=complaint.phone,
-        district=complaint.district,
-        description=complaint.description,
-        date_of_incident=complaint.date_of_incident,
-        image=complaint.image
-    )
+    complaint.forward = True
+    complaint.save()
 
     return redirect("manage_complaint")

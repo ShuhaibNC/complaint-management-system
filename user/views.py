@@ -5,8 +5,7 @@ from django.contrib.auth.hashers import check_password
 from django.views.decorators.csrf import csrf_protect
 from functools import wraps
 import datetime
-from .models import Complaint
-from complaint_manager.models import Complaint as CMData
+from complaint_manager.models import Complaint
 # Create your views here.
 from django.http import HttpResponse, Http404, FileResponse
 from reportlab.pdfgen import canvas

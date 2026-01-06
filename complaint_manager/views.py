@@ -20,7 +20,7 @@ def manage_complaint_cm(request):
     district = SignupRecord.objects.filter(username=username)\
                                    .values_list("district", flat=True)\
                                    .first()
-    data = Complaint.objects.filter(district=district).order_by('-created_at')
+    data = Complaint.objects.filter(district=district, forward=True).order_by('-created_at')
     return render(request, 'cm_manage_complaint.html', {'objects': data})
 
 def document_pdf(request, complaint_id):
