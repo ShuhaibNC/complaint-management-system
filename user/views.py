@@ -59,11 +59,16 @@ def signup(request):
 @csrf_protect
 def register_complaint(request):
     if request.method == "POST":
+        
         username = request.session.get("external_username")
         fname = request.POST.get("fname", "").strip()
         lname = request.POST.get("lname", "").strip()
         email = request.POST.get("email", "").strip()
         phone = request.POST.get("phone", "").strip()
+    if len(phone) != 10:
+        return render(request, "complaint_register.html", {
+                "info": "Please enter a valid phone number"
+            })
         description = request.POST.get("description", "").strip()
         date_str = request.POST.get("date", "")
         image_file = request.FILES.get("image")
