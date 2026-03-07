@@ -240,7 +240,6 @@ def download_pdf(request, complaint_id):
     elements.append(Paragraph(complaint.description or "No description provided.", styles["BodyText"]))
     elements.append(Spacer(1, 18))
 
-    # Footer style
     elements.append(HRFlowable(width="100%", color=colors.HexColor("#e5e7eb")))
     elements.append(Spacer(1, 4))
     elements.append(Paragraph("This document was generated automatically.", muted))
@@ -256,4 +255,12 @@ def download_pdf(request, complaint_id):
     doc.build(elements)
 
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename=f"complaint_report_{complaint.id}.pdf")
+
+    # ── FIX: use HttpResponse with inline Content-Disposition ──
+    # as_attachment=True sends "attachment" header which Android WebView
+    # cannot handle — it blocks the download silently.
+    # "inline" tells WebView to open/display the PDF directly,
+    # which hands it off to the OS PDF viewer / share sheet.
+    response = HttpResponse(buffer.read(), content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="complaint_report_{complaint.id}.pdf"'
+    return response

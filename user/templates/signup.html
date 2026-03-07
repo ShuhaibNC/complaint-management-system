@@ -1,28 +1,346 @@
 {% extends "home/base.html" %}
 {% block title %}Register{% endblock %}
 {% block log %}<a href="/" class="button primary">Login</a>{% endblock %}
-{% block header %}<h2 style="font-weight: bold;">SIGN UP</h2>{% endblock %}
-{% block content %}
-<div class="container" style="max-width:600px; margin:40px auto; padding:20px; border-radius:10px; box-shadow:0 2px 10px #0000001a;background-color: #272832;">
-    <h2 style="text-align:center;">Create User Account</h2>
-    <form method="POST" action="">
-        {% csrf_token %}
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
+{% block header %}<h2 style="font-weight:bold;">SIGN UP</h2>{% endblock %}
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
+{% block extra_head %}
+<style>
+/* ══════════════════════════════════════════
+   DESKTOP — unchanged
+   ══════════════════════════════════════════ */
+.desk-signup-wrap {
+	max-width: 600px;
+	margin: 40px auto;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+	background-color: #272832;
+}
+.desk-signup-wrap h2 { text-align: center; color: #fff; }
+.desk-signup-wrap label { color: rgba(255,255,255,0.8); font-size: 0.9em; }
+.desk-signup-wrap input {
+	width: 100%; padding: 10px; margin: 8px 0;
+	border: 1px solid #ccc; border-radius: 5px;
+	box-sizing: border-box;
+}
+.desk-signup-btn {
+	width: 100%; padding: 12px;
+	background-color: #404253; color: #fff;
+	border: none; border-radius: 5px;
+	margin-top: 10px; font-size: 16px; cursor: pointer;
+}
+.desk-signup-btn:hover { background-color: #e44c65; }
+.desk-signup-info { text-align: center; margin-top: 8px; color: #e44c65; font-size: 0.9em; }
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
+/* ══════════════════════════════════════════
+   MOBILE
+   ══════════════════════════════════════════ */
+@media screen and (max-width: 736px) {
 
-        <label for="password">Confirm Password:</label>
-        
-        <input type="password" id="cpassword" name="cpassword" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
-        <button type="submit" style="width:100%; padding:12px; background-color:#404253; color:white; border:none; border-radius:5px; margin-top:10px; font-size:16px; cursor:pointer;" required>
-            Sign Up
-        </button>
-        <center><label>{{ info }}</label></center>
-    </form>
-</div>
+	/* hide desktop */
+	#header, #titleBar, #navPanel { display: none !important; }
+	html, body { background: #0f1018 !important; }
+	#page-wrapper, #main { padding: 0 !important; background: #0f1018 !important; }
+	#main .container { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+	header.major { display: none !important; }
+	#content { background: transparent !important; border: none !important; padding: 0 !important; }
+	.desk-signup-wrap { display: none !important; }
+
+	/* full screen shell */
+	#mob-signup {
+		display: flex !important;
+		position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+		flex-direction: column;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		background: #0f1018;
+	}
+
+	/* ── top bar ── */
+	#mob-signup-topbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 20px 0;
+		flex-shrink: 0;
+	}
+	.mob-brand {
+		font-family: "Roboto", sans-serif;
+		font-weight: 700; font-size: 22px;
+		color: #e44c65; letter-spacing: 2px;
+		text-decoration: none !important; border: none !important;
+	}
+	.mob-login-link {
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; font-weight: 600;
+		color: #e44c65;
+		text-decoration: none !important;
+		padding: 6px 14px;
+		border-radius: 20px;
+		border: 1.5px solid rgba(228,76,101,0.4) !important;
+	}
+	.mob-login-link:hover { background: rgba(228,76,101,0.1); }
+
+	/* ── hero ── */
+	#mob-signup-hero {
+		padding: 32px 28px 24px;
+		text-align: center;
+		flex-shrink: 0;
+	}
+	.mob-logo-circle {
+		width: 68px; height: 68px;
+		background: linear-gradient(135deg, #e44c65, #b83050);
+		border-radius: 50%;
+		display: flex; align-items: center; justify-content: center;
+		margin: 0 auto 18px;
+		box-shadow: 0 8px 24px rgba(228,76,101,0.35);
+	}
+	.mob-logo-circle svg { width: 34px; height: 34px; fill: #fff; }
+	#mob-signup-hero h2 {
+		font-family: "Roboto", sans-serif;
+		font-size: 24px; font-weight: 700;
+		color: #fff; margin: 0 0 6px;
+	}
+	#mob-signup-hero p {
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: rgba(255,255,255,0.4);
+		margin: 0;
+	}
+
+	/* ── form card ── */
+	#mob-signup-card {
+		margin: 0 16px;
+		background: #1a1b27;
+		border-radius: 20px;
+		padding: 24px 20px 28px;
+		border: 1px solid rgba(255,255,255,0.05);
+		box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+		flex-shrink: 0;
+	}
+
+	/* input groups */
+	.mob-input-group { margin-bottom: 16px; }
+	.mob-input-group label {
+		display: block;
+		font-family: "Roboto", sans-serif;
+		font-size: 10.5px; font-weight: 700;
+		color: rgba(255,255,255,0.3);
+		text-transform: uppercase; letter-spacing: 1.5px;
+		margin-bottom: 8px;
+	}
+	.mob-input-wrap {
+		position: relative;
+		display: flex; align-items: center;
+	}
+	.mob-input-icon {
+		position: absolute; left: 13px;
+		color: rgba(255,255,255,0.2);
+		pointer-events: none; display: flex;
+	}
+	.mob-input-icon svg { width: 18px; height: 18px; fill: currentColor; }
+	.mob-input-group input {
+		width: 100%; box-sizing: border-box;
+		background: #12131c;
+		border: 1px solid rgba(255,255,255,0.07);
+		border-radius: 12px;
+		color: rgba(255,255,255,0.9);
+		font-family: "Roboto", sans-serif;
+		font-size: 15px;
+		padding: 13px 14px 13px 42px;
+		outline: none;
+		-webkit-appearance: none;
+		transition: border-color 0.2s;
+	}
+	.mob-input-group input:focus {
+		border-color: rgba(228,76,101,0.5);
+		background: #0f1018;
+	}
+
+	/* password strength hint */
+	.mob-hint {
+		font-family: "Roboto", sans-serif;
+		font-size: 11px; color: rgba(255,255,255,0.25);
+		margin-top: 5px; padding-left: 2px;
+	}
+
+	/* divider */
+	.mob-divider {
+		height: 1px;
+		background: rgba(255,255,255,0.05);
+		margin: 6px 0 18px;
+	}
+
+	/* submit */
+	.mob-signup-btn {
+		width: 100%;
+		background: linear-gradient(135deg, #e44c65, #b83050);
+		color: #fff; border: none;
+		border-radius: 14px; padding: 15px;
+		font-family: "Roboto", sans-serif;
+		font-size: 15px; font-weight: 700;
+		cursor: pointer; letter-spacing: 0.5px;
+		box-shadow: 0 6px 20px rgba(228,76,101,0.4);
+		-webkit-tap-highlight-color: transparent;
+		margin-top: 4px;
+	}
+	.mob-signup-btn:active { background: #c03050; }
+
+	/* info / error */
+	.mob-info {
+		margin-top: 14px; text-align: center;
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: #e44c65;
+		font-weight: 500; min-height: 18px;
+	}
+
+	/* login row */
+	.mob-login-row {
+		text-align: center;
+		margin-top: 20px; padding-bottom: 36px;
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: rgba(255,255,255,0.3);
+		flex-shrink: 0;
+	}
+	.mob-login-row a {
+		color: #e44c65; font-weight: 600;
+		text-decoration: none !important; border: none !important;
+	}
+}
+
+/* hide mobile on desktop */
+@media screen and (min-width: 737px) {
+	#mob-signup { display: none !important; }
+}
+</style>
 {% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════
+     DESKTOP VIEW
+     ══════════════════════════════════════════ -->
+<div class="desk-signup-wrap">
+	<h2>Create User Account</h2>
+	<form method="POST" action="">
+		{% csrf_token %}
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" required placeholder="">
+
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" required placeholder="">
+
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required placeholder="">
+
+		<label for="cpassword">Confirm Password:</label>
+		<input type="password" id="cpassword" name="cpassword" required placeholder="">
+
+		<button type="submit" class="desk-signup-btn">Sign Up</button>
+		<div class="desk-signup-info"><label>{{ info }}</label></div>
+	</form>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- ══════════════════════════════════════════
+     MOBILE APP UI
+     ══════════════════════════════════════════ -->
+<div id="mob-signup" style="display:none;">
+
+	<!-- top bar -->
+	<div id="mob-signup-topbar">
+		<span class="mob-brand">E-COPS</span>
+		<a href="/" class="mob-login-link">Login</a>
+	</div>
+
+	<!-- hero -->
+	<div id="mob-signup-hero">
+		<div class="mob-logo-circle">
+			<!-- person-add icon -->
+			<svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+		</div>
+		<h2>Create Account</h2>
+		<p>Join E-COPS Complaint Management</p>
+	</div>
+
+	<!-- form card -->
+	<div id="mob-signup-card">
+		<form method="POST" action="">
+			{% csrf_token %}
+
+			<div class="mob-input-group">
+				<label for="mob-email">Email</label>
+				<div class="mob-input-wrap">
+					<span class="mob-input-icon">
+						<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+					</span>
+					<input type="email" id="mob-email" name="email" required placeholder="name@email.com" autocomplete="email">
+				</div>
+			</div>
+
+			<div class="mob-input-group">
+				<label for="mob-username">Username</label>
+				<div class="mob-input-wrap">
+					<span class="mob-input-icon">
+						<svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+					</span>
+					<input type="text" id="mob-username" name="username" required placeholder="Choose a username" autocomplete="username">
+				</div>
+			</div>
+
+			<div class="mob-divider"></div>
+
+			<div class="mob-input-group">
+				<label for="mob-password">Password</label>
+				<div class="mob-input-wrap">
+					<span class="mob-input-icon">
+						<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.8-2.2-5-5-5S7 3.2 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.7 1.4-3.1 3.1-3.1 1.7 0 3.1 1.4 3.1 3.1v2z"/></svg>
+					</span>
+					<input type="password" id="mob-password" name="password" required placeholder="Create a password" autocomplete="new-password">
+				</div>
+				<div class="mob-hint">Use 8+ characters with letters and numbers</div>
+			</div>
+
+			<div class="mob-input-group">
+				<label for="mob-cpassword">Confirm Password</label>
+				<div class="mob-input-wrap">
+					<span class="mob-input-icon">
+						<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.8-2.2-5-5-5S7 3.2 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.7 1.4-3.1 3.1-3.1 1.7 0 3.1 1.4 3.1 3.1v2z"/></svg>
+					</span>
+					<input type="password" id="mob-cpassword" name="cpassword" required placeholder="Repeat your password" autocomplete="new-password">
+				</div>
+			</div>
+
+			<button type="submit" class="mob-signup-btn">CREATE ACCOUNT</button>
+
+			{% if info %}
+			<div class="mob-info">{{ info }}</div>
+			{% else %}
+			<div class="mob-info"></div>
+			{% endif %}
+
+		</form>
+	</div>
+
+	<!-- login link -->
+	<div class="mob-login-row">
+		Already have an account? <a href="/">Login</a>
+	</div>
+
+</div>
+
+<script>
+(function() {
+	function applyLayout() {
+		var mobile = window.innerWidth <= 736;
+		var el = document.getElementById("mob-signup");
+		if (el) el.style.display = mobile ? "flex" : "none";
+	}
+	applyLayout();
+	window.addEventListener("resize", applyLayout);
+})();
+</script>
+{% endblock %}
+{% block bottom_nav %}{% endblock %}

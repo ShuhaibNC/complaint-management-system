@@ -1,59 +1,549 @@
 {% extends "home/base.html" %}
-{% block title %}Manage Complaint for {{ request.session.external_username }} {% endblock %}
-{% block major %}
+{% block title %}My Complaints — {{ request.session.external_username }}{% endblock %}
+{% block major %}{% endblock %}
+
+{% block extra_head %}
+<style>
+/* ══════════════════════════════════════════
+   DESKTOP — unchanged table layout
+   ══════════════════════════════════════════ */
+#content h2 { margin-bottom: 0.25em; }
+#content p  { margin-bottom: 1em; color: rgba(255,255,255,0.6); }
+
+.desk-table {
+	border-collapse: collapse;
+	width: 70%;
+	text-align: left;
+}
+.desk-table th,
+.desk-table td {
+	border: 1px solid rgba(255,255,255,0.15);
+	padding: 8px 10px;
+	font-size: 13.5px;
+}
+.desk-table thead tr { background: rgba(255,255,255,0.06); }
+.desk-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+.desk-table img { border-radius: 6px; }
+.desk-dl-btn {
+	background: #4c61af;
+	color: #fff;
+	padding: 5px 12px;
+	border-radius: 4px;
+	text-decoration: none;
+	font-size: 12px;
+	white-space: nowrap;
+	cursor: pointer;
+	border: none;
+	display: inline-block;
+}
+.desk-dl-btn:hover { background: #5a71c4; color: #fff; }
+
+/* ══════════════════════════════════════════
+   MOBILE
+   ══════════════════════════════════════════ */
+@media screen and (max-width: 736px) {
+
+	/* hide desktop elements */
+	#header, #titleBar, #navPanel { display: none !important; }
+	html, body { background: #0f1018 !important; }
+	#page-wrapper, #main { padding: 0 !important; background: #0f1018 !important; }
+	#main .container { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+	header.major { display: none !important; }
+	#content { background: transparent !important; border: none !important; padding: 0 !important; }
+	.desk-table, #content > h2, #content > p { display: none !important; }
+
+	/* ── top bar ── */
+	#mob-topbar {
+		display: flex !important;
+		position: fixed;
+		top: 0; left: 0; right: 0; height: 56px;
+		background: #1a1b27;
+		align-items: center;
+		padding: 0 16px; gap: 10px;
+		z-index: 9000;
+		box-shadow: 0 1px 10px rgba(0,0,0,0.55);
+	}
+	.tb-back {
+		text-decoration: none !important; border: none !important;
+		color: rgba(255,255,255,0.5);
+		display: flex; align-items: center; flex-shrink: 0;
+	}
+	.tb-back svg { width: 22px; height: 22px; fill: currentColor; }
+	.tb-brand {
+		font-family: "Roboto", sans-serif;
+		font-weight: 700; font-size: 18px;
+		color: #e44c65; letter-spacing: 1.5px;
+		text-decoration: none !important; border: none !important;
+	}
+	.tb-title {
+		flex: 1; text-align: right;
+		font-family: "Roboto", sans-serif;
+		font-size: 12px; color: rgba(255,255,255,0.35);
+		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+	}
+
+	/* ── scrollable area ── */
+	#mob-wrap {
+		display: block;
+		position: fixed;
+		top: 56px; left: 0; right: 0; bottom: 64px;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	/* ── hero strip ── */
+	#mob-hero {
+		background: linear-gradient(135deg, #e44c65 0%, #b83050 100%);
+		padding: 18px 18px 16px;
+	}
+	#mob-hero h2 {
+		font-family: "Roboto", sans-serif;
+		font-size: 17px; font-weight: 700;
+		color: #fff; margin: 0 0 3px;
+	}
+	#mob-hero p {
+		font-family: "Roboto", sans-serif;
+		font-size: 12px; color: rgba(255,255,255,0.75); margin: 0;
+	}
+
+	/* ── card list ── */
+	#mob-list { padding: 12px 14px 20px; }
+
+	.mob-card {
+		background: #1a1b27;
+		border: 1px solid rgba(255,255,255,0.05);
+		border-radius: 16px;
+		margin-bottom: 12px;
+		overflow: hidden;
+	}
+
+	/* always-visible header row */
+	.mob-card-top {
+		padding: 14px 16px;
+		display: flex; align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+		gap: 10px;
+	}
+	.mob-card-meta { flex: 1; min-width: 0; }
+	.mob-card-id {
+		font-family: "Roboto", sans-serif;
+		font-size: 10.5px; font-weight: 700;
+		color: rgba(255,255,255,0.28);
+		text-transform: uppercase; letter-spacing: 1px;
+	}
+	.mob-card-name {
+		font-family: "Roboto", sans-serif;
+		font-size: 15px; font-weight: 600;
+		color: rgba(255,255,255,0.9);
+		margin-top: 2px;
+		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+	}
+	.mob-card-sub {
+		font-family: "Roboto", sans-serif;
+		font-size: 11px; color: rgba(255,255,255,0.35);
+		margin-top: 2px;
+		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+	}
+	.mob-card-chevron {
+		flex-shrink: 0;
+		color: rgba(255,255,255,0.2);
+		transition: transform 0.2s;
+	}
+	.mob-card-chevron svg { width: 18px; height: 18px; fill: currentColor; display: block; }
+	.mob-card.open .mob-card-chevron { transform: rotate(90deg); }
+
+	/* expanded detail */
+	.mob-card-expand {
+		display: none;
+		border-top: 1px solid rgba(255,255,255,0.05);
+		padding: 14px 16px 16px;
+	}
+	.mob-card.open .mob-card-expand { display: block; }
+
+	/* field rows */
+	.mob-field-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px 16px;
+		margin-bottom: 14px;
+	}
+	.mob-field-label {
+		font-family: "Roboto", sans-serif;
+		font-size: 9.5px; font-weight: 700;
+		color: rgba(255,255,255,0.25);
+		text-transform: uppercase; letter-spacing: 1.2px;
+		margin-bottom: 3px;
+	}
+	.mob-field-value {
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: rgba(255,255,255,0.8);
+		word-break: break-word;
+	}
+	.mob-field-full { margin-bottom: 14px; }
+
+	/* evidence image */
+	.mob-evidence-img {
+		width: 80px; height: 80px;
+		object-fit: cover;
+		border-radius: 10px;
+		border: 1px solid rgba(255,255,255,0.08);
+		display: block; margin-top: 4px;
+	}
+
+	/* ── download button ── */
+	.mob-dl-btn {
+		display: flex; align-items: center; justify-content: center; gap: 8px;
+		width: 100%; margin-top: 14px;
+		background: #4c61af;
+		color: #fff;
+		border: none; border-radius: 12px;
+		padding: 13px;
+		font-family: "Roboto", sans-serif;
+		font-size: 14px; font-weight: 600;
+		text-decoration: none !important;
+		-webkit-tap-highlight-color: transparent;
+		box-shadow: 0 4px 14px rgba(76,97,175,0.4);
+		cursor: pointer;
+		position: relative;
+	}
+	.mob-dl-btn:active { background: #3a4f96; }
+	.mob-dl-btn svg { width: 18px; height: 18px; fill: #fff; flex-shrink: 0; }
+
+	/* downloading state */
+	.mob-dl-btn.loading {
+		background: #333a5c;
+		pointer-events: none;
+	}
+	.mob-dl-btn.loading::after {
+		content: '';
+		display: inline-block;
+		width: 16px; height: 16px;
+		border: 2px solid rgba(255,255,255,0.3);
+		border-top-color: #fff;
+		border-radius: 50%;
+		animation: spin 0.7s linear infinite;
+		margin-left: 6px;
+	}
+	@keyframes spin { to { transform: rotate(360deg); } }
+
+	/* toast feedback */
+	.dl-toast {
+		position: fixed;
+		bottom: 80px; left: 16px; right: 16px;
+		background: #1e1f2e;
+		color: #fff;
+		font-family: "Roboto", sans-serif;
+		font-size: 13px;
+		padding: 13px 18px;
+		border-radius: 12px;
+		z-index: 20000;
+		box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+		text-align: center;
+		display: none;
+		border-left: 3px solid #4c61af;
+	}
+	.dl-toast.error { border-left-color: #e44c65; }
+
+	/* empty state */
+	.mob-empty {
+		text-align: center;
+		padding: 56px 24px;
+		font-family: "Roboto", sans-serif;
+		color: rgba(255,255,255,0.28);
+		font-size: 14px;
+	}
+	.mob-empty svg {
+		width: 48px; height: 48px;
+		fill: rgba(255,255,255,0.08);
+		display: block; margin: 0 auto 12px;
+	}
+
+	/* ── bottom nav ── */
+	#bottom-nav {
+		display: flex !important;
+		position: fixed;
+		bottom: 0; left: 0; right: 0; height: 64px;
+		background: #1a1b27;
+		border-top: 1px solid rgba(255,255,255,0.07);
+		z-index: 9000;
+		box-shadow: 0 -2px 16px rgba(0,0,0,0.4);
+	}
+	.bnav-item {
+		flex: 1; display: flex; flex-direction: column;
+		align-items: center; justify-content: center;
+		text-decoration: none !important; border: none !important;
+		color: rgba(255,255,255,0.3);
+		font-size: 9.5px; font-family: "Roboto", sans-serif;
+		gap: 4px; cursor: pointer; background: none;
+		-webkit-tap-highlight-color: transparent;
+		padding: 6px 1px; transition: color 0.15s;
+	}
+	.bnav-item svg  { width: 22px; height: 22px; fill: currentColor; display: block; }
+	.bnav-item span { display: block; line-height: 1; }
+	.bnav-item.active { color: #e44c65; }
+	.bnav-item:hover  { color: #e44c65; }
+	.bnav-logout { color: rgba(228,76,101,0.4); }
+}
+
+/* hide mobile on desktop */
+@media screen and (min-width: 737px) {
+	#mob-topbar, #mob-wrap, #bottom-nav, #dl-toast { display: none !important; }
+}
+</style>
 {% endblock %}
+
 {% block content %}
+
+<!-- ══════════════════════════════════════════
+     DESKTOP VIEW
+     ══════════════════════════════════════════ -->
 <h2>Hello, {{ request.session.external_username }}</h2>
 <p>Your Complaints</p>
-<table  border="1" style="border: 1;border-collapse: collapse; width: 70%; text-align: left;">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>District</th>
-            <th>Description</th>
-            <th>Date of incident</th>
-            <th>Image</th>
-            <th>Created at</th>
-            <th>Download</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in objects %}
-        <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.first_name }}</td>
-            <td>{{ item.last_name }}</td>
-            <td>{{ item.email }}</td>
-            <td>{{ item.phone }}</td>
-            <td>{{ item.district }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ item.date_of_incident }}</td>
-            <td>
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" alt="Image" width="100">
-                {% else %}
-                    No Image
-                {% endif %}
-            </td>
-            <td>{{ item.created_at }}</td>
-            <td>
-  <a href="{% url 'download_pdf' item.id %}"
-     class="button"
-     style="background-color:#4c61afff;color:white;cursor:pointer;border-radius:4px;text-decoration:none;">
-     Download
-  </a>
-</td>
 
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5">You don't have any complaints right now</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<table class="desk-table">
+	<thead>
+		<tr>
+			<th>ID</th><th>Firstname</th><th>Lastname</th>
+			<th>Email</th><th>Phone</th><th>District</th>
+			<th>Description</th><th>Date of Incident</th>
+			<th>Image</th><th>Created At</th><th>Download</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in objects %}
+		<tr>
+			<td>{{ item.id }}</td>
+			<td>{{ item.first_name }}</td>
+			<td>{{ item.last_name }}</td>
+			<td>{{ item.email }}</td>
+			<td>{{ item.phone }}</td>
+			<td>{{ item.district }}</td>
+			<td>{{ item.description }}</td>
+			<td>{{ item.date_of_incident }}</td>
+			<td>{% if item.image %}<img src="{{ item.image.url }}" alt="Image" width="100">{% else %}No Image{% endif %}</td>
+			<td>{{ item.created_at }}</td>
+			<td><a href="{% url 'download_pdf' item.id %}" class="desk-dl-btn">Download</a></td>
+		</tr>
+		{% empty %}
+		<tr><td colspan="11">You don't have any complaints right now</td></tr>
+		{% endfor %}
+	</tbody>
 </table>
+
+{% endblock %}
+
+{% block extra_scripts %}
+
+<div id="mob-topbar" style="display:none;">
+	<a href="/home" class="tb-back">
+		<svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+	</a>
+	<a href="/home" class="tb-brand">E-COPS</a>
+	<span class="tb-title">My Complaints</span>
+</div>
+
+<div id="mob-wrap" style="display:none;">
+
+	<div id="mob-hero">
+		<h2>📄 My Complaints</h2>
+		<p>{{ request.session.external_username }} — tap a card to view &amp; download</p>
+	</div>
+
+	<div id="mob-list">
+		{% for item in objects %}
+		<div class="mob-card">
+
+			<!-- always-visible summary -->
+			<div class="mob-card-top" onclick="this.closest('.mob-card').classList.toggle('open')">
+				<div class="mob-card-meta">
+					<div class="mob-card-id">#{{ item.id }} &middot; {{ item.district }}</div>
+					<div class="mob-card-name">{{ item.first_name }} {{ item.last_name }}</div>
+					<div class="mob-card-sub">{{ item.date_of_incident }} &middot; {{ item.email }}</div>
+				</div>
+				<div class="mob-card-chevron">
+					<svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg>
+				</div>
+			</div>
+
+			<!-- expanded detail -->
+			<div class="mob-card-expand">
+
+				<div class="mob-field-full">
+					<div class="mob-field-label">Description</div>
+					<div class="mob-field-value">{{ item.description }}</div>
+				</div>
+
+				<div class="mob-field-grid">
+					<div class="mob-field">
+						<div class="mob-field-label">Phone</div>
+						<div class="mob-field-value">{{ item.phone }}</div>
+					</div>
+					<div class="mob-field">
+						<div class="mob-field-label">Created At</div>
+						<div class="mob-field-value">{{ item.created_at }}</div>
+					</div>
+					<div class="mob-field">
+						<div class="mob-field-label">District</div>
+						<div class="mob-field-value">{{ item.district }}</div>
+					</div>
+					<div class="mob-field">
+						<div class="mob-field-label">Date of Incident</div>
+						<div class="mob-field-value">{{ item.date_of_incident }}</div>
+					</div>
+				</div>
+
+				{% if item.image %}
+				<div class="mob-field-full">
+					<div class="mob-field-label">Evidence</div>
+					<img class="mob-evidence-img" src="{{ item.image.url }}" alt="Evidence">
+				</div>
+				{% endif %}
+
+				<!-- 
+				  Download button uses data-url instead of href.
+				  JS intercepts the tap and uses fetch + base64
+				  so Android WebView can open/share the PDF.
+				-->
+				<button class="mob-dl-btn"
+				        data-url="{% url 'download_pdf' item.id %}"
+				        data-name="complaint_{{ item.id }}.pdf"
+				        onclick="mobDownload(this)">
+					<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+					<span class="dl-btn-label">Download PDF</span>
+				</button>
+
+			</div>
+		</div>
+		{% empty %}
+		<div class="mob-empty">
+			<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+			You don't have any complaints right now.
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<!-- toast -->
+<div id="dl-toast" class="dl-toast"></div>
+
+<!-- bottom nav -->
+<nav id="bottom-nav" style="display:none;">
+	<a href="/home" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+		<span>Home</span>
+	</a>
+	<a href="/complaint" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+		<span>Complain</span>
+	</a>
+	<a href="/track_complaint" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+		<span>Track</span>
+	</a>
+	<a href="/download_complaint" class="bnav-item active">
+		<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+		<span>Download</span>
+	</a>
+	<a href="/" class="bnav-item bnav-logout">
+		<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+		<span>Logout</span>
+	</a>
+</nav>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   Layout switch
+   ══════════════════════════════════════════════════════════ */
+(function() {
+	function applyLayout() {
+		var mobile = window.innerWidth <= 736;
+		["mob-topbar","mob-wrap","bottom-nav"].forEach(function(id) {
+			var el = document.getElementById(id);
+			if (el) el.style.display = mobile ? (id === "bottom-nav" ? "flex" : "block") : "none";
+		});
+	}
+	applyLayout();
+	window.addEventListener("resize", applyLayout);
+})();
+
+/* ══════════════════════════════════════════════════════════
+   Toast helper
+   ══════════════════════════════════════════════════════════ */
+var _toastTimer;
+function showToast(msg, isError) {
+	var t = document.getElementById('dl-toast');
+	clearTimeout(_toastTimer);
+	t.textContent = msg;
+	t.className = 'dl-toast' + (isError ? ' error' : '');
+	t.style.display = 'block';
+	_toastTimer = setTimeout(function(){ t.style.display = 'none'; }, 3500);
+}
+
+/* ══════════════════════════════════════════════════════════
+   WebView-safe PDF download
+   ══════════════════════════════════════════════════════════
+
+   Android WebView blocks <a download> and won't trigger the
+   system download manager for same-origin fetch responses.
+
+   Strategy:
+     1. Fetch the PDF as an ArrayBuffer.
+     2. Convert to base64 data URI.
+     3. Open the data URI in a new window — WebView will hand
+        it off to the device PDF viewer / share sheet, which
+        is the correct UX on Android.
+   ══════════════════════════════════════════════════════════ */
+function mobDownload(btn) {
+	var url      = btn.getAttribute('data-url');
+	var filename = btn.getAttribute('data-name') || 'complaint.pdf';
+	var label    = btn.querySelector('.dl-btn-label');
+
+	/* loading state */
+	btn.classList.add('loading');
+	if (label) label.textContent = 'Preparing…';
+	showToast('⏳ Fetching your PDF…');
+
+	fetch(url, { credentials: 'same-origin' })
+		.then(function(res) {
+			if (!res.ok) throw new Error('Server error ' + res.status);
+			return res.arrayBuffer();
+		})
+		.then(function(buffer) {
+			/* Convert ArrayBuffer → base64 string */
+			var bytes  = new Uint8Array(buffer);
+			var binary = '';
+			for (var i = 0; i < bytes.byteLength; i++) {
+				binary += String.fromCharCode(bytes[i]);
+			}
+			var b64 = window.btoa(binary);
+			var dataUri = 'data:application/pdf;base64,' + b64;
+
+			/* 
+			  Open the data URI. On Android WebView this triggers
+			  the OS PDF viewer / share sheet.
+			  On desktop browsers it opens in a new tab.
+			*/
+			var a = document.createElement('a');
+			a.href = dataUri;
+			/* 'download' attr is ignored by WebView but works on desktop */
+			a.download = filename;
+			a.target   = '_blank';
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+
+			showToast('✅ PDF opened!');
+		})
+		.catch(function(err) {
+			console.error('Download error:', err);
+			showToast('❌ Download failed: ' + err.message, true);
+		})
+		.finally(function() {
+			btn.classList.remove('loading');
+			if (label) label.textContent = 'Download PDF';
+		});
+}
+</script>
 {% endblock %}

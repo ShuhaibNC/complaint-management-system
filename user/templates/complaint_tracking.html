@@ -1,218 +1,597 @@
 {% extends "home/base.html" %}
-{% block title %}Complaint Tracking for {{ request.session.external_username }}{% endblock %}
+{% block title %}Complaint Tracking — {{ request.session.external_username }}{% endblock %}
 {% block major %}{% endblock %}
-{% block content %}
 
-<h2>Track Complaint for {{ request.session.external_username }}</h2>
-
-<header>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</header>
-
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+/* ══════════════════════════════════════════
+   DESKTOP STYLES
+   ══════════════════════════════════════════ */
 :root { color-scheme: dark; }
 
-body {
-  background: #0f1115;
-  color: #e5e7eb;
-  font-family: system-ui, sans-serif;
-}
-
 .list-card {
-  background: #161a20;
-  border: 1px solid #262a33;
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: transform .15s, box-shadow .15s, border .15s;
-  cursor: pointer;
+	background: #161a20;
+	border: 1px solid #262a33;
+	border-radius: 16px;
+	padding: 14px;
+	margin-bottom: 12px;
+	box-shadow: 0 8px 20px rgba(0,0,0,.25);
+	transition: transform .15s, box-shadow .15s, border .15s;
+	cursor: pointer;
 }
-
 .list-card:hover {
-  transform: translateY(-2px);
-  border-color: #3b82f6;
-  box-shadow: 0 14px 28px rgba(0,0,0,.38);
+	transform: translateY(-2px);
+	border-color: #3b82f6;
+	box-shadow: 0 14px 28px rgba(0,0,0,.38);
 }
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #aeb4c3;
+.card-header-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
+	color: #aeb4c3;
 }
-
 .card-info {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px 14px;
-  margin-top: 10px;
-  font-size: 14px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 6px 14px;
+	margin-top: 10px;
+	font-size: 14px;
 }
-
 .card-image img {
-  width: 100px;
-  border-radius: 10px;
-  border: 1px solid #2a2f39;
+	width: 100px;
+	border-radius: 10px;
+	border: 1px solid #2a2f39;
 }
-
 .card-expand {
-  background: #262d37;
-  padding: 28px;
-  border-radius: 18px;
-  margin-top: 10px;
-  display: none;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .25s ease;
+	background: #262d37;
+	padding: 28px;
+	border-radius: 18px;
+	margin-top: 10px;
+	display: none;
+	overflow: hidden;
 }
-
-.card-expand.open { display: block; max-height: 500px; }
+.card-expand.open { display: block; }
 
 /* progress bar */
 .progressbar {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  height: 90px;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	height: 90px;
 }
-
 .progressbar::before {
-  content: "";
-  position: absolute;
-  top: 45px;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background: #7c7c7c;
-  border-radius: 20px;
+	content: "";
+	position: absolute;
+	top: 45px; left: 0;
+	width: 100%; height: 6px;
+	background: #7c7c7c;
+	border-radius: 20px;
 }
-
 .progress-step {
-  position: relative;
-  width: 100%;
-  text-align: center;
+	position: relative;
+	width: 100%;
+	text-align: center;
 }
-
 .progress-step .icon {
-  position: absolute;
-  top: 45px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #111827;
-  border: 3px solid #e44c65;
-  color: #e44c65;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	position: absolute;
+	top: 45px; left: 50%;
+	transform: translate(-50%, -50%);
+	width: 48px; height: 48px;
+	border-radius: 50%;
+	background: #111827;
+	border: 3px solid #e44c65;
+	color: #e44c65;
+	display: flex; justify-content: center; align-items: center;
+}
+.progress-step.active .icon { background: #e44c65; color: #fff; }
+.progress-step span {
+	position: absolute;
+	top: 78px; left: 50%;
+	transform: translateX(-50%);
+	font-size: 13px;
+	white-space: nowrap;
 }
 
-.progress-step.active .icon { background: #e44c65; color: white; }
+/* ══════════════════════════════════════════
+   MOBILE OVERRIDES
+   ══════════════════════════════════════════ */
+@media screen and (max-width: 736px) {
 
-.progress-step span {
-  position: absolute;
-  top: 78px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 13px;
+	/* ── hide ALL desktop card content ── */
+	.list-card,
+	#content > h2,
+	#content > div > p {
+		display: none !important;
+	}
+
+	/* ── hide base.html's desktop header, use its mob topbar instead ── */
+	#header, #titleBar, #navPanel { display: none !important; }
+
+	/* page shell */
+	html, body { background: #0f1018 !important; }
+	#page-wrapper, #main { padding: 0 !important; background: #0f1018 !important; }
+	#main .container { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+	header.major { display: none !important; }
+	#content { background: transparent !important; border: none !important; padding: 0 !important; }
+
+	/* ── mobile top bar ── */
+	#mob-topbar {
+		display: flex !important;
+		position: fixed;
+		top: 0; left: 0; right: 0;
+		height: 56px;
+		background: #1a1b27;
+		align-items: center;
+		padding: 0 16px;
+		z-index: 9000;
+		box-shadow: 0 1px 10px rgba(0,0,0,0.55);
+		gap: 10px;
+	}
+	.tb-back {
+		text-decoration: none !important; border: none !important;
+		color: rgba(255,255,255,0.5);
+		display: flex; align-items: center; flex-shrink: 0;
+	}
+	.tb-back svg { width: 22px; height: 22px; fill: currentColor; }
+	.tb-brand {
+		font-family: "Roboto", sans-serif;
+		font-weight: 700; font-size: 18px;
+		color: #e44c65; letter-spacing: 1.5px;
+		text-decoration: none !important; border: none !important;
+	}
+	.tb-title {
+		flex: 1; text-align: right;
+		font-family: "Roboto", sans-serif;
+		font-size: 12px; color: rgba(255,255,255,0.35);
+		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+	}
+
+	/* ── scrollable area ── */
+	#mob-track-wrap {
+		display: block;
+		position: fixed;
+		top: 56px; left: 0; right: 0; bottom: 64px;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	/* ── hero strip ── */
+	#mob-track-hero {
+		background: linear-gradient(135deg, #e44c65 0%, #b83050 100%);
+		padding: 18px 18px 16px;
+	}
+	#mob-track-hero h2 {
+		font-family: "Roboto", sans-serif;
+		font-size: 17px; font-weight: 700;
+		color: #fff; margin: 0 0 3px;
+	}
+	#mob-track-hero p {
+		font-family: "Roboto", sans-serif;
+		font-size: 12px; color: rgba(255,255,255,0.75); margin: 0;
+	}
+
+	/* ── cards ── */
+	#mob-track-list { padding: 12px 14px 20px; }
+
+	.mob-complaint-card {
+		background: #1a1b27;
+		border: 1px solid rgba(255,255,255,0.05);
+		border-radius: 16px;
+		margin-bottom: 12px;
+		overflow: hidden;
+	}
+
+	/* card top row — always visible */
+	.mob-card-top {
+		padding: 14px 16px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+	}
+	.mob-card-id {
+		font-family: "Roboto", sans-serif;
+		font-size: 11px; font-weight: 700;
+		color: rgba(255,255,255,0.3);
+		text-transform: uppercase; letter-spacing: 1px;
+	}
+	.mob-card-name {
+		font-family: "Roboto", sans-serif;
+		font-size: 14px; font-weight: 600;
+		color: rgba(255,255,255,0.9);
+		margin-top: 2px;
+	}
+	.mob-card-date {
+		font-family: "Roboto", sans-serif;
+		font-size: 11px; color: rgba(255,255,255,0.35);
+		margin-top: 1px;
+	}
+	.mob-card-badge {
+		font-family: "Roboto", sans-serif;
+		font-size: 10px; font-weight: 700;
+		padding: 4px 10px;
+		border-radius: 20px;
+		white-space: nowrap;
+		flex-shrink: 0;
+		margin-left: 10px;
+	}
+	.badge-received     { background: rgba(96,165,250,0.15); color: #60a5fa; }
+	.badge-processing   { background: rgba(251,191,36,0.15);  color: #fbbf24; }
+	.badge-checking     { background: rgba(167,139,250,0.15); color: #a78bfa; }
+	.badge-investigating{ background: rgba(251,146,60,0.15);  color: #fb923c; }
+	.badge-resolved     { background: rgba(52,211,153,0.15);  color: #34d399; }
+
+	.mob-card-chevron {
+		margin-left: 8px; flex-shrink: 0;
+		color: rgba(255,255,255,0.2);
+		transition: transform 0.2s;
+	}
+	.mob-card-chevron svg { width: 18px; height: 18px; fill: currentColor; display: block; }
+	.mob-complaint-card.open .mob-card-chevron { transform: rotate(90deg); }
+
+	/* expanded section */
+	.mob-card-expand {
+		display: none;
+		border-top: 1px solid rgba(255,255,255,0.05);
+		padding: 14px 16px 16px;
+	}
+	.mob-complaint-card.open .mob-card-expand { display: block; }
+
+	.mob-expand-row {
+		display: flex; justify-content: space-between;
+		margin-bottom: 8px;
+	}
+	.mob-expand-label {
+		font-family: "Roboto", sans-serif;
+		font-size: 10px; font-weight: 700;
+		color: rgba(255,255,255,0.3);
+		text-transform: uppercase; letter-spacing: 1px;
+		margin-bottom: 3px;
+	}
+	.mob-expand-value {
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: rgba(255,255,255,0.8);
+	}
+	.mob-expand-field { margin-bottom: 12px; }
+	.mob-expand-img {
+		width: 80px; height: 80px;
+		object-fit: cover;
+		border-radius: 10px;
+		border: 1px solid rgba(255,255,255,0.08);
+	}
+
+	/* ── mobile progress stepper (vertical) ── */
+	.mob-stepper {
+		margin-top: 14px;
+		padding-top: 14px;
+		border-top: 1px solid rgba(255,255,255,0.05);
+		position: relative;
+	}
+	.mob-step {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+		margin-bottom: 0;
+		position: relative;
+	}
+	/* vertical connector line between steps */
+	.mob-step:not(:last-child)::after {
+		content: '';
+		position: absolute;
+		left: 15px; top: 32px;
+		width: 2px; height: 28px;
+		background: rgba(255,255,255,0.08);
+	}
+	.mob-step.step-done:not(:last-child)::after { background: #e44c65; }
+
+	.mob-step-icon {
+		width: 32px; height: 32px; flex-shrink: 0;
+		border-radius: 50%;
+		background: #12131c;
+		border: 2px solid rgba(255,255,255,0.1);
+		display: flex; align-items: center; justify-content: center;
+		font-size: 13px; color: rgba(255,255,255,0.2);
+	}
+	.mob-step.step-done .mob-step-icon {
+		background: #e44c65;
+		border-color: #e44c65;
+		color: #fff;
+	}
+	.mob-step-label {
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: rgba(255,255,255,0.3);
+		padding-top: 6px; line-height: 1;
+	}
+	.mob-step.step-done .mob-step-label { color: rgba(255,255,255,0.85); font-weight: 600; }
+	/* spacer between steps */
+	.mob-step-spacer { height: 28px; }
+
+	/* empty state */
+	.mob-empty {
+		text-align: center;
+		padding: 48px 24px;
+		font-family: "Roboto", sans-serif;
+		color: rgba(255,255,255,0.3);
+		font-size: 14px;
+	}
+	.mob-empty svg { width: 48px; height: 48px; fill: rgba(255,255,255,0.1); margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto; }
+
+	/* ── bottom nav ── */
+	#bottom-nav {
+		display: flex !important;
+		position: fixed;
+		bottom: 0; left: 0; right: 0;
+		height: 64px;
+		background: #1a1b27;
+		border-top: 1px solid rgba(255,255,255,0.07);
+		z-index: 9000;
+		box-shadow: 0 -2px 16px rgba(0,0,0,0.4);
+	}
+	.bnav-item {
+		flex: 1; display: flex; flex-direction: column;
+		align-items: center; justify-content: center;
+		text-decoration: none !important; border: none !important;
+		color: rgba(255,255,255,0.3);
+		font-size: 9.5px; font-family: "Roboto", sans-serif;
+		gap: 4px; cursor: pointer; background: none;
+		-webkit-tap-highlight-color: transparent;
+		padding: 6px 1px; transition: color 0.15s;
+	}
+	.bnav-item svg  { width: 22px; height: 22px; fill: currentColor; display: block; }
+	.bnav-item span { display: block; line-height: 1; }
+	.bnav-item.active { color: #e44c65; }
+	.bnav-item:hover  { color: #e44c65; }
+	.bnav-logout { color: rgba(228,76,101,0.4); }
+}
+
+/* hide mobile elements on desktop */
+@media screen and (min-width: 737px) {
+	#mob-topbar, #mob-track-wrap, #bottom-nav { display: none !important; }
 }
 </style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════
+     DESKTOP VIEW
+     ══════════════════════════════════════════ -->
+<h2>Track Complaint for {{ request.session.external_username }}</h2>
 
 <div>
-  {% for item in objects %}
+{% for item in objects %}
+<div class="list-card" onclick="toggleExpand(this)" data-status="{{ item.status }}">
 
-  <div class="list-card" onclick="toggleExpand(this)" data-status="{{ item.status }}">
+	<div class="card-header-row">
+		<div><strong>ID:</strong> {{ item.id }}</div>
+		<span>Created at {{ item.created_at }}</span>
+	</div>
 
-    <div class="card-header">
-      <div><strong>ID:</strong> {{ item.id }}</div>
-      <span>Created at {{ item.created_at }}</span>
-    </div>
+	<div class="card-info">
+		<div><strong>Full name:</strong> {{ item.first_name }} {{ item.last_name }}</div>
+		<div><strong>Description:</strong> {{ item.description }}</div>
+		<div><strong>Date of incident:</strong> {{ item.date_of_incident }}</div>
+		<div><strong>Status:</strong> {{ item.status }}</div>
+		<div class="card-image">
+			{% if item.image %}<img src="{{ item.image.url }}" alt="Complaint image">{% else %}No image{% endif %}
+		</div>
+	</div>
 
-    <div class="card-info">
-      <div><strong>Full name:</strong> {{ item.first_name }} {{ item.last_name }}</div>
-      <div><strong>Description:</strong> {{ item.description }}</div>
-      <div><strong>Date of incident:</strong> {{ item.date_of_incident }}</div>
-      <div><strong>Status:</strong> {{ item.status }}</div>
+	<div class="card-expand">
+		<div class="progressbar">
+			<div class="progress-step" data-stage="Received">
+				<div class="icon"><i class="fa-solid fa-envelope"></i></div>
+				<span>Received</span>
+			</div>
+			<div class="progress-step" data-stage="Processing">
+				<div class="icon"><i class="fa-solid fa-gears"></i></div>
+				<span>Processing</span>
+			</div>
+			<div class="progress-step" data-stage="Checking">
+				<div class="icon"><i class="fa-solid fa-clipboard-check"></i></div>
+				<span>Checking</span>
+			</div>
+			<div class="progress-step" data-stage="Investigating">
+				<div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+				<span>Investigating</span>
+			</div>
+			<div class="progress-step" data-stage="Complaint Resolved">
+				<div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+				<span>Complaint Resolved</span>
+			</div>
+		</div>
+	</div>
 
-      <div class="card-image">
-        {% if item.image %}
-          <img src="{{ item.image.url }}" alt="Complaint image">
-        {% else %}
-          No image
-        {% endif %}
-      </div>
-    </div>
-
-    <div class="card-expand">
-      <div class="progressbar">
-
-        <div class="progress-step" data-stage="Received">
-          <div class="icon"><i class="fa-solid fa-envelope"></i></div>
-          <span>Received</span>
-        </div>
-
-        <div class="progress-step" data-stage="Processing">
-          <div class="icon"><i class="fa-solid fa-gears"></i></div>
-          <span>Processing</span>
-        </div>
-
-        <div class="progress-step" data-stage="Checking">
-          <div class="icon"><i class="fa-solid fa-clipboard-check"></i></div>
-          <span>Checking</span>
-        </div>
-
-        <div class="progress-step" data-stage="Investigating">
-          <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-          <span>Investigating</span>
-        </div>
-
-        <div class="progress-step" data-stage="Complaint Resolved">
-          <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
-          <span>Complaint Resolved</span>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-  {% empty %}
-    <p>You don't have any complaints right now</p>
-  {% endfor %}
+</div>
+{% empty %}
+<p>You don't have any complaints right now.</p>
+{% endfor %}
 </div>
 
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- ══════════════════════════════════════════
+     MOBILE APP UI  (injected after base shell)
+     ══════════════════════════════════════════ -->
+
+<!-- mobile top bar -->
+<div id="mob-topbar" style="display:none;">
+	<a href="/home" class="tb-back">
+		<svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+	</a>
+	<a href="/home" class="tb-brand">E-COPS</a>
+	<span class="tb-title">Track Complaint</span>
+</div>
+
+<!-- mobile scrollable content -->
+<div id="mob-track-wrap" style="display:none;">
+
+	<div id="mob-track-hero">
+		<h2>📍 Complaint Tracker</h2>
+		<p>{{ request.session.external_username }} &mdash; tap a card to see progress</p>
+	</div>
+
+	<div id="mob-track-list">
+		{% for item in objects %}
+
+		<div class="mob-complaint-card" data-status="{{ item.status }}">
+
+			<!-- always-visible top row -->
+			<div class="mob-card-top" onclick="mobToggle(this.closest('.mob-complaint-card'))">
+				<div style="flex:1;min-width:0;">
+					<div class="mob-card-id">#{{ item.id }}</div>
+					<div class="mob-card-name">{{ item.first_name }} {{ item.last_name }}</div>
+					<div class="mob-card-date">{{ item.date_of_incident }}</div>
+				</div>
+				<span class="mob-card-badge
+					{% if item.status == "Received" %}badge-received
+					{% elif item.status == "Processing" %}badge-processing
+					{% elif item.status == "Checking" %}badge-checking
+					{% elif item.status == "Investigating" %}badge-investigating
+					{% else %}badge-resolved{% endif %}">{{ item.status }}</span>
+				<div class="mob-card-chevron">
+					<svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg>
+				</div>
+			</div>
+
+			<!-- expanded detail -->
+			<div class="mob-card-expand">
+
+				<div class="mob-expand-field">
+					<div class="mob-expand-label">Description</div>
+					<div class="mob-expand-value">{{ item.description }}</div>
+				</div>
+
+				<div class="mob-expand-row">
+					<div class="mob-expand-field" style="flex:1">
+						<div class="mob-expand-label">Created</div>
+						<div class="mob-expand-value">{{ item.created_at }}</div>
+					</div>
+					{% if item.image %}
+					<div>
+						<div class="mob-expand-label">Evidence</div>
+						<img class="mob-expand-img" src="{{ item.image.url }}" alt="Evidence">
+					</div>
+					{% endif %}
+				</div>
+
+				<!-- vertical stepper -->
+				<div class="mob-stepper" data-status="{{ item.status }}">
+
+					<div class="mob-step" data-stage="Received">
+						<div class="mob-step-icon"><i class="fa-solid fa-envelope"></i></div>
+						<div class="mob-step-label">Received</div>
+					</div>
+					<div class="mob-step-spacer"></div>
+
+					<div class="mob-step" data-stage="Processing">
+						<div class="mob-step-icon"><i class="fa-solid fa-gears"></i></div>
+						<div class="mob-step-label">Processing</div>
+					</div>
+					<div class="mob-step-spacer"></div>
+
+					<div class="mob-step" data-stage="Checking">
+						<div class="mob-step-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+						<div class="mob-step-label">Checking</div>
+					</div>
+					<div class="mob-step-spacer"></div>
+
+					<div class="mob-step" data-stage="Investigating">
+						<div class="mob-step-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+						<div class="mob-step-label">Investigating</div>
+					</div>
+					<div class="mob-step-spacer"></div>
+
+					<div class="mob-step" data-stage="Complaint Resolved">
+						<div class="mob-step-icon"><i class="fa-solid fa-circle-check"></i></div>
+						<div class="mob-step-label">Complaint Resolved</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		{% empty %}
+		<div class="mob-empty">
+			<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+			You don't have any complaints right now.
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<!-- bottom nav -->
+<nav id="bottom-nav" style="display:none;">
+	<a href="/home" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+		<span>Home</span>
+	</a>
+	<a href="/complaint" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+		<span>Complain</span>
+	</a>
+	<a href="/track_complaint" class="bnav-item active">
+		<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+		<span>Track</span>
+	</a>
+	<a href="/download_complaint" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+		<span>Download</span>
+	</a>
+	<a href="/" class="bnav-item bnav-logout">
+		<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+		<span>Logout</span>
+	</a>
+</nav>
+
 <script>
+const ORDER = ["Received","Processing","Checking","Investigating","Complaint Resolved"];
+
+/* ── Desktop expand/progress ── */
 function toggleExpand(card) {
-  const section = card.querySelector(".card-expand");
-  section.classList.toggle("open");
+	card.querySelector(".card-expand").classList.toggle("open");
+}
+document.addEventListener("DOMContentLoaded", function() {
+	document.querySelectorAll(".list-card").forEach(function(card) {
+		var status = (card.dataset.status || "").trim();
+		var idx = ORDER.indexOf(status);
+		card.querySelectorAll(".progress-step").forEach(function(s, i) {
+			s.classList.toggle("active", idx >= 0 && i <= idx);
+		});
+	});
+});
+
+/* ── Mobile toggle ── */
+function mobToggle(card) {
+	card.classList.toggle("open");
 }
 
+/* ── Mobile stepper activation ── */
 document.addEventListener("DOMContentLoaded", function() {
-  const cards = document.querySelectorAll(".list-card");
-
-  const order = [
-    "Received",
-    "Processing",
-    "Checking",
-    "Investigating",
-    "Complaint Resolved"
-  ];
-
-  cards.forEach(card => {
-    const savedStatus = card.dataset.status?.trim();
-    const bar = card.querySelector(".progressbar");
-    const steps = Array.from(bar.querySelectorAll(".progress-step"));
-    const idx = order.indexOf(savedStatus);
-
-    steps.forEach((s, i) => {
-      if (idx >= 0 && i <= idx) s.classList.add("active");
-      else s.classList.remove("active");
-    });
-  });
+	document.querySelectorAll(".mob-stepper").forEach(function(stepper) {
+		var status = (stepper.dataset.status || "").trim();
+		var idx = ORDER.indexOf(status);
+		stepper.querySelectorAll(".mob-step").forEach(function(s, i) {
+			s.classList.toggle("step-done", idx >= 0 && i <= idx);
+		});
+	});
 });
-</script>
 
+/* ── Show/hide mobile vs desktop ── */
+(function() {
+	function applyLayout() {
+		var mobile = window.innerWidth <= 736;
+		// mobile elements
+		["mob-topbar","mob-track-wrap","bottom-nav"].forEach(function(id) {
+			var el = document.getElementById(id);
+			if (el) el.style.display = mobile ? (id === "bottom-nav" ? "flex" : "block") : "none";
+		});
+	}
+	applyLayout();
+	window.addEventListener("resize", applyLayout);
+})();
+</script>
 {% endblock %}

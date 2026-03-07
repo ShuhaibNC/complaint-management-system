@@ -1,124 +1,399 @@
 {% extends "home/base.html" %}
 {% block title %}SOS Alerts{% endblock %}
+{% block mobile_title %}SOS Alerts{% endblock %}
 {% block major %}{% endblock %}
-{% block content %}
 
-<h2>SOS Alerts</h2>
-<p>This is the SOS Alerts page for the {{ request.session.external_username }}.</p>
-
+{% block extra_head %}
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-:root { color-scheme: dark; }
-
-body{
-  background: #0f1115;
-  color: #e5e7eb;
-  font-family: system-ui, sans-serif;
+/* ════════════════════════════════════════
+   SHARED / RESET
+════════════════════════════════════════ */
+:root {
+  --bg:        #0b0d12;
+  --surface:   #13161e;
+  --surface2:  #1a1e2a;
+  --border:    rgba(255,255,255,0.06);
+  --accent:    #e44c65;
+  --accent2:   #3b82f6;
+  --text:      #e2e6f0;
+  --muted:     #7a8099;
+  --success:   #22c55e;
+  --mono:      'Space Mono', monospace;
+  --body-font: 'DM Sans', sans-serif;
 }
 
-.cards-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 16px;
-  margin-top: 18px;
+/* ════════════════════════════════════════
+   DESKTOP STYLES
+════════════════════════════════════════ */
+@media screen and (min-width: 737px) {
+  #content {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-family: var(--body-font);
+  }
+
+  .sos-page-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .sos-page-title h2 {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: 1px;
+  }
+  .sos-page-title .pulse-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(228,76,101,0.6);
+    animation: pulse 1.6s infinite;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
+    margin-top: 0;
+  }
+
+  .alert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    font-family: var(--body-font);
+  }
+  .alert-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(228,76,101,0.35);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(228,76,101,0.15);
+  }
 }
 
-.alert-card{
-  background: #161a20;
-  border: 1px solid #262a33;
-  border-radius: 18px;
-  padding: 16px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.3);
-  transition: transform .12s, border .12s;
-}
-
-.alert-card:hover{
-  transform: translateY(-2px);
-  border-color: #3b82f6;
-}
-
-.card-header{
+/* ════════════════════════════════════════
+   CARD INTERNALS (shared desktop+mobile)
+════════════════════════════════════════ */
+.card-top-row {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
-  color: #aeb4c3;
+  align-items: flex-start;
+  margin-bottom: 12px;
 }
 
-.card-header strong{
-  color: #e5e7eb;
+.sos-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(228,76,101,0.12);
+  border: 1px solid rgba(228,76,101,0.3);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+}
+.sos-badge .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.6s infinite;
 }
 
-.card-body{
-  margin-top: 10px;
-  font-size: 14px;
+.card-timestamp {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+  text-align: right;
+  line-height: 1.4;
 }
 
-.map-box{
+.card-alert-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 10px;
+  font-family: var(--body-font);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-alert-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 14px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.info-item {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+}
+.info-item.full-width { grid-column: 1 / -1; }
+.info-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-family: var(--mono);
+  margin-bottom: 2px;
+}
+.info-value {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+  font-family: var(--body-font);
+  word-break: break-word;
+}
+
+.coords-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.coord-chip {
+  flex: 1;
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 8px;
+  padding: 6px 10px;
+  text-align: center;
+}
+.coord-chip .clabel {
+  font-size: 9px;
+  color: #60a5fa;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.coord-chip .cval {
+  font-size: 12px;
+  color: #93c5fd;
+  font-family: var(--mono);
+  margin-top: 2px;
+}
+
+.map-box {
   width: 100%;
-  height: 220px;
-  margin-top: 12px;
+  height: 210px;
   border-radius: 14px;
-  border: 1px solid #2a2f39;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-family: var(--body-font);
+}
+.empty-state svg { opacity: 0.25; margin-bottom: 12px; }
+.empty-state p { font-size: 15px; margin: 0; }
+
+/* ════════════════════════════════════════
+   MOBILE OVERRIDES
+════════════════════════════════════════ */
+@media screen and (max-width: 736px) {
+  #content {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .sos-page-title { display: none; } /* title shown in topbar */
+
+  .cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 0;
+  }
+
+  .alert-card {
+    background: #161b25;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    /* slide-up entrance */
+    animation: slideUp 0.35s ease both;
+  }
+
+  /* Stagger card animations */
+  .alert-card:nth-child(1) { animation-delay: 0.05s; }
+  .alert-card:nth-child(2) { animation-delay: 0.10s; }
+  .alert-card:nth-child(3) { animation-delay: 0.15s; }
+  .alert-card:nth-child(4) { animation-delay: 0.20s; }
+  .alert-card:nth-child(n+5) { animation-delay: 0.25s; }
+
+  .map-box { height: 190px; }
+
+  /* Mobile info grid single col on very small screens */
+  @media screen and (max-width: 380px) {
+    .info-grid { grid-template-columns: 1fr; }
+  }
+}
+
+/* ════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════ */
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(228,76,101,0.6); }
+  70%  { box-shadow: 0 0 0 7px rgba(228,76,101,0); }
+  100% { box-shadow: 0 0 0 0 rgba(228,76,101,0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 </style>
+{% endblock %}
+
+{% block bottom_nav %}
+<nav id="bottom-nav">
+  <a href="/home" class="bnav-item">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="/sos_alerts" class="bnav-item active">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+    <span>SOS</span>
+  </a>
+  <a href="/complaint" class="bnav-item">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+    <span>Complain</span>
+  </a>
+  <a href="/track_complaint" class="bnav-item">
+    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>Track</span>
+  </a>
+  <a href="/" class="bnav-item bnav-logout">
+    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+    <span>Logout</span>
+  </a>
+</nav>
+{% endblock %}
+
+{% block content %}
+<!-- Desktop title -->
+<div class="sos-page-title">
+  <div class="pulse-dot"></div>
+  <h2>SOS ALERTS</h2>
+</div>
 
 <div class="cards-grid">
 {% for item in objects %}
-
   <div class="alert-card">
-    <div class="card-header">
-      <div><strong>ID:</strong> {{ item.id }}</div>
-      <span>{{ item.created_at }}</span>
+
+    <!-- Top row: badge + timestamp -->
+    <div class="card-top-row">
+      <span class="sos-badge">
+        <span class="dot"></span>
+        SOS #{{ item.id }}
+      </span>
+      <div class="card-timestamp">
+        {{ item.created_at|date:"d M Y" }}<br>
+        {{ item.created_at|date:"H:i:s" }}
+      </div>
     </div>
 
-    <div class="card-body">
-      <div><h3 style='color:red;'>Detected Informations on {{ item.created_at }}</h3></div>
-      <div><strong>User:</strong> {{ item.username }}</div>
-      <div><strong>Email:</strong> {{ item.email }}</div>
-      <div><strong>Detected District:</strong> {{ item.district }}</div>
-      <div><strong>Latitude:</strong> {{ item.latitude }} <strong>Longitude:</strong> {{ item.longitude }}</div>
-      <div><strong>Location:</strong></div>
+    <!-- Section title -->
+    <div class="card-alert-title">Detected on {{ item.created_at|date:"d M Y, H:i" }}</div>
 
-      <div class="map-box" id="map-{{ item.id }}"></div>
-
-      <p style="margin-top:8px; color:#bfc5d4;">
-        Coordinates describe the position relative to the Earth grid.  
-        {{ item.latitude }}, {{ item.longitude }}
-      </p>
+    <!-- Info grid -->
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">User</div>
+        <div class="info-value">{{ item.username }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">District</div>
+        <div class="info-value">{{ item.district }}</div>
+      </div>
+      <div class="info-item full-width">
+        <div class="info-label">Email</div>
+        <div class="info-value">{{ item.email }}</div>
+      </div>
     </div>
+
+    <!-- Coords chips -->
+    <div class="coords-row">
+      <div class="coord-chip">
+        <div class="clabel">Latitude</div>
+        <div class="cval">{{ item.latitude }}</div>
+      </div>
+      <div class="coord-chip">
+        <div class="clabel">Longitude</div>
+        <div class="cval">{{ item.longitude }}</div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="map-box" id="map-{{ item.id }}"></div>
+
   </div>
-
 {% empty %}
-  <p>No data available</p>
+  <div class="empty-state">
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="#e44c65">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+    </svg>
+    <p>No SOS alerts at this time.</p>
+  </div>
 {% endfor %}
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-function initMap(id, lat, lng){
-  const map = L.map(id).setView([lat, lng], 14);
+function initMap(id, lat, lng) {
+  const map = L.map(id, { zoomControl: false, attributionControl: false }).setView([lat, lng], 14);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: ''
-  }).addTo(map);
+  const icon = L.divIcon({
+    className: '',
+    html: `<div style="
+      width:30px;height:30px;border-radius:50%;
+      background:rgba(228,76,101,0.9);
+      border:3px solid #fff;
+      box-shadow:0 0 0 5px rgba(228,76,101,0.3),0 4px 12px rgba(0,0,0,0.5);
+      display:flex;align-items:center;justify-content:center;
+    ">
+      <div style="width:8px;height:8px;border-radius:50%;background:#fff;"></div>
+    </div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15]
+  });
 
-  L.marker([lat, lng]).addTo(map)
-    .bindPopup("SOS location<br>" + lat + ", " + lng);
+  L.marker([lat, lng], { icon })
+    .addTo(map)
+    .bindPopup(`<b style="color:#e44c65">SOS Location</b><br>${lat}, ${lng}`);
 }
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
   {% for item in objects %}
     {% if item.latitude and item.longitude %}
-      initMap(
-        "map-{{ item.id }}",
-        {{ item.latitude }},
-        {{ item.longitude }}
-      );
+      initMap("map-{{ item.id }}", {{ item.latitude }}, {{ item.longitude }});
     {% endif %}
   {% endfor %}
 });
 </script>
-
 {% endblock %}

@@ -4299,3 +4299,103 @@ th, td {
 }
 
 
+/* ===================================================================
+ * CMS MOBILE FIXES (mobile-only overrides)
+ * - Do not change desktop layout
+ * - Do not change template content
+ * =================================================================== */
+
+/* Prevent accidental horizontal scrolling from long content. */
+@media screen and (max-width: 736px) {
+	html, body {
+		overflow-x: hidden;
+	}
+
+	/* Keep the main content area scrollable for wide tables. */
+	#main .container,
+	#content,
+	.wrapper > .container {
+		max-width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	/* Tables: use full width on mobile; allow horizontal scroll instead of breaking layout. */
+	table,
+	table[style] {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+
+	/* Common inline widths used in templates (e.g., width: 70%). */
+	table[style*="width: 70%"],
+	table[style*="width:70%"] {
+		width: 100% !important;
+	}
+
+	/* Make dense tables more readable on mobile. */
+	table th,
+	table td {
+		padding: 0.5em 0.6em !important;
+		font-size: 0.9em;
+		line-height: 1.35em;
+		vertical-align: top;
+		word-break: break-word;
+		overflow-wrap: anywhere;
+	}
+
+	/* Images inside tables shouldn’t force overflow. */
+	table img {
+		max-width: 90px;
+		height: auto;
+	}
+
+	/* Inline fixed-width text inputs in tables (e.g., manage users). */
+	table input[type="text"],
+	table input[type="email"],
+	table input[type="number"],
+	table input[type="tel"],
+	table input[type="url"],
+	table input[type="password"],
+	table select,
+	table textarea {
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box;
+	}
+
+	/* Make long action buttons wrap nicely instead of overflowing. */
+	.button,
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	button {
+		white-space: normal;
+	}
+
+	/* Home page feedback box: inline width (40%) causes cramped input on mobile. */
+	#feedback_text {
+		width: min(92vw, 560px) !important;
+		max-width: 100% !important;
+	}
+}
+
+/* Very small phones: prevent titlebar buttons from colliding with title. */
+@media screen and (max-width: 360px) {
+	#titleBar .title {
+		padding-left: 70px;   /* space for hamburger */
+		padding-right: 120px; /* space for SOS + login/logout */
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	#titleBar .log-btn-mobile {
+		padding: 0 8px;
+		font-size: 0.8em;
+	}
+
+	#titleBar .sos-btn-mobile {
+		right: 68px;
+	}
+}

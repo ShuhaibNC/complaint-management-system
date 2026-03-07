@@ -1,30 +1,345 @@
 {% extends "home/base.html" %}
-{% block title %}Manage Feedback {% endblock %}
-{% block major %}
+{% block title %}Manage Feedback{% endblock %}
+{% block mobile_title %}Anonymous Feedbacks{% endblock %}
+{% block major %}{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════
+   SHARED VARS
+════════════════════════════════════════ */
+:root {
+  --bg:       #0b0d12;
+  --surface:  #13161e;
+  --surface2: #1a1e2a;
+  --border:   rgba(255,255,255,0.06);
+  --accent:   #e44c65;
+  --accent2:  #3b82f6;
+  --text:     #e2e6f0;
+  --muted:    #7a8099;
+  --mono:     'Space Mono', monospace;
+  --sans:     'DM Sans', sans-serif;
+}
+
+/* ════════════════════════════════════════
+   DESKTOP STYLES
+════════════════════════════════════════ */
+@media screen and (min-width: 737px) {
+  #content {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-family: var(--sans);
+  }
+
+  .fb-page-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .fb-page-title h2 {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: 1px;
+  }
+  .fb-page-title .icon-wrap {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fb-page-title .icon-wrap svg { fill: #60a5fa; width: 18px; height: 18px; }
+
+  /* Desktop table */
+  .fb-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+  }
+  .fb-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--sans);
+  }
+  .fb-table thead tr {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .fb-table thead th {
+    padding: 14px 18px;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 400;
+    text-align: left;
+  }
+  .fb-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .fb-table tbody tr:last-child { border-bottom: none; }
+  .fb-table tbody tr:hover { background: rgba(255,255,255,0.025); }
+  .fb-table tbody td {
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--text);
+    vertical-align: top;
+  }
+  .fb-table tbody td.id-cell {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    width: 60px;
+  }
+  .fb-table tbody td.msg-cell {
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .fb-table tbody td.date-cell {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    width: 160px;
+  }
+
+  /* Desktop mobile cards — hidden on desktop */
+  .fb-cards { display: none; }
+}
+
+/* ════════════════════════════════════════
+   MOBILE STYLES
+════════════════════════════════════════ */
+@media screen and (max-width: 736px) {
+  #content {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  /* Hide desktop elements */
+  .fb-page-title { display: none; }
+  .fb-table-wrap { display: none; }
+
+  /* Card list */
+  .fb-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fb-card {
+    background: #161b25;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    animation: slideUp 0.35s ease both;
+  }
+  .fb-card:nth-child(1) { animation-delay: 0.04s; }
+  .fb-card:nth-child(2) { animation-delay: 0.09s; }
+  .fb-card:nth-child(3) { animation-delay: 0.14s; }
+  .fb-card:nth-child(4) { animation-delay: 0.19s; }
+  .fb-card:nth-child(n+5) { animation-delay: 0.23s; }
+
+  .fb-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .fb-id-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.22);
+    border-radius: 7px;
+    padding: 3px 9px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #60a5fa;
+  }
+  .fb-id-badge svg { width: 10px; height: 10px; fill: #60a5fa; }
+
+  .fb-timestamp {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .fb-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.05);
+    margin: 10px 0;
+  }
+
+  .fb-message {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: #d1d5e0;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+
+  /* Anon label */
+  .fb-anon-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 10px;
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+  .fb-anon-tag::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+}
+
+/* ════════════════════════════════════════
+   EMPTY STATE (shared)
+════════════════════════════════════════ */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-family: var(--sans);
+}
+.empty-state svg { opacity: 0.22; display: block; margin: 0 auto 14px; }
+.empty-state p { font-size: 15px; margin: 0; }
+
+/* ════════════════════════════════════════
+   ANIMATION
+════════════════════════════════════════ */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
 {% endblock %}
+
+{% block bottom_nav %}
+<nav id="bottom-nav">
+  <a href="/home" class="bnav-item">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="/manage_feedback" class="bnav-item active">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+    <span>Feedback</span>
+  </a>
+  <a href="/complaint" class="bnav-item">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+    <span>Complain</span>
+  </a>
+  <a href="/track_complaint" class="bnav-item">
+    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    <span>Track</span>
+  </a>
+  <a href="/" class="bnav-item bnav-logout">
+    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+    <span>Logout</span>
+  </a>
+</nav>
+{% endblock %}
+
 {% block content %}
-<h2>Anonymous Feedbacks</h2>
-<p>Manage feedback as {{ request.session.external_username }}.</p>
-<table border="1" style="border: 1;border-collapse: collapse; width: 70%; text-align: left;">
+
+<!-- ── Desktop title ── -->
+<div class="fb-page-title">
+  <div class="icon-wrap">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+  </div>
+  <h2>ANONYMOUS FEEDBACKS</h2>
+</div>
+
+<!-- ══════════════════════════════════════
+     DESKTOP TABLE
+══════════════════════════════════════ -->
+<div class="fb-table-wrap">
+  <table class="fb-table">
     <thead>
-        <tr>
-            <th>ID</th>
-            <th>Message</th>
-            <th>Created at</th>
-        </tr>
+      <tr>
+        <th>#</th>
+        <th>Message</th>
+        <th>Received</th>
+      </tr>
     </thead>
     <tbody>
-        {% for item in objects %}
-        <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.message }}</td>
-            <td>{{ item.created_at }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5">No data available</td>
-        </tr>
-        {% endfor %}
+      {% for item in objects %}
+      <tr>
+        <td class="id-cell">{{ item.id }}</td>
+        <td class="msg-cell">{{ item.message }}</td>
+        <td class="date-cell">{{ item.created_at }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3">
+          <div class="empty-state">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="#7a8099">
+              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+            </svg>
+            <p>No feedback submitted yet.</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════
+     MOBILE CARDS
+══════════════════════════════════════ -->
+<div class="fb-cards">
+  {% for item in objects %}
+  <div class="fb-card">
+    <div class="fb-card-header">
+      <span class="fb-id-badge">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        #{{ item.id }}
+      </span>
+      <div class="fb-timestamp">
+        {{ item.created_at|date:"d M Y" }}<br>
+        {{ item.created_at|date:"H:i" }}
+      </div>
+    </div>
+
+    <div class="fb-divider"></div>
+
+    <div class="fb-message">{{ item.message }}</div>
+
+    <div class="fb-anon-tag">Anonymous</div>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <svg width="56" height="56" viewBox="0 0 24 24" fill="#7a8099">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+    </svg>
+    <p>No feedback submitted yet.</p>
+  </div>
+  {% endfor %}
+</div>
+
 {% endblock %}

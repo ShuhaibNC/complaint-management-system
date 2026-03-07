@@ -1,26 +1,322 @@
 {% extends "home/base.html" %}
 {% block title %}Login{% endblock %}
 {% block log %}<a href="/signup" class="button primary">Sign Up</a>{% endblock %}
-{% block header %}<h2 style="font-weight: bold;">Login</h2>{% endblock %}
+{% block header %}<h2 style="font-weight:bold;">Login</h2>{% endblock %}
+
+{% block extra_head %}
+<style>
+/* ══════════════════════════════════════════
+   DESKTOP — unchanged
+   ══════════════════════════════════════════ */
+.desk-login-wrap {
+	max-width: 600px;
+	margin: 40px auto;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+	background-color: #272832;
+}
+.desk-login-wrap h2 {
+	text-align: center;
+	color: #e44c65;
+	font-weight: bold;
+}
+.desk-login-wrap label {
+	color: rgba(255,255,255,0.8);
+	font-size: 0.9em;
+}
+.desk-login-wrap input {
+	width: 100%; padding: 10px; margin: 8px 0;
+	border: 1px solid #ccc; border-radius: 5px;
+	box-sizing: border-box;
+}
+.desk-login-btn {
+	width: 100%; padding: 12px;
+	background-color: #404253; color: #fff;
+	border: none; border-radius: 5px;
+	margin-top: 10px; font-size: 16px; cursor: pointer;
+}
+.desk-login-btn:hover { background-color: #e44c65; }
+.desk-login-links { text-align: center; margin-top: 10px; }
+.desk-login-links a { color: #e44c65; display: block; margin-top: 6px; }
+.desk-login-info { text-align: center; margin-top: 8px; color: #e44c65; font-size: 0.9em; }
+
+/* ══════════════════════════════════════════
+   MOBILE
+   ══════════════════════════════════════════ */
+@media screen and (max-width: 736px) {
+
+	/* hide desktop elements */
+	#header, #titleBar, #navPanel { display: none !important; }
+	html, body { background: #0f1018 !important; }
+	#page-wrapper, #main { padding: 0 !important; background: #0f1018 !important; }
+	#main .container { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+	header.major { display: none !important; }
+	#content { background: transparent !important; border: none !important; padding: 0 !important; }
+	.desk-login-wrap { display: none !important; }
+
+	/* full-screen login shell */
+	#mob-login {
+		display: flex !important;
+		position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+		flex-direction: column;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		background: #0f1018;
+	}
+
+	/* ── top brand bar ── */
+	#mob-login-topbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 20px 0;
+	}
+	.mob-brand {
+		font-family: "Roboto", sans-serif;
+		font-weight: 700; font-size: 22px;
+		color: #e44c65; letter-spacing: 2px;
+		text-decoration: none !important; border: none !important;
+	}
+	.mob-signup-link {
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; font-weight: 600;
+		color: #e44c65;
+		text-decoration: none !important; border: none !important;
+		padding: 6px 14px;
+		border-radius: 20px;
+		border: 1.5px solid rgba(228,76,101,0.4) !important;
+	}
+	.mob-signup-link:hover { background: rgba(228,76,101,0.1); }
+
+	/* ── hero section ── */
+	#mob-login-hero {
+		padding: 40px 28px 32px;
+		text-align: center;
+	}
+	.mob-logo-circle {
+		width: 72px; height: 72px;
+		background: linear-gradient(135deg, #e44c65, #b83050);
+		border-radius: 50%;
+		display: flex; align-items: center; justify-content: center;
+		margin: 0 auto 20px;
+		box-shadow: 0 8px 24px rgba(228,76,101,0.35);
+	}
+	.mob-logo-circle svg { width: 36px; height: 36px; fill: #fff; }
+	#mob-login-hero h2 {
+		font-family: "Roboto", sans-serif;
+		font-size: 26px; font-weight: 700;
+		color: #fff; margin: 0 0 8px;
+	}
+	#mob-login-hero p {
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: rgba(255,255,255,0.4);
+		margin: 0;
+	}
+
+	/* ── form card ── */
+	#mob-login-card {
+		margin: 0 16px;
+		background: #1a1b27;
+		border-radius: 20px;
+		padding: 24px 20px 28px;
+		border: 1px solid rgba(255,255,255,0.05);
+		box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+	}
+
+	/* fields */
+	.mob-input-group { margin-bottom: 16px; }
+	.mob-input-group label {
+		display: block;
+		font-family: "Roboto", sans-serif;
+		font-size: 10.5px; font-weight: 700;
+		color: rgba(255,255,255,0.3);
+		text-transform: uppercase; letter-spacing: 1.5px;
+		margin-bottom: 8px;
+	}
+	.mob-input-wrap {
+		position: relative;
+		display: flex; align-items: center;
+	}
+	.mob-input-wrap .mob-input-icon {
+		position: absolute; left: 13px;
+		color: rgba(255,255,255,0.2);
+		pointer-events: none;
+	}
+	.mob-input-wrap .mob-input-icon svg { width: 18px; height: 18px; fill: currentColor; display: block; }
+	.mob-input-group input {
+		width: 100%; box-sizing: border-box;
+		background: #12131c;
+		border: 1px solid rgba(255,255,255,0.07);
+		border-radius: 12px;
+		color: rgba(255,255,255,0.9);
+		font-family: "Roboto", sans-serif;
+		font-size: 15px;
+		padding: 13px 14px 13px 42px;
+		outline: none;
+		-webkit-appearance: none;
+		transition: border-color 0.2s;
+	}
+	.mob-input-group input:focus {
+		border-color: rgba(228,76,101,0.5);
+		background: #0f1018;
+	}
+
+	/* forgot password link */
+	.mob-forgot {
+		display: block; text-align: right;
+		font-family: "Roboto", sans-serif;
+		font-size: 12px; color: #e44c65;
+		text-decoration: none !important; border: none !important;
+		margin-top: -8px; margin-bottom: 20px;
+	}
+
+	/* submit button */
+	.mob-login-btn {
+		width: 100%;
+		background: linear-gradient(135deg, #e44c65, #b83050);
+		color: #fff; border: none;
+		border-radius: 14px; padding: 15px;
+		font-family: "Roboto", sans-serif;
+		font-size: 15px; font-weight: 700;
+		cursor: pointer; letter-spacing: 0.5px;
+		box-shadow: 0 6px 20px rgba(228,76,101,0.4);
+		-webkit-tap-highlight-color: transparent;
+	}
+	.mob-login-btn:active { background: #c03050; }
+
+	/* error/info */
+	.mob-info {
+		margin-top: 14px;
+		text-align: center;
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: #e44c65;
+		min-height: 18px;
+		font-weight: 500;
+	}
+
+	/* sign up row */
+	.mob-signup-row {
+		text-align: center;
+		margin-top: 20px;
+		font-family: "Roboto", sans-serif;
+		font-size: 13px; color: rgba(255,255,255,0.3);
+		padding-bottom: 32px;
+	}
+	.mob-signup-row a {
+		color: #e44c65; font-weight: 600;
+		text-decoration: none !important; border: none !important;
+	}
+}
+
+/* hide mobile on desktop */
+@media screen and (min-width: 737px) {
+	#mob-login { display: none !important; }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container" style="max-width:600px; margin:40px auto; padding:20px; border-radius:10px; box-shadow:0 2px 10px #0000001a;background-color: #272832;">
-    {% block major %}
-    {% endblock %}
-    <h2 style="text-align:center;color: #e44c65;font-weight: bold;">LOGIN</h2>
-    <form method="POST" action="">
-        {% csrf_token %}
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required placeholder="" style="width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px;" required>
-
-        <button type="submit" style="width:100%; padding:12px; background-color:#404253; color:white; border:none; border-radius:5px; margin-top:10px; font-size:16px; cursor:pointer;" required>
-            Login
-        </button>
-        <center><a href="/reset_password" style="color: #e44c65; margin-top: 10px; display: block;">Forgot Password?</a></center>
-        <center><a href="/signup">Don't have an account? Click here</a></center>
-        <center><label>{{ info }}</label></center>
-    </form>
+<!-- ══════════════════════════════════════════
+     DESKTOP VIEW
+     ══════════════════════════════════════════ -->
+<div class="desk-login-wrap">
+	<h2>LOGIN</h2>
+	<form method="POST" action="">
+		{% csrf_token %}
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" required placeholder="">
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required placeholder="">
+		<button type="submit" class="desk-login-btn">Login</button>
+		<div class="desk-login-links">
+			<a href="/reset_password">Forgot Password?</a>
+			<a href="/signup">Don't have an account? Click here</a>
+		</div>
+		<div class="desk-login-info"><label>{{ info }}</label></div>
+	</form>
 </div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- ══════════════════════════════════════════
+     MOBILE APP UI
+     ══════════════════════════════════════════ -->
+<div id="mob-login" style="display:none;">
+
+	<!-- top bar -->
+	<div id="mob-login-topbar">
+		<span class="mob-brand">E-COPS</span>
+		<a href="/signup" class="mob-signup-link">Sign Up</a>
+	</div>
+
+	<!-- hero -->
+	<div id="mob-login-hero">
+		<div class="mob-logo-circle">
+			<!-- shield icon -->
+			<svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+		</div>
+		<h2>Welcome Back</h2>
+		<p>Sign in to E-COPS Complaint Management</p>
+	</div>
+
+	<!-- form card -->
+	<div id="mob-login-card">
+		<form method="POST" action="">
+			{% csrf_token %}
+
+			<div class="mob-input-group">
+				<label for="mob-username">Username</label>
+				<div class="mob-input-wrap">
+					<span class="mob-input-icon">
+						<svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+					</span>
+					<input type="text" id="mob-username" name="username" required placeholder="Enter your username" autocomplete="username">
+				</div>
+			</div>
+
+			<div class="mob-input-group">
+				<label for="mob-password">Password</label>
+				<div class="mob-input-wrap">
+					<span class="mob-input-icon">
+						<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.8-2.2-5-5-5S7 3.2 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.7 1.4-3.1 3.1-3.1 1.7 0 3.1 1.4 3.1 3.1v2z"/></svg>
+					</span>
+					<input type="password" id="mob-password" name="password" required placeholder="Enter your password" autocomplete="current-password">
+				</div>
+			</div>
+
+			<a href="/reset_password" class="mob-forgot">Forgot Password?</a>
+
+			<button type="submit" class="mob-login-btn">LOGIN</button>
+
+			{% if info %}
+			<div class="mob-info">{{ info }}</div>
+			{% else %}
+			<div class="mob-info"></div>
+			{% endif %}
+		</form>
+	</div>
+
+	<!-- sign up link -->
+	<div class="mob-signup-row">
+		Don't have an account? <a href="/signup">Sign Up</a>
+	</div>
+
+</div>
+{% block bottom_nav %}{% endblock %}
+
+<script>
+(function() {
+	function applyLayout() {
+		var mobile = window.innerWidth <= 736;
+		var el = document.getElementById("mob-login");
+		if (el) el.style.display = mobile ? "flex" : "none";
+	}
+	applyLayout();
+	window.addEventListener("resize", applyLayout);
+})();
+</script>
 {% endblock %}

@@ -2,75 +2,253 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>{% block title %}F-Box{% endblock %}</title>
+		<title>{% block title %}E-COPS{% endblock %}</title>
 		<link rel="icon" type="image/png" href="{% static 'images/Kerala_State_Police_Logo.png' %}"/>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
 		<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
+
+		<style>
+		/* ── Desktop header fix ── */
+		#header {
+			display: flex !important;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 1.5em;
+			height: 3.5em;
+			position: fixed;
+			top: 0; left: 0; right: 0;
+			background: rgba(39,40,51,0.97);
+			box-shadow: 0 0 0.25em rgba(0,0,0,0.3);
+			z-index: 1000;
+			box-sizing: border-box;
+		}
+		#header h1#logo {
+			position: static !important;
+			margin: 0;
+			line-height: 3.5em;
+			flex-shrink: 0;
+		}
+		#header nav#nav {
+			position: static !important;
+			margin: 0;
+		}
+		#header nav#nav > ul {
+			display: flex !important;
+			align-items: center;
+			gap: 0.4em;
+			margin: 0; padding: 0;
+			list-style: none;
+			flex-wrap: nowrap;
+		}
+		#header nav#nav > ul > li {
+			margin: 0 !important;
+			display: flex;
+			align-items: center;
+		}
+		#header nav#nav > ul > li > a.button {
+			height: 2em;
+			line-height: 2em;
+			padding: 0 1em;
+			font-size: 0.82em;
+			white-space: nowrap;
+		}
+		#header nav#nav > ul > li > a:not(.button) {
+			line-height: 3.5em;
+			white-space: nowrap;
+			font-size: 0.88em;
+		}
+
+		/* ── Mobile bottom nav ── */
+		#bottom-nav { display: none; }
+
+		@media screen and (max-width: 736px) {
+			/* Hide desktop header on mobile */
+			#header, #titleBar, #navPanel { display: none !important; }
+
+			html, body { background: #0f1018 !important; }
+			#page-wrapper { padding-top: 56px !important; padding-bottom: 68px !important; background: #0f1018; }
+
+			/* Top bar */
+			#mob-base-topbar {
+				display: flex;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 56px;
+				background: #1a1b27;
+				align-items: center;
+				padding: 0 16px;
+				z-index: 9000;
+				box-shadow: 0 1px 10px rgba(0,0,0,0.55);
+			}
+			#mob-base-topbar .tb-brand {
+				font-family: "Roboto", sans-serif;
+				font-weight: 700;
+				font-size: 20px;
+				color: #e44c65;
+				letter-spacing: 2px;
+				text-decoration: none;
+				border: none !important;
+			}
+			/* Page title in center */
+			#mob-base-topbar .tb-title {
+				flex: 1;
+				text-align: center;
+				font-family: "Roboto", sans-serif;
+				font-size: 14px;
+				font-weight: 500;
+				color: rgba(255,255,255,0.75);
+				padding: 0 8px;
+			}
+			/* Back chevron */
+			#mob-base-topbar .tb-back {
+				text-decoration: none;
+				border: none !important;
+				color: rgba(255,255,255,0.5);
+				display: flex; align-items: center;
+				margin-right: 6px;
+			}
+			#mob-base-topbar .tb-back svg { width: 22px; height: 22px; fill: currentColor; }
+
+			/* Content area */
+			#main.wrapper { padding: 16px !important; }
+			#main .container { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+
+			/* Hide desktop major header on subpages */
+			header.major { display: none; }
+
+			/* Bottom nav */
+			#bottom-nav {
+				display: flex;
+				position: fixed;
+				bottom: 0; left: 0; right: 0;
+				height: 64px;
+				background: #1a1b27;
+				border-top: 1px solid rgba(255,255,255,0.07);
+				z-index: 9000;
+				box-shadow: 0 -2px 16px rgba(0,0,0,0.4);
+			}
+			.bnav-item {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				text-decoration: none !important;
+				color: rgba(255,255,255,0.3);
+				font-size: 9.5px;
+				font-family: "Roboto", sans-serif;
+				gap: 4px;
+				cursor: pointer;
+				-webkit-tap-highlight-color: transparent;
+				padding: 6px 1px;
+				transition: color 0.15s;
+				border: none !important;
+				background: none;
+			}
+			.bnav-item svg { width: 22px; height: 22px; fill: currentColor; display: block; }
+			.bnav-item span { display: block; line-height: 1; }
+			.bnav-item.active { color: #e44c65; }
+			.bnav-item:hover  { color: #e44c65; }
+			.bnav-logout { color: rgba(228,76,101,0.4); }
+
+			/* Mobile content card style */
+			#content {
+				background: #1a1b27;
+				border-radius: 16px;
+				padding: 18px !important;
+				border: 1px solid rgba(255,255,255,0.04);
+				color: rgba(255,255,255,0.8);
+				font-family: "Roboto", sans-serif;
+			}
+			/* Tables inside content */
+			#content table { font-size: 13px; }
+			#content th { font-size: 11px; color: rgba(255,255,255,0.5); }
+		}
+
+		/* Hide mobile elements on desktop */
+		@media screen and (min-width: 737px) {
+			#mob-base-topbar { display: none !important; }
+		}
+		</style>
+
 		{% block extra_head %}{% endblock %}
 	</head>
 	<body class="is-preload">
 		<div id="page-wrapper">
 
-			<!-- Header -->
-				<header id="header">
-					<h1 id="logo"><b><a href="#" style="font-weight: bold;">F-BOX</a></b></h1>
-					<nav id="nav">
-						<ul>
-        
+			<!-- Desktop Header -->
+			<header id="header">
+				<h1 id="logo"><b><a href="/home" style="font-weight:bold;">E-COPS</a></b></h1>
+				<nav id="nav">
+					<ul>
+						<li>{% block log %}<a href="/" class="button primary">Logout</a>{% endblock %}</li>
+					</ul>
+				</nav>
+			</header>
 
-    
-
-    <li>{% block log %}<a href="/" class="button">Logout</a>{% endblock %}</li>
-</ul>
-
-					</nav><br>
+			<!-- Main content -->
+			<div id="main" class="wrapper style1">
+				<div class="container">
+					{% block major %}
+					<header class="major">
+						{% block header %}{% endblock %}
 					</header>
-
-			<!-- Main -->
-				<div id="main" class="wrapper style1">
-					<div class="container">
-						{% block major %}
-						<header class="major">
-							{% block header %}
-							{% endblock %}
-						</header>
-						{% endblock %}
-						<!-- Content -->
-							<section id="content">
-								{% block content %}
-								{% endblock %}
-							</section>
-
-					</div>
+					{% endblock %}
+					<section id="content">
+						{% block content %}{% endblock %}
+					</section>
 				</div>
+			</div>
 
-			<!-- Footer -->
-				<!-- <footer id="footer">
-					<ul class="icons">
-						<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-						<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-						<li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
-					</ul>
-					<ul class="copyright">
-						<li>&copy; F-Box. All rights reserved.</li></li>
-					</ul>
-				</footer> -->
+		</div><!-- /#page-wrapper -->
+
+		<!-- Mobile top bar -->
+		<div id="mob-base-topbar">
+			<a href="/home" class="tb-back" title="Home">
+				<svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+			</a>
+			<a href="/home" class="tb-brand">E-COPS</a>
+			<span class="tb-title">{% block mobile_title %}{% endblock %}</span>
 		</div>
 
-	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
-	<script src="{% static 'assets/js/browser.min.js' %}"></script>
-	<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
-	<script src="{% static 'assets/js/util.js' %}"></script>
-	<script src="{% static 'assets/js/main.js' %}"></script>
-	
+		<!-- Mobile bottom nav (role-aware via block) -->
+		 {% block bottom_nav %}
+		<nav id="bottom-nav">
+			
+			<a href="/home" class="bnav-item">
+				<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+				<span>Home</span>
+			</a>
+			<a href="/complaint" class="bnav-item">
+				<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+				<span>Complain</span>
+			</a>
+			<a href="/track_complaint" class="bnav-item">
+				<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+				<span>Track</span>
+			</a>
+			<a href="/download_complaint" class="bnav-item">
+				<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+				<span>Download</span>
+			</a>
+			<a href="/" class="bnav-item bnav-logout">
+				<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+				<span>Logout</span>
+			</a>
+			
+		</nav>
+		{% endblock %}
 
+		<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+		<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
+		<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
+		<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+		<script src="{% static 'assets/js/browser.min.js' %}"></script>
+		<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+		<script src="{% static 'assets/js/util.js' %}"></script>
+		<script src="{% static 'assets/js/main.js' %}"></script>
+		{% block extra_scripts %}{% endblock %}
 	</body>
 </html>

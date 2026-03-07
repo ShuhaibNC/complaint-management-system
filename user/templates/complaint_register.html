@@ -8,503 +8,589 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
 	<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
-    :root {
-        --bg-gradient: linear-gradient(135deg, #1e0a3d 0%, #91124d 50%, #e91e63 100%);
-        --card-bg: rgba(15, 15, 20, 0.98); 
-        --input-bg: #1a1a20;             
-        --border-color: #3f3f46;          
-        --accent-glow: #60a5fa;           
-        --accent-neon: #00d4ff;           
-        --text-bright: #ffffff;          
-        --text-sub: #cbd5e1;        
-            
-    }
-    /* Fix padding for the District dropdown only */
-#district {
-    padding: 10px 38px 10px 14px;
-    line-height: 1.2;
-}
+	<style>
+	@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
-/* Optional: keep arrow aligned */
-#district:focus {
-    background-color: #111116;
-}
+	:root {
+		--accent:      #e44c65;
+		--accent-blue: #60a5fa;
+		--accent-neon: #00d4ff;
+		--card-bg:     #1a1b27;
+		--input-bg:    #12131c;
+		--border:      rgba(255,255,255,0.08);
+		--text:        rgba(255,255,255,0.85);
+		--text-sub:    rgba(255,255,255,0.4);
+	}
 
-    body {
-        margin: 0;  
-    }
+	/* ── DESKTOP header fix (same as index) ── */
+	#header {
+		display: flex !important;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 1.5em;
+		height: 3.5em;
+		position: fixed;
+		top: 0; left: 0; right: 0;
+		background: rgba(39,40,51,0.97);
+		box-shadow: 0 0 0.25em rgba(0,0,0,0.3);
+		z-index: 1000;
+		box-sizing: border-box;
+	}
+	#header h1#logo { position: static !important; margin: 0; line-height: 3.5em; flex-shrink: 0; }
+	#header nav#nav  { position: static !important; margin: 0; }
+	#header nav#nav > ul {
+		display: flex !important; align-items: center; gap: 0.4em;
+		margin: 0; padding: 0; list-style: none; flex-wrap: nowrap;
+	}
+	#header nav#nav > ul > li { margin: 0 !important; display: flex; align-items: center; }
+	#header nav#nav > ul > li > label { color: rgba(255,255,255,0.65); font-size: 0.78em; margin: 0; white-space: nowrap; }
+	#header nav#nav > ul > li > a.button { height: 2em; line-height: 2em; padding: 0 1em; font-size: 0.82em; white-space: nowrap; }
+	#header nav#nav > ul > li > a:not(.button) { line-height: 3.5em; white-space: nowrap; font-size: 0.88em; }
+	#sos-btn img { margin: 0 !important; vertical-align: middle; display: block; }
 
-    .main-wrapper {
-        background: var(--bg-gradient);
-        background-attachment: fixed;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        padding: 40px 20px;
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+	/* ── DESKTOP page layout ── */
+	#page-wrapper { padding-top: 3.5em; }
 
-    .complaint-card {
-        background-color: #292733;
-        margin-top: 3em;
-        width: 100%;
-        max-width: 600px;
-        padding: 50px;
-        border-radius: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
-        color: var(--text-bright);
-    }
+	.main-wrapper {
+		background: linear-gradient(135deg, #1e0a3d 0%, #91124d 50%, #e91e63 100%);
+		background-attachment: fixed;
+		font-family: 'Plus Jakarta Sans', sans-serif;
+		padding: 40px 20px;
+		min-height: calc(100vh - 3.5em);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-    .card-header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
+	.complaint-card {
+		background-color: #292733;
+		width: 100%;
+		max-width: 600px;
+		padding: 50px;
+		border-radius: 24px;
+		border: 1px solid rgba(255,255,255,0.15);
+		box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+		color: #fff;
+	}
 
-    .card-header h2 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        background: linear-gradient(to bottom, #ffffff 30%, var(--accent-glow) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 10px 20px rgba(96, 165, 254, 0.2);
-    }
+	.card-header { text-align: center; margin-bottom: 40px; }
+	.card-header h2 {
+		margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.03em;
+		background: linear-gradient(to bottom, #ffffff 30%, #60a5fa 100%);
+		-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+	}
+	.card-header p { color: #cbd5e1; font-size: 16px; margin-top: 12px; opacity: 0.9; }
 
-    .card-header p {
-        color: var(--text-sub);
-        font-size: 16px;
-        margin-top: 12px;
-        font-weight: 400;
-        opacity: 0.9;
-    }
+	.form-group { margin-bottom: 25px; }
+	.form-row { display: flex; gap: 20px; }
+	.form-row .form-group { flex: 1; }
 
-    .form-group {
-        margin-bottom: 25px;
-    }
+	.complaint-card label {
+		display: block; font-size: 13px; font-weight: 700;
+		color: #00d4ff; margin-bottom: 10px;
+		text-transform: uppercase; letter-spacing: 1.5px;
+	}
 
-    label {
-        display: block;
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--accent-neon); 
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-    }
+	.complaint-card input,
+	.complaint-card textarea,
+	.complaint-card select {
+		width: 100%; padding: 16px 20px;
+		background-color: #292733;
+		border: 1px solid #3f3f46; border-radius: 12px;
+		font-size: 15px; color: #fff; font-weight: 500;
+		box-sizing: border-box;
+		transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+	}
+	.complaint-card select {
+		cursor: pointer; appearance: none;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300d4ff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+		background-repeat: no-repeat; background-position: right 15px center; background-size: 18px;
+		padding-right: 38px;
+	}
+	.complaint-card option { background-color: #1a1a20; color: #fff; }
+	.complaint-card input:focus,
+	.complaint-card textarea:focus,
+	.complaint-card select:focus {
+		outline: none; border-color: #60a5fa;
+		background-color: #111116;
+		box-shadow: 0 0 20px rgba(96,165,254,0.25);
+	}
+	input[type="date"] { color-scheme: dark; }
 
-    input, textarea, select {
-        width: 100%;
-        padding: 16px 20px;
-        background-color: #292733;
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        font-size: 15px;
-        color: #ffffff;
-        font-weight: 500;
-        box-sizing: border-box;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+	.submit-btn {
+		background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+		color: #fff; width: 100%; padding: 18px; border: none;
+		border-radius: 14px; font-size: 17px; font-weight: 800;
+		cursor: pointer; display: flex; align-items: center;
+		justify-content: center; gap: 12px; margin-top: 25px;
+		box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+		transition: all 0.3s ease;
+	}
+	.submit-btn:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 15px 30px rgba(37,99,235,0.6);
+		background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+	}
 
-    /* Dropdown Styling */
-    select {
-        cursor: pointer;
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300d4ff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 15px center;
-        background-size: 18px;
-    }
+	.info-tag { font-size: 12px; color: #71717a; margin-top: 8px; display: block; font-style: italic; }
+	.success-alert {
+		margin-top: 25px; padding: 15px;
+		background-color: rgba(52,211,153,0.15);
+		border: 1px solid #34d399; color: #6ee7b7;
+		border-radius: 12px; text-align: center; font-weight: 700; font-size: 15px;
+	}
 
-    option {
-        background-color: #1a1a20;
-        color: white;
-    }
+	/* ══════════════════════════════════════════
+	   MOBILE — full app shell, no images
+	   ══════════════════════════════════════════ */
+	@media screen and (max-width: 736px) {
 
-    input:focus, textarea:focus, select:focus {
-        outline: none;
-        border-color: var(--accent-glow);
-        background-color: #111116;
-        box-shadow: 0 0 20px rgba(96, 165, 254, 0.25);
-        transform: translateY(-1px);
-    }
+		/* Hide desktop elements */
+		#header, #titleBar, #navPanel { display: none !important; }
 
-    .submit-btn {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: #ffffff;
-        width: 100%;
-        padding: 18px;
-        border: none;
-        border-radius: 14px;
-        font-size: 17px;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        margin-top: 25px;
-        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
-        transition: all 0.3s ease;
-    }
+		html, body { background: #0f1018 !important; }
+		#page-wrapper { padding: 0 !important; background: #0f1018; min-height: 100vh; }
 
-    .submit-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 30px rgba(37, 99, 235, 0.6);
-        background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-    }
+		/* Hide desktop form wrapper */
+		.main-wrapper { display: none !important; }
 
-    .info-tag {
-        font-size: 12px;
-        color: #71717a;
-        margin-top: 8px;
-        display: block;
-        font-style: italic;
-    }
-
-    .success-alert {
-        margin-top: 25px;
-        padding: 15px;
-        background-color: rgba(52, 211, 153, 0.15);
-        border: 1px solid #34d399;
-        color: #6ee7b7;
-        border-radius: 12px;
-        text-align: center;
-        font-weight: 700;
-        font-size: 15px;
-    }
-
-    input[type="date"] {
-        color-scheme: dark;
-    }
-   @media (max-width: 768px) {
-
-    .main-wrapper {
-        padding: 0;
-        align-items: stretch;
-        min-height: 100vh;
-    }
-
-    .complaint-card {
-        width: 100%;
-        max-width: none;
-        margin: 0;
-        border-radius: 0;
-        padding: 20px 16px;
-        min-height: 100vh;
-        box-shadow: none;
-    }
-
-    .card-header h2 {
-        font-size: 22px;
-    }
-
-    input,
-    textarea,
-    select {
-        padding: 12px 14px;
-        font-size: 14px;
-    }
-
-    div[style*="display: flex"] {
-        display: block !important;
-    }
-
-    .submit-btn {
-        padding: 14px;
-        font-size: 15px;
-    }
-    }
-
-</style>
-</head>
-<body class="is-preload">
-	<div id="page-wrapper">
-		<header id="header">
-			<h1 id="logo"><b><a href="/home" style="font-weight: bold;">F-BOX</a></b></h1>
-			<nav id="nav">
-				<ul>
-					<li><label id="sos-status">Hello, welcome {{ request.session.external_username }}.</label></li>
-					{% if role != "sho" and role != "cm" and role != "sm" %}
-						<li>
-							<a href="#" id="sos-btn">
-								<img style="margin-bottom: -22px; margin-right: -20px;" width="58" height="55"
-									 src="{% static 'images/sos_button.png' %}" alt="SOS">
-							</a>
-						</li>
-					{% endif %}
-					<li><a href="/home">Home</a></li>
-					{% if role != "sho" and role != "cm" and role != "sm" %}
-						<li>
-							<a href="#">Services
-								<img style="margin-bottom: -10px; margin-left: 5px;"
-									 src="{% static '/images/arrow.svg' %}" width="30" height="30" alt="">
-							</a>
-							<ul>
-								<li><a href="/complaint">E-Complaint Registration</a></li>
-								<li><a href="/track_complaint">Complaint Tracking</a></li>
-								<li><a href="/download_complaint">Download Complaint</a></li>
-							</ul>
-						</li>
-					{% endif %}
-					<li><a href="/" class="button">Logout</a></li>
-				</ul>
-			</nav><br>
-			<marquee style="background-color: #81818137;color: #ffffff;font-weight: bold;">🔔 Notification: 🆕 Smart SOS System just rolled out</marquee>
-		</header>
-
-<div class="main-wrapper">
-    <div class="complaint-card">
-        <div class="card-header">
-            <h2>Secure Complaint Portal</h2>
-            <p>Your details are protected with end-to-end encryption.</p>
-        </div>
-
-        <form method="POST" action="" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="form-group">
-                <label>First Name</label>
-                <input type="text" id="fname" name="fname" required placeholder="Enter first name">
-            </div>
-        <div class="form-group">
-             <label>Last Name</label>
-                <input id="lname" type="text" name="lname" required placeholder="Enter last name">
-            </div>
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>Email ID</label>
-                    <input id="email" type="email" name="email" required placeholder="name@email.com">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>Phone</label>
-                    <input id="phone" type="text" name="phone" required placeholder="Mobile number">
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>Date of Incident</label>
-                    <input id="date" type="date" name="date" required>
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>District</label>
-                    <select id="district" name="district" required>
-                        <option value="" disabled selected>Select District</option>
-                        <optgroup label="Kerala Districts">
-                            <option value="kasaragod">Kasaragod</option>
-                            <option value="kannur">Kannur</option>
-                            <option value="wayanad">Wayanad</option>
-                            <option value="kozhikode">Kozhikode</option>
-                            <option value="malappuram">Malappuram</option>
-                            <option value="palakkad">Palakkad</option>
-                            <option value="thrissur">Thrissur</option>
-                            <option value="ernakulam">Ernakulam</option>
-                            <option value="idukki">Idukki</option>
-                            <option value="kottayam">Kottayam</option>
-                            <option value="alappuzha">Alappuzha</option>
-                            <option value="pathanamthitta">Pathanamthitta</option>
-                            <option value="kollam">Kollam</option>
-                            <option value="thiruvananthapuram">Thiruvananthapuram</option>
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Incident Details</label>
-                <textarea id="description" name="description" rows="5" required placeholder="Describe what happened..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Supporting Evidence</label>
-                <input id="image" type="file" name="image" style="padding: 10px;">
-                <span class="info-tag">Optional: Photos, Documents, or Screenshots.</span>
-            </div>
-
-            <button type="submit" class="submit-btn">
-                <span>✓</span> REGISTER COMPLAINT
-            </button>
-
-            {% if info %}
-            <div class="success-alert">
-                {{ info }}
-            </div>
-            {% endif %}
-        </form>
-    </div>
-</div>
-	</div>
-
-	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
-	<script src="{% static 'assets/js/browser.min.js' %}"></script>
-	<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
-	<script src="{% static 'assets/js/util.js' %}"></script>
-	<script src="{% static 'assets/js/main.js' %}"></script>
-	<script>
-	// Enhance titleBar with SOS button and Sign Up button on mobile
-	$(document).ready(function() {
-		setTimeout(function() {
-			var $titleBar = $('#titleBar');
-			if ($titleBar.length) {
-				// Add SOS button to titleBar if it exists in nav
-				var $sosBtn = $('#nav #sos-btn');
-				if ($sosBtn.length && !$titleBar.find('.sos-btn-mobile').length) {
-					var sosImgSrc = $sosBtn.find('img').attr('src');
-					$titleBar.append(
-						'<a href="#" class="sos-btn-mobile" id="sos-btn-mobile" style="position: absolute; right: 60px; top: 0; height: 44px; width: 44px; display: flex; align-items: center; justify-content: center; z-index: 10002;"><img src="' + sosImgSrc + '" alt="SOS" style="max-width: 36px; max-height: 36px;"></a>'
-					);
-				}
-
-				// Add Sign Up/Logout button to titleBar
-				var $logBtn = $('#nav').find('a.button.primary, #nav a[href="/signup"], #nav a.button:contains("Sign Up"), #nav a.button:contains("Login")');
-				if ($logBtn.length && !$titleBar.find('.log-btn-mobile').length) {
-					var logHref = $logBtn.attr('href');
-					var logText = $logBtn.text().trim();
-					if (logText && (logText.includes('Sign Up') || logText.includes('Login'))) {
-						$titleBar.append(
-							'<a href="' + logHref + '" class="log-btn-mobile" style="position: absolute; right: 10px; top: 0; height: 44px; line-height: 44px; padding: 0 12px; color: #ffffff; text-decoration: none; font-size: 0.85em; z-index: 10002;">' + logText + '</a>'
-						);
-					}
-				}
-			}
-		}, 150);
-	});
-
-	// Enhance mobile menu to include labels and images, and remove duplicate SOS buttons
-	$(document).ready(function() {
-		setTimeout(function() {
-			var $navPanel = $('#navPanel');
-			if ($navPanel.length) {
-				// Remove duplicate SOS buttons from navPanel (keep only one if any)
-				var $sosLinks = $navPanel.find('a[href="#"]');
-				var sosCount = 0;
-				$sosLinks.each(function() {
-					var $link = $(this);
-					var linkText = $link.text().trim();
-					// Check if this is an SOS button (has # href and might have image or be empty)
-					if ($link.attr('href') === '#' && ($link.find('img').length > 0 || linkText === '')) {
-						sosCount++;
-						if (sosCount > 1) {
-							$link.remove(); // Remove duplicate
-						}
-					}
-				});
-
-				var $originalStatus = $('#nav #sos-status');
-				if ($originalStatus.length && $originalStatus.text().trim()) {
-					var statusText = $originalStatus.text();
-					if ($navPanel.find('.sos-status-mobile').length === 0) {
-						$navPanel.find('nav').prepend(
-							'<div class="sos-status-mobile" style="color: rgba(255, 255, 255, 0.9); padding: 0.75em 0.5em; border-bottom: solid 1px rgba(255, 255, 255, 0.1); font-size: 0.9em; line-height: 1.5; word-wrap: break-word;">' + statusText + '</div>'
-						);
-					}
-				}
-				$navPanel.find('a').each(function() {
-					var $link = $(this);
-					var href = $link.attr('href');
-					if (href && href !== '#') {
-						var $originalLink = $('#nav').find('a[href="' + href + '"]');
-						if ($originalLink.length) {
-							var $img = $originalLink.find('img');
-							if ($img.length && !$link.find('img').length) {
-								var imgSrc = $img.attr('src');
-								var imgAlt = $img.attr('alt') || '';
-								$link.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" style="max-width: 30px; max-height: 30px; vertical-align: middle; margin-right: 8px; display: inline-block;">');
-							}
-						}
-					}
-				});
-			}
-		}, 100);
-	});
-
-	// SOS Button functionality (works for both desktop and mobile buttons)
-	function handleSOSClick(event) {
-		event.preventDefault();
-		const statusText = document.getElementById("sos-status");
-
-		if (!navigator.geolocation) {
-			if (statusText) statusText.textContent = "Geolocation not supported.";
-			$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Geolocation not supported.");
-			return;
+		/* ── Top bar ── */
+		#mob-topbar {
+			display: flex;
+			position: fixed;
+			top: 0; left: 0; right: 0;
+			height: 56px;
+			background: #1a1b27;
+			align-items: center;
+			padding: 0 16px;
+			z-index: 9000;
+			box-shadow: 0 1px 10px rgba(0,0,0,0.55);
+			gap: 10px;
+		}
+		.tb-back {
+			text-decoration: none !important;
+			border: none !important;
+			color: rgba(255,255,255,0.5);
+			display: flex; align-items: center;
+			flex-shrink: 0;
+		}
+		.tb-back svg { width: 22px; height: 22px; fill: currentColor; }
+		.tb-brand {
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-weight: 800; font-size: 18px;
+			color: #e44c65; letter-spacing: 1.5px;
+			text-decoration: none !important;
+			border: none !important;
+		}
+		.tb-title {
+			flex: 1;
+			text-align: right;
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 12px;
+			color: rgba(255,255,255,0.35);
+			white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 		}
 
-		if (statusText) statusText.textContent = "Getting your location...";
-		$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Getting your location...");
-		navigator.geolocation.getCurrentPosition(
-			(pos) => {
-				const latitude = pos.coords.latitude;
-				const longitude = pos.coords.longitude;
-				setTimeout(() => {
-					if (statusText) statusText.textContent = "Preparing SOS message...";
-					$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Preparing SOS message...");
-				}, 1000);
-				setTimeout(() => {
-					if (statusText) statusText.textContent = "Sending location to CMS...";
-					$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Sending location to CMS...");
-				}, 2000);
-				fetch("{% url 'sos' %}", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ latitude: latitude, longitude: longitude }),
-				})
-				.then((res) => res.json())
-				.then((data) => {
-					setTimeout(() => {
-						if (data.ok) {
-							if (statusText) statusText.textContent = "SOS Request Sent Successfully";
-							$('#navPanel .sos-status-mobile').text("SOS Request Sent Successfully");
-						} else {
-							if (statusText) statusText.textContent = "Server Error: " + data.error;
-							$('#navPanel .sos-status-mobile').text("Server Error: " + data.error);
-						}
-					}, 2000);
-				})
-				.catch((err) => {
-					console.error("Fetch error:", err);
-					setTimeout(() => {
-						if (statusText) statusText.textContent = "Network Error: " + err.message;
-						$('#navPanel .sos-status-mobile').text("Network Error: " + err.message);
-					}, 1000);
-				});
-			},
-			(err) => {
-				if (statusText) statusText.textContent = "Geolocation error: " + err.message;
-				$('#navPanel .sos-status-mobile').text("Geolocation error: " + err.message);
-			}
-		);	
+		/* ── Scrollable content ── */
+		#mob-form-wrap {
+			display: block;
+			position: fixed;
+			top: 56px; left: 0; right: 0; bottom: 64px;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
+			padding: 0;
+		}
+
+		/* ── Page hero strip ── */
+		#mob-form-hero {
+			background: linear-gradient(135deg, #e44c65 0%, #b83050 100%);
+			padding: 20px 18px 18px;
+		}
+		#mob-form-hero h2 {
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 18px; font-weight: 800;
+			color: #fff; margin: 0 0 4px;
+		}
+		#mob-form-hero p {
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 12px; color: rgba(255,255,255,0.75);
+			margin: 0;
+		}
+
+		/* ── Form card ── */
+		#mob-form-body {
+			padding: 16px 16px 24px;
+		}
+
+		/* ── Field groups ── */
+		.mob-field { margin-bottom: 16px; }
+		.mob-field label {
+			display: block;
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 10.5px; font-weight: 700;
+			color: var(--accent-neon);
+			text-transform: uppercase; letter-spacing: 1.5px;
+			margin-bottom: 7px;
+		}
+		.mob-field input,
+		.mob-field textarea,
+		.mob-field select {
+			width: 100%; box-sizing: border-box;
+			background: var(--card-bg);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			color: var(--text);
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 14px;
+			padding: 13px 14px;
+			outline: none;
+			-webkit-appearance: none;
+			appearance: none;
+		}
+		.mob-field select {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300d4ff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 14px center;
+			background-size: 16px;
+			padding-right: 38px;
+		}
+		.mob-field option { background: #1a1b27; color: #fff; }
+		.mob-field input:focus,
+		.mob-field textarea:focus,
+		.mob-field select:focus {
+			border-color: rgba(96,165,254,0.6);
+			background: #0f1018;
+		}
+		input[type="date"] { color-scheme: dark; }
+		.mob-field textarea { resize: none; }
+		.mob-field .info-tag {
+			font-size: 11px; color: var(--text-sub);
+			margin-top: 6px; display: block; font-style: italic;
+		}
+
+		/* two-column row */
+		.mob-row {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 12px;
+		}
+
+		/* ── File input ── */
+		.mob-field input[type="file"] {
+			padding: 11px 14px;
+			cursor: pointer;
+		}
+
+		/* ── Submit button ── */
+		.mob-submit {
+			width: 100%;
+			background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+			color: #fff;
+			border: none;
+			border-radius: 14px;
+			padding: 15px;
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 15px; font-weight: 800;
+			cursor: pointer;
+			display: flex; align-items: center; justify-content: center; gap: 10px;
+			margin-top: 8px;
+			box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+			-webkit-tap-highlight-color: transparent;
+		}
+		.mob-submit:active { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); }
+
+		/* ── Success alert ── */
+		.mob-success {
+			margin-top: 16px; padding: 14px;
+			background: rgba(52,211,153,0.12);
+			border: 1px solid #34d399; color: #6ee7b7;
+			border-radius: 12px; text-align: center;
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 14px; font-weight: 700;
+		}
+
+		/* ── Section divider label ── */
+		.mob-section-label {
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			font-size: 10px; font-weight: 700;
+			color: rgba(255,255,255,0.25);
+			text-transform: uppercase; letter-spacing: 2px;
+			padding: 14px 0 8px;
+		}
+
+		/* ── Bottom nav ── */
+		#bottom-nav {
+			display: flex;
+			position: fixed;
+			bottom: 0; left: 0; right: 0;
+			height: 64px;
+			background: #1a1b27;
+			border-top: 1px solid rgba(255,255,255,0.07);
+			z-index: 9000;
+			box-shadow: 0 -2px 16px rgba(0,0,0,0.4);
+		}
+		.bnav-item {
+			flex: 1; display: flex; flex-direction: column;
+			align-items: center; justify-content: center;
+			text-decoration: none !important;
+			color: rgba(255,255,255,0.3);
+			font-size: 9.5px;
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			gap: 4px; cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+			padding: 6px 1px;
+			transition: color 0.15s;
+			border: none !important; background: none;
+		}
+		.bnav-item svg { width: 22px; height: 22px; fill: currentColor; display: block; }
+		.bnav-item span { display: block; line-height: 1; }
+		.bnav-item.active { color: #e44c65; }
+		.bnav-item:hover   { color: #e44c65; }
+		.bnav-logout { color: rgba(228,76,101,0.4); }
 	}
 
-	// Attach SOS functionality to both desktop and mobile buttons
-	const sosBtn = document.getElementById("sos-btn");
-	const sosBtnMobile = document.getElementById("sos-btn-mobile");
-	const statusText = document.getElementById("sos-status");
-	
-	if (sosBtn) {
-		sosBtn.addEventListener("click", handleSOSClick);
+	/* Hide mobile shell on desktop */
+	@media screen and (min-width: 737px) {
+		#mob-topbar, #mob-form-wrap, #bottom-nav { display: none !important; }
 	}
-	if (sosBtnMobile) {
-		sosBtnMobile.addEventListener("click", handleSOSClick);
-	}
+	</style>
+</head>
+<body class="is-preload">
+<div id="page-wrapper">
 
-	if (statusText) {
-		var observer = new MutationObserver(function(mutations) {
-			$('#navPanel .sos-status-mobile').text(statusText.textContent);
-		});
-		observer.observe(statusText, { childList: true, characterData: true, subtree: true });
-	}
-	</script>
+	<!-- ══ DESKTOP HEADER ══ -->
+	<header id="header">
+		<h1 id="logo"><b><a href="/home" style="font-weight:bold;">E-COPS</a></b></h1>
+		<nav id="nav">
+			<ul>
+				<li><label id="sos-status">Hello, {{ request.session.external_username }}</label></li>
+				{% if role != "sho" and role != "cm" and role != "sm" %}
+					<li><a href="#" id="sos-btn" title="SOS"><img width="44" height="42" src="{% static 'images/sos_button.png' %}" alt="SOS"></a></li>
+				{% endif %}
+				<li><a href="/home">Home</a></li>
+				{% if role != "sho" and role != "cm" and role != "sm" %}
+					<li>
+						<a href="#">Services <img style="vertical-align:middle;margin-left:4px;" src="{% static '/images/arrow.svg' %}" width="24" height="24"></a>
+						<ul>
+							<li><a href="/complaint">E-Complaint Registration</a></li>
+							<li><a href="/track_complaint">Complaint Tracking</a></li>
+							<li><a href="/download_complaint">Download Complaint</a></li>
+						</ul>
+					</li>
+				{% endif %}
+				<li><a href="/" class="button primary">Logout</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<!-- ══ DESKTOP FORM ══ -->
+	<div class="main-wrapper">
+		<div class="complaint-card">
+			<div class="card-header">
+				<h2>Secure Complaint Portal</h2>
+				<p>Your details are protected with end-to-end encryption.</p>
+			</div>
+			<form method="POST" action="" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="form-group"><label>First Name</label><input type="text" name="fname" required placeholder="Enter first name"></div>
+				<div class="form-group"><label>Last Name</label><input type="text" name="lname" required placeholder="Enter last name"></div>
+				<div class="form-row">
+					<div class="form-group"><label>Email ID</label><input type="email" name="email" required placeholder="name@email.com"></div>
+					<div class="form-group"><label>Phone</label><input type="text" name="phone" required placeholder="Mobile number"></div>
+				</div>
+				<div class="form-row">
+					<div class="form-group"><label>Date of Incident</label><input type="date" name="date" required></div>
+					<div class="form-group">
+						<label>District</label>
+						<select name="district" required>
+							<option value="" disabled selected>Select District</option>
+							<optgroup label="Kerala Districts">
+								<option value="kasaragod">Kasaragod</option><option value="kannur">Kannur</option>
+								<option value="wayanad">Wayanad</option><option value="kozhikode">Kozhikode</option>
+								<option value="malappuram">Malappuram</option><option value="palakkad">Palakkad</option>
+								<option value="thrissur">Thrissur</option><option value="ernakulam">Ernakulam</option>
+								<option value="idukki">Idukki</option><option value="kottayam">Kottayam</option>
+								<option value="alappuzha">Alappuzha</option><option value="pathanamthitta">Pathanamthitta</option>
+								<option value="kollam">Kollam</option><option value="thiruvananthapuram">Thiruvananthapuram</option>
+							</optgroup>
+						</select>
+					</div>
+				</div>
+				<div class="form-group"><label>Incident Details</label><textarea name="description" rows="5" required placeholder="Describe what happened..."></textarea></div>
+				<div class="form-group">
+					<label>Supporting Evidence</label>
+					<input type="file" name="image" style="padding:10px;">
+					<span class="info-tag">Optional: Photos, Documents, or Screenshots.</span>
+				</div>
+				<button type="submit" class="submit-btn"><span>✓</span> REGISTER COMPLAINT</button>
+				{% if info %}<div class="success-alert">{{ info }}</div>{% endif %}
+			</form>
+		</div>
+	</div>
+
+</div><!-- /#page-wrapper -->
+
+<!-- ══════════════════════════════════════════
+     MOBILE APP UI
+     ══════════════════════════════════════════ -->
+
+<!-- Top bar -->
+<div id="mob-topbar">
+	<a href="/home" class="tb-back">
+		<svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+	</a>
+	<a href="/home" class="tb-brand">E-COPS</a>
+	<span class="tb-title">E-Complaint</span>
+</div>
+
+<!-- Scrollable form -->
+<div id="mob-form-wrap">
+
+	<!-- Hero strip -->
+	<div id="mob-form-hero">
+		<h2>📋 Register a Complaint</h2>
+		<p>Your details are protected with end-to-end encryption.</p>
+	</div>
+
+	<!-- Form body -->
+	<div id="mob-form-body">
+		<form method="POST" action="" enctype="multipart/form-data">
+			{% csrf_token %}
+
+			<div class="mob-section-label">Personal Details</div>
+
+			<div class="mob-row">
+				<div class="mob-field">
+					<label>First Name</label>
+					<input type="text" name="fname" required placeholder="First name">
+				</div>
+				<div class="mob-field">
+					<label>Last Name</label>
+					<input type="text" name="lname" required placeholder="Last name">
+				</div>
+			</div>
+
+			<div class="mob-field">
+				<label>Email ID</label>
+				<input type="email" name="email" required placeholder="name@email.com">
+			</div>
+
+			<div class="mob-field">
+				<label>Phone</label>
+				<input type="tel" name="phone" required placeholder="Mobile number">
+			</div>
+
+			<div class="mob-section-label">Incident Details</div>
+
+			<div class="mob-row">
+				<div class="mob-field">
+					<label>Date</label>
+					<input type="date" name="date" required>
+				</div>
+				<div class="mob-field">
+					<label>District</label>
+					<select name="district" required>
+						<option value="" disabled selected>Select</option>
+						<optgroup label="Kerala">
+							<option value="kasaragod">Kasaragod</option>
+							<option value="kannur">Kannur</option>
+							<option value="wayanad">Wayanad</option>
+							<option value="kozhikode">Kozhikode</option>
+							<option value="malappuram">Malappuram</option>
+							<option value="palakkad">Palakkad</option>
+							<option value="thrissur">Thrissur</option>
+							<option value="ernakulam">Ernakulam</option>
+							<option value="idukki">Idukki</option>
+							<option value="kottayam">Kottayam</option>
+							<option value="alappuzha">Alappuzha</option>
+							<option value="pathanamthitta">Pathanamthitta</option>
+							<option value="kollam">Kollam</option>
+							<option value="thiruvananthapuram">Thiruvananthapuram</option>
+						</optgroup>
+					</select>
+				</div>
+			</div>
+
+			<div class="mob-field">
+				<label>Incident Description</label>
+				<textarea name="description" rows="5" required placeholder="Describe what happened in detail…"></textarea>
+			</div>
+
+			<div class="mob-section-label">Evidence</div>
+
+			<div class="mob-field">
+				<label>Supporting File</label>
+				<input type="file" name="image">
+				<span class="info-tag">Optional — Photos, documents, or screenshots.</span>
+			</div>
+
+			<button type="submit" class="mob-submit">
+				<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#fff;flex-shrink:0;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+				REGISTER COMPLAINT
+			</button>
+
+			{% if info %}
+			<div class="mob-success">{{ info }}</div>
+			{% endif %}
+
+		</form>
+	</div>
+</div><!-- /#mob-form-wrap -->
+
+<!-- Bottom nav -->
+<nav id="bottom-nav">
+	<a href="/home" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+		<span>Home</span>
+	</a>
+	<a href="/complaint" class="bnav-item active">
+		<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+		<span>Complain</span>
+	</a>
+	<a href="/track_complaint" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+		<span>Track</span>
+	</a>
+	<a href="/download_complaint" class="bnav-item">
+		<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+		<span>Download</span>
+	</a>
+	<a href="/" class="bnav-item bnav-logout">
+		<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+		<span>Logout</span>
+	</a>
+</nav>
+
+<!-- Scripts -->
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+<script src="{% static 'assets/js/browser.min.js' %}"></script>
+<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'assets/js/util.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+<script>
+/* SOS desktop */
+function handleSOSClick(e) {
+	e.preventDefault();
+	var $s = $('#sos-status');
+	if (!navigator.geolocation) { $s.text('Geolocation not supported.'); return; }
+	$s.text('Getting location…');
+	navigator.geolocation.getCurrentPosition(function(pos) {
+		$s.text('Sending SOS…');
+		fetch("{% url 'sos' %}", {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ latitude: pos.coords.latitude, longitude: pos.coords.longitude })
+		}).then(r => r.json()).then(function(d) {
+			$s.text(d.ok ? 'SOS Sent!' : 'Error: ' + d.error);
+		}).catch(function() { $s.text('Network error.'); });
+	}, function(e) { $s.text('Location error: ' + e.message); });
+}
+$('#sos-btn').on('click', handleSOSClick);
+</script>
 </body>
 </html>

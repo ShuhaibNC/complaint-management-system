@@ -2,514 +2,1024 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>F-Box</title>
+	<title>E-COPS</title>
 	<link rel="icon" type="image/png" href="{% static 'images/Kerala_State_Police_Logo.png' %}"/>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
-	<noscript>
-		<link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" />
-	</noscript>
-	
-	{% block extra_head %}{% endblock %}
+	<noscript><link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}" /></noscript>
+
+	<style>
+	/* =====================================================
+	   DESKTOP HEADER — fixed, clean, no glitch
+	   ===================================================== */
+
+	/* 1. Reset any theme positioning on header */
+	#header {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: space-between !important;
+		padding: 0 2em !important;
+		height: 3.75em !important;
+		position: fixed !important;
+		top: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
+		width: 100% !important;
+		background: rgba(27, 28, 38, 0.98) !important;
+		box-shadow: 0 1px 0 rgba(255,255,255,0.05), 0 2px 16px rgba(0,0,0,0.45) !important;
+		z-index: 10000 !important;
+		box-sizing: border-box !important;
+		backdrop-filter: blur(10px) !important;
+		-webkit-backdrop-filter: blur(10px) !important;
+		border-bottom: 1px solid rgba(228,76,101,0.12) !important;
+	}
+
+	/* 2. Logo — static, not absolute */
+	#header h1#logo {
+		position: static !important;
+		transform: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		line-height: 3.75em !important;  /* match header height exactly */
+		flex-shrink: 0 !important;
+		display: flex !important;
+		align-items: center !important;
+		height: 3.75em !important;
+	}
+	#header h1#logo a {
+		font-size: 1.35em !important;
+		font-weight: 900 !important;
+		letter-spacing: 2px !important;
+		color: #e44c65 !important;
+		text-decoration: none !important;
+		border: none !important;
+		line-height: 1 !important;
+		display: block !important;
+	}
+
+	/* 3. Nav — static, flex row */
+	#header nav#nav {
+		position: static !important;
+		transform: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	#header nav#nav > ul {
+		display: flex !important;
+		align-items: center !important;
+		flex-wrap: nowrap !important;
+		gap: 0.25em !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		list-style: none !important;
+	}
+	#header nav#nav > ul > li {
+		margin: 0 !important;
+		padding: 0 !important;
+		position: relative !important;
+	}
+
+	/* 4. Greeting label */
+	#header nav#nav > ul > li > label {
+		color: rgba(255,255,255,0.5) !important;
+		font-size: 0.75em !important;
+		margin: 0 0.6em 0 0 !important;
+		white-space: nowrap !important;
+		display: inline-block !important;
+		padding: 0 !important;
+		border-right: 1px solid rgba(255,255,255,0.1) !important;
+		padding-right: 0.9em !important;
+	}
+
+	/* 5. Plain links */
+	#header nav#nav > ul > li > a:not(.button) {
+
+		white-space: nowrap !important;
+		font-size: 0.82em !important;
+		color: rgba(255,255,255,0.7) !important;
+		padding: 0 0.6em !important;
+		text-decoration: none !important;
+		border: none !important;
+		transition: color 0.15s !important;
+	}
+	#header nav#nav > ul > li > a:not(.button):hover {
+		color: #e44c65 !important;
+	}
+
+	/* 6. Button links */
+	#header nav#nav > ul > li > a.button {
+		height: 2em !important;
+		line-height: 2em !important;
+		padding: 0 1.1em !important;
+		font-size: 0.78em !important;
+		white-space: nowrap !important;
+		border-radius: 4px !important;
+		margin: 0 0.15em !important;
+	}
+	#header nav#nav > ul > li > a.button.primary {
+		background: #e44c65 !important;
+		border-color: #e44c65 !important;
+		color: #fff !important;
+	}
+	#header nav#nav > ul > li > a.button.primary:hover {
+		background: #c03050 !important;
+		border-color: #c03050 !important;
+	}
+	#header nav#nav > ul > li > a.button:not(.primary) {
+		background: rgba(255,255,255,0.06) !important;
+		border: 1px solid rgba(255,255,255,0.14) !important;
+		color: rgba(255,255,255,0.8) !important;
+	}
+	#header nav#nav > ul > li > a.button:not(.primary):hover {
+		background: rgba(255,255,255,0.1) !important;
+		border-color: rgba(228,76,101,0.4) !important;
+		color: #fff !important;
+	}
+
+	/* 7. Dropdown arrow image fix */
+	#header nav#nav > ul > li > a img {
+
+		margin-left: 4px !important;
+		display: inline !important;
+		margin-bottom: 0 !important;
+	}
+
+	/* 8. Dropdown sub-menu — native ul AND dropotron-generated wrappers */
+
+	/* The theme's dropotron.js moves the <ul> out of the DOM and wraps it
+	   in a div.dropotron — we must style both the original ul and that wrapper */
+
+	/* Native ul (before dropotron activates) */
+	#header nav#nav > ul > li > ul {
+		position: absolute !important;
+		top: 3.75em !important;
+		right: 0 !important;
+		background: #1a1b27 !important;
+		border: 1px solid rgba(255,255,255,0.1) !important;
+		border-radius: 8px !important;
+		box-shadow: 0 8px 32px rgba(0,0,0,0.55) !important;
+		min-width: 210px !important;
+		padding: 6px 0 !important;
+		list-style: none !important;
+		z-index: 10001 !important;
+		margin: 0 !important;
+		pointer-events: auto !important;
+	}
+
+	/* dropotron styling — visual only, never override position/display/z-index */
+	.dropotron {
+		background: #1a1b27;
+		border: 1px solid rgba(255,255,255,0.1);
+		border-top: 2px solid #e44c65;
+		border-radius: 0 0 8px 8px;
+		box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+		min-width: 210px;
+		padding: 6px 0;
+		list-style: none;
+	}
+	.dropotron li {
+		border-bottom: 1px solid rgba(255,255,255,0.04);
+		list-style: none;
+	}
+	.dropotron li:last-child { border-bottom: none; }
+	.dropotron li a {
+		display: block;
+		padding: 10px 18px;
+		font-size: 0.83em;
+		color: rgba(255,255,255,0.75);
+		white-space: nowrap;
+		text-decoration: none;
+		border: none;
+		background: transparent;
+		transition: background 0.12s, color 0.12s;
+	}
+	.dropotron li a:hover {
+		background: rgba(228,76,101,0.12);
+		color: #e44c65;
+	}
+
+	/* ── Restore #header > h2 title block (used on inner pages) ── */
+	/* Some pages render a <h2> directly in #header for the page title.
+	   Make sure it's visible and properly positioned. */
+	#header > h2 {
+		position: static !important;
+		margin: 0 !important;
+		font-size: 1em !important;
+		font-weight: 600 !important;
+		color: rgba(255,255,255,0.85) !important;
+		letter-spacing: 1px !important;
+		text-transform: uppercase !important;
+
+		flex: 1 !important;
+		text-align: center !important;
+	}
+
+	/* ── .major header block (page-level section titles) ── */
+	.major {
+		text-align: center !important;
+		margin-bottom: 2em !important;
+	}
+	.major h2 {
+		font-size: 1.75em !important;
+		font-weight: 700 !important;
+		letter-spacing: 1px !important;
+		text-transform: uppercase !important;
+		border-bottom: 2px solid #e44c65 !important;
+		display: inline-block !important;
+		padding-bottom: 0.35em !important;
+		margin-bottom: 0.5em !important;
+	}
+	.major p {
+		color: rgba(255,255,255,0.55) !important;
+		font-size: 0.9em !important;
+	}
+
+	/* 9. SOS image button */
+	#sos-btn {
+		display: flex !important;
+		align-items: center !important;
+		border: none !important;
+	}
+	#sos-btn img {
+		display: block !important;
+		margin: 0 !important;
+
+	}
+
+	/* =====================================================
+	   NOTIFICATION MARQUEE — sits flush below header,
+	   never overlaps it, never jumps
+	   ===================================================== */
+	.desk-marquee {
+		position: fixed !important;
+		top: 3.75em !important;   /* exactly header height */
+		left: 0 !important;
+		right: 0 !important;
+		z-index: 9999 !important; /* just below header */
+		background: rgba(228,76,101,0.13) !important;
+		border-bottom: 1px solid rgba(228,76,101,0.2) !important;
+		padding: 3px 0 !important;
+		line-height: 1.6 !important;
+	}
+	.desk-marquee marquee {
+		color: rgba(255,255,255,0.85) !important;
+		font-size: 0.76em !important;
+		font-weight: 600 !important;
+		letter-spacing: 0.5px !important;
+	}
+
+	/* 10. Page body offset so content clears the fixed bars */
+	body { padding-top: 3.75em !important; }
+	body.has-marquee { padding-top: 5.15em !important; }
+
+	/* Remove the old page-wrapper padding hack */
+	body.has-marquee #page-wrapper { padding-top: 0 !important; }
+
+	/* =====================================================
+	   MOBILE — show clean app UI, hide desktop elements
+	   ===================================================== */
+	@media screen and (max-width: 736px) {
+
+		/* Override the desktop padding-top on mobile */
+		body, body.has-marquee { padding-top: 0 !important; }
+
+		/* ── Hide ALL desktop-only content ── */
+		#header,
+		.desk-marquee,
+		#banner,
+		#one, #two, #three, #four,
+		#titleBar, #navPanel {
+			display: none !important;
+		}
+
+		/* ── App shell ── */
+		html, body { background: #0f1018 !important; }
+		#page-wrapper {
+			padding: 0 0 68px !important;
+			min-height: 100vh;
+			background: #0f1018;
+		}
+
+		/* ── Top app bar ── */
+		#mob-topbar {
+			display: flex;
+			position: fixed;
+			top: 0; left: 0; right: 0;
+			height: 56px;
+			background: #1a1b27;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 16px;
+			z-index: 9000;
+			box-shadow: 0 1px 10px rgba(0,0,0,0.55);
+		}
+		.tb-brand {
+			font-family: "Roboto", sans-serif;
+			font-weight: 700;
+			font-size: 20px;
+			color: #e44c65;
+			letter-spacing: 2px;
+			text-decoration: none;
+			border: none !important;
+		}
+		.tb-user {
+			font-family: "Roboto", sans-serif;
+			font-size: 12px;
+			color: rgba(255,255,255,0.5);
+			max-width: 55vw;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		/* ── Notification bar ── */
+		#mob-notif {
+			position: fixed;
+			top: 56px; left: 0; right: 0;
+			z-index: 8999;
+			background: rgba(228,76,101,0.18);
+			font-size: 11.5px;
+			font-weight: bold;
+			color: #fff;
+			overflow: hidden;
+		}
+		#mob-notif marquee { display: block; padding: 3px 0; }
+
+		/* ── Scrollable content ── */
+		#mob-content {
+			display: block;
+			position: fixed;
+			top: 56px;
+			left: 0; right: 0;
+			bottom: 64px;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
+			padding: 0;
+			margin: 0;
+		}
+		{% if notification %}#mob-content { top: 78px; }{% endif %}
+
+		/* ── Section label ── */
+		.mob-label {
+			padding: 14px 16px 6px;
+			font-family: "Roboto", sans-serif;
+			font-size: 10.5px;
+			font-weight: 600;
+			color: rgba(255,255,255,0.28);
+			letter-spacing: 2px;
+			text-transform: uppercase;
+		}
+
+		/* ── Hero greeting ── */
+		#mob-hero {
+			margin: 25px 16px 0;
+			background: linear-gradient(135deg, #e44c65 0%, #b83050 100%);
+			border-radius: 20px;
+			padding: 22px 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			box-shadow: 0 6px 24px rgba(228,76,101,0.3);
+		}
+		.hero-text h2 {
+			font-family: "Roboto", sans-serif;
+			font-size: 18px;
+			font-weight: 700;
+			color: #fff;
+			margin: 0 0 4px;
+			line-height: 1.2;
+		}
+		.hero-text p {
+			font-family: "Roboto", sans-serif;
+			font-size: 12px;
+			color: rgba(255,255,255,0.75);
+			margin: 0;
+		}
+		.hero-logo {
+			width: 52px; height: 52px;
+			border-radius: 50%;
+			background: rgba(255,255,255,0.15);
+			padding: 7px;
+			flex-shrink: 0;
+			margin-left: 12px;
+			object-fit: contain;
+		}
+
+		/* ── SOS banner ── */
+		#mob-sos-banner {
+			margin: 12px 16px 0;
+			background: #1a1b27;
+			border: 1.5px solid rgba(228,76,101,0.35);
+			border-radius: 16px;
+			padding: 15px 16px;
+			display: flex;
+			align-items: center;
+			gap: 13px;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+			text-decoration: none;
+		}
+		.sos-icon {
+			width: 44px; height: 44px;
+			border-radius: 50%;
+			background: #e44c65;
+			display: flex; align-items: center; justify-content: center;
+			flex-shrink: 0;
+			animation: sos-pulse 2s infinite;
+		}
+		.sos-icon svg { width: 22px; height: 22px; fill: #fff; }
+		@keyframes sos-pulse {
+			0%,100% { box-shadow: 0 0 0 0 rgba(228,76,101,0.55); }
+			60%      { box-shadow: 0 0 0 9px rgba(228,76,101,0); }
+		}
+		.sos-text strong {
+			display: block;
+			font-family: "Roboto", sans-serif;
+			font-size: 14px;
+			color: #fff;
+			font-weight: 600;
+		}
+		.sos-text span {
+			font-family: "Roboto", sans-serif;
+			font-size: 11px;
+			color: rgba(255,255,255,0.4);
+		}
+		.sos-chevron { margin-left: auto; opacity: 0.35; }
+		.sos-chevron svg { width: 20px; height: 20px; fill: #fff; }
+
+		/* ── Quick action grid ── */
+		#mob-quickactions {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 10px;
+			padding: 0 16px;
+		}
+		.qcard {
+			background: #1a1b27;
+			border-radius: 16px;
+			padding: 20px 10px 16px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			text-decoration: none !important;
+			color: rgba(255,255,255,0.75);
+			font-family: "Roboto", sans-serif;
+			font-size: 12px;
+			font-weight: 400;
+			border: 1px solid rgba(255,255,255,0.04);
+			box-shadow: 0 2px 14px rgba(0,0,0,0.25);
+			transition: background 0.15s, transform 0.12s;
+			-webkit-tap-highlight-color: transparent;
+			min-height: 100px;
+		}
+		.qcard:active { transform: scale(0.96); background: #22233a; }
+		.qcard-icon {
+			width: 42px; height: 42px;
+			background: rgba(228,76,101,0.1);
+			border-radius: 13px;
+			display: flex; align-items: center; justify-content: center;
+		}
+		.qcard-icon svg { width: 22px; height: 22px; fill: #e44c65; }
+		.qcard span { text-align: center; line-height: 1.35; color: rgba(255,255,255,0.7); }
+
+		/* ── Staff action list ── */
+		#mob-staffactions {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			padding: 0 16px;
+		}
+		.scard {
+			background: #1a1b27;
+			border-radius: 14px;
+			padding: 14px 16px;
+			display: flex;
+			align-items: center;
+			gap: 13px;
+			text-decoration: none !important;
+			color: rgba(255,255,255,0.8);
+			font-family: "Roboto", sans-serif;
+			font-size: 14px;
+			border: 1px solid rgba(255,255,255,0.04);
+			-webkit-tap-highlight-color: transparent;
+			transition: background 0.12s;
+		}
+		.scard:active { background: #22233a; }
+		.sc-icon {
+			width: 38px; height: 38px;
+			border-radius: 11px;
+			background: rgba(228,76,101,0.1);
+			display: flex; align-items: center; justify-content: center;
+			flex-shrink: 0;
+		}
+		.sc-icon svg { width: 20px; height: 20px; fill: #e44c65; }
+		.sc-label { flex: 1; }
+		.sc-arrow svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.18); }
+		.scard.alert-card { border-color: rgba(228,76,101,0.3); }
+		.scard.alert-card .sc-icon { background: rgba(228,76,101,0.18); }
+		.sc-badge {
+			background: #e44c65;
+			color: #fff;
+			font-size: 9.5px;
+			font-weight: 700;
+			border-radius: 20px;
+			padding: 2px 9px;
+			letter-spacing: 0.5px;
+		}
+
+		/* ── Mobile feedback ── */
+		#mob-feedback {
+			margin: 0 16px;
+			background: #1a1b27;
+			border-radius: 16px;
+			padding: 18px;
+			border: 1px solid rgba(255,255,255,0.04);
+		}
+		#mob-feedback h3 {
+			font-family: "Roboto", sans-serif;
+			font-size: 14px;
+			font-weight: 500;
+			color: rgba(255,255,255,0.85);
+			margin: 0 0 12px;
+			line-height: 1;
+		}
+		#mob-feedback textarea {
+			width: 100%;
+			box-sizing: border-box;
+			background: #12131c;
+			border: 1px solid rgba(255,255,255,0.08);
+			border-radius: 10px;
+			color: rgba(255,255,255,0.8);
+			font-family: "Roboto", sans-serif;
+			font-size: 13px;
+			padding: 12px;
+			resize: none;
+			outline: none;
+			-webkit-appearance: none;
+		}
+		#mob-feedback textarea:focus { border-color: rgba(228,76,101,0.6); }
+		#mob-feedback button {
+			margin-top: 10px;
+			width: 100%;
+			background: #e44c65;
+			color: #fff;
+			border: none;
+			border-radius: 10px;
+			padding: 13px;
+			font-family: "Roboto", sans-serif;
+			font-size: 14px;
+			font-weight: 500;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+		}
+		#mob-feedback button:active { background: #c03050; }
+		#mob-feedback-status {
+			font-family: "Roboto", sans-serif;
+			font-size: 12px;
+			margin-top: 8px;
+			text-align: center;
+			min-height: 18px;
+		}
+
+		/* ── SOS toast ── */
+		#sos-toast {
+			display: none;
+			position: fixed;
+			bottom: 76px; left: 16px; right: 16px;
+			background: #1e1f2e;
+			color: #fff;
+			font-family: "Roboto", sans-serif;
+			font-size: 13px;
+			padding: 13px 18px;
+			border-radius: 12px;
+			z-index: 20000;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+			border-left: 3px solid #e44c65;
+			text-align: center;
+		}
+
+		/* ── Bottom nav ── */
+		#bottom-nav {
+			display: flex;
+			position: fixed;
+			bottom: 0; left: 0; right: 0;
+			height: 64px;
+			background: #1a1b27;
+			border-top: 1px solid rgba(255,255,255,0.07);
+			z-index: 9000;
+			box-shadow: 0 -2px 16px rgba(0,0,0,0.4);
+		}
+		.bnav-item {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-decoration: none !important;
+			color: rgba(255,255,255,0.3);
+			font-size: 9.5px;
+			font-family: "Roboto", sans-serif;
+			gap: 4px;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+			padding: 6px 1px;
+			transition: color 0.15s;
+			border: none !important;
+			background: none;
+		}
+		.bnav-item svg { width: 22px; height: 22px; fill: currentColor; display: block; }
+		.bnav-item span { display: block; line-height: 1; }
+		.bnav-item.active { color: #e44c65; }
+		.bnav-item:hover  { color: #e44c65; }
+		.bnav-logout { color: rgba(228,76,101,0.4); }
+
+		.mob-spacer { height: 24px; }
+	}
+
+	/* ── Hide all mobile elements on desktop ── */
+	@media screen and (min-width: 737px) {
+		#mob-topbar, #mob-notif, #mob-content,
+		#sos-toast, #bottom-nav,
+		.mob-label, .mob-spacer { display: none !important; }
+	}
+
+	</style>
 </head>
-<body class="is-preload landing">
-	<div id="page-wrapper">
-		<header id="header">
-			<h1 id="logo"><b><a href="#" style="font-weight: bold;">F-BOX</a></b></h1>
-			<nav id="nav">
-				<ul>
-    <li><label id="sos-status">Hello, welcome {{ request.session.external_username }}.</label></li>
+<body class="is-preload landing{% if notification %} has-marquee{% endif %}">
+<div id="page-wrapper">
 
-    {# SOS LINKS #}
-    {% if role == "sm" %}
-        <li><a href="/system_manager/sos_alerts" class="button primary">SOS Alerts</a></li>
-        <li><a href="/home">Home</a></li>
+<!-- ═══════════════════════════════════════════════════════
+     DESKTOP HEADER
+     ═══════════════════════════════════════════════════════ -->
+<header id="header">
+	<h1 id="logo"><a href="/home">E-COPS</a></h1>
+	<nav id="nav">
+		<ul>
+			<li><label id="sos-status">Hello, {{ request.session.external_username }}</label></li>
 
-    {% elif role == "sho" or role == "cm" %}
-        <li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
-        <li><a href="/home">Home</a></li>
+			{% if role == "sm" %}
+				<li><a href="/system_manager/sos_alerts" class="button primary">SOS Alerts</a></li>
+				<li><a href="/home">Home</a></li>
+			{% elif role == "sho" or role == "cm" %}
+				<li><a href="/home/sos_alerts" class="button primary">SOS Alerts</a></li>
+				<li><a href="/home">Home</a></li>
+			{% else %}
+				<li><a href="#" id="sos-btn" title="Send SOS"><img width="44" height="42" src="{% static 'images/sos_button.png' %}" alt="SOS"></a></li>
+				<li><a href="/home">Home</a></li>
+			{% endif %}
 
-    {% else %}
-        <li>
-            <a href="#" id="sos-btn">
-                <img style="margin-bottom: -22px; margin-right: -20px;" width="58" height="55"
-                     src="{% static 'images/sos_button.png' %}" alt="">
-            </a>
-        </li>
-        <li><a href="/home">Home</a></li>
-    {% endif %}
-
-    {# MANAGEMENT LINKS #}
-    {% if role == "sho" or role == "cm" or role == "sm" %}
-        {% if role == "cm" %}
-            <li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
-
-        {% elif role == "sm" %}
-            <li><a href="/manage_complaint_sm" class="button">Manage Complaint</a></li>
-            <li><a href="/manage_users" class="button">Manage Users</a></li>
-			 <li><a href="/manage_notification" class="button">Manage Notification</a></li>
-
-        {% else %}
-            <li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
-        {% endif %}
-
-        <li><a href="/manage_feedback">Manage Feedback</a></li>
-
-    {% endif %}
-
-    {# PUBLIC SERVICES MENU #}
-    {% if role != "sho" and role != "cm" and role != "sm" %}
-        <li>
-            <a href="#">Services
-                <img style="margin-bottom: -10px; margin-left: 5px;"
-                     src="{% static '/images/arrow.svg' %}" width="30" height="30">
-            </a>
-            <ul>
-                <li><a href="/complaint">E-Complaint Registration</a></li>
-                <li><a href="/track_complaint">Complaint Tracking</a></li>
-                <li><a href="/download_complaint">Download Complaint</a></li>
-            </ul>
-        </li>
-    {% endif %}
-
-    <li><a href="/" class="button primary">Logout</a></li>
-</ul>
-
-			</nav><br>
-			{% if notification %}
-    {% for noti in notification %}
-	<marquee style="background-color: #81818137;color: #ffffff;font-weight: bold;">{{ noti.message }}</marquee>
-    {% endfor %}
-{% endif %}
-			
-		</header>
-
-		<!-- Banner -->
-		<section id="banner">
-			<div class="content">
-				<header>
-					<b>
-						<h2>COMPLAINT MANAGEMENT SYSTEM</h2>
-					</b>
-					<p style="font-family: Arial, Helvetica, sans-serif;">A smart and efficient platform to register,
-						track, <br>
-						and resolve complaints with ease.</p>
-				</header>
-				<span class="image"><img src="{% static 'images/Kerala_State_Police_Logo.png' %}" alt="" /></span>
-			</div>
-			<a href="#one" class="goto-next scrolly">Next</a>
-		</section>
-
-		<!-- One -->
-		<section id="one" class="spotlight style1 bottom">
-			<span class="image fit main"><img src="{% static 'images/cell.avif' %}" alt="" /></span>
-			<div class="content">
-				<div class="container">
-					<div class="row">
-						<div class="col-4 col-12-medium">
-							<header>
-								<h2 style="font-weight: bold;">Easily register and track your complaints <br>
-									online fast, simple, and transparent</h2>
-
-							</header>
-						</div>
-						<div class="col-4 col-12-medium">
-							<p style="font-family: Arial, Helvetica, sans-serif;">Our online complaint management system
-								allows users to seamlessly register issues,
-								monitor their progress in real-time,
-								and ensure timely resolution through a transparent and efficient process</p>
-						</div>
-						<div class="col-4 col-12-medium">
-							<p style="font-family: Arial, Helvetica, sans-serif;">This online complaint management
-								system is designed to provide a
-								user-friendly platform where individuals can conveniently submit their complaints,
-								receive acknowledgment, track the status of their issues at every stage,
-								and ensure they are addressed in a timely and transparent manner enhancing
-								accountability,
-								communication, and overall satisfaction.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<a href="#two" class="goto-next scrolly">Next</a>
-		</section>
-
-		<!-- Two -->
-		<section id="two" class="spotlight style2 right">
-			<span class="image fit main"><img src="{% static 'images/jdt1.jpg' %}" alt="" /></span>
-			<div class="content">
-				<header>
-					<h2>JDT ISLAM COLLAGE OF ARTS AND SCIENCE</h2>
-
-				</header>
-				<p>"Final year BCA project" This means the system was created as part of last year
-					academic requirement for the Bachelor of Computer Applications (BCA) course.<BR>
-					"Developed" : I and our team designed and built this system ourselves.<BR>
-					At JDT Islam College of Arts and Science"<BR>
-					showing where the project was completed.</p>
-			</div>
-			<a href="#three" class="goto-next scrolly">Next</a>
-		</section>
-
-		<!-- Three -->
-		<!-- <section id="three" class="spotlight style3 left">
-					<span class="image fit main bottom"><img src="{% static 'images/pic04.jpg' %}" alt="" /></span>
-					<div class="content">
-						<header>
-							<h2>Interdum felis blandit praesent sed augue</h2>
-							<p>Accumsan integer ultricies aliquam vel massa sapien phasellus</p>
-						</header>
-						<p>Feugiat accumsan lorem eu ac lorem amet ac arcu phasellus tortor enim mi mi nisi praesent adipiscing. Integer mi sed nascetur cep aliquet augue varius tempus lobortis porttitor lorem et accumsan consequat adipiscing lorem.</p>
-						<ul class="actions">
-							<li><a href="#" class="button">Learn More</a></li>
-						</ul>
-					</div>
-					<a href="#four" class="goto-next scrolly">Next</a>
-				</section> -->
-
-		<!-- Four -->
-		<section id="four" class="wrapper style1 special fade-up">
-			<div class="container">
-				<!-- <header class="major">
-							<h2>Accumsan sed tempus adipiscing blandit</h2>
-							<p>Iaculis ac volutpat vis non enim gravida nisi faucibus posuere arcu consequat</p>
-						</header> -->
-				<div class="box alt">
-					<div class="row gtr-uniform">
-						<section class="col-3 col-3-medium col-12-xsmall">
-							<a href="/portfolio_adnan/">
-							<img style="border-radius: 50%;" src="{% static '/images/adnan.jpg' %}" width="150px" height="150px">
-							<h3>MOHAMMED ADNAN A K</h3>
-							<p class="teamdesc">Team Lead</p>
-							</a>
-						</section>
-
-						<section class="col-3 col-3-medium col-12-xsmall">
-							<a href="/portfolio_fadhis">
-							<img style="border-radius: 50%;" src="{% static '/images/fadis.jpg' %}" width="150px" height="150px">
-							<h3>MUHAMMED FADHIS</h3>
-							<p class="teamdesc">Crew Member</p>
-							</a>
-						</section>
-
-						<section class="col-3 col-3-medium col-12-xsmall">
-							<a href="/portfolio_sajas">
-							<img style="border-radius: 50%;" src="{% static '/images/sajas.jpg' %}" width="150px" height="150px">
-							<h3>MOHAMMED SAJAS T</h3>
-							<p class="teamdesc">Crew Member</p>
-							</a>
-						</section>
-
-						<section class="col-3 col-3-medium col-12-xsmall">
-							<a href="/portfolio_rahil">
-							<img style="border-radius: 50%;" src="{% static '/images/rahil.jpg' %}" width="150px" height="150px">
-							<h3>MUHAMMED RAHIL P.P</h3>
-							<p class="teamdesc">Crew Member</p>
-							</a>
-						</section>
-					</div>
-				</div>
-
-				<!--	<section class="col-4 col-6-medium col-12-xsmall">
-									<span class="icon solid alt major fa-file"></span>
-									<h3>Odio laoreet accumsan</h3>
-									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-								</section>
-								<section class="col-4 col-6-medium col-12-xsmall">
-									<span class="icon solid alt major fa-lock"></span>
-									<h3>Massa arcu accumsan</h3>
-									<p>Feugiat accumsan lorem eu ac lorem amet accumsan donec. Blandit orci porttitor.</p>
-								</section>
-							</div> -->
-			</div>
-			<footer class="major">
-				{% if role != "sho" %}
-				<center>
-    <textarea id="feedback_text" rows="5" required placeholder="Enter your anonymous feedback here..."
-              style="width:40%; padding:10px; margin: 8px 0; border:1px solid #ccc; border-radius:5px;"></textarea>
-    <br>
-    <button id="feedback_btn" class="button primary" style="margin: 8px;">Send Feedback</button>
-    <p id="feedback_status" style="font-weight:bold; color:green;"></p>
-				</center>
+			{% if role == "sho" or role == "cm" or role == "sm" %}
+				{% if role == "cm" %}
+					<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
+				{% elif role == "sm" %}
+					<li><a href="/manage_complaint_sm" class="button">Manage Complaint</a></li>
+					<li><a href="/manage_users" class="button">Manage Users</a></li>
+					<li><a href="/manage_notification" class="button">Manage Notification</a></li>
 				{% else %}
+					<li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
 				{% endif %}
+				<li><a href="/manage_feedback">Manage Feedback</a></li>
+			{% endif %}
 
-			</footer>
-	</div>
-	</section>
-
-	<!-- Five -->
-	<!-- <section id="five" class="wrapper style2 special fade">
-					<div class="container">
-						<header>
-							<h2>Magna faucibus lorem diam</h2>
-							<p>Ante metus praesent faucibus ante integer id accumsan eleifend</p>
-						</header>
-						<form method="post" action="#" class="cta">
-							<div class="row gtr-uniform gtr-50">
-								<div class="col-8 col-12-xsmall"><input type="email" name="email" id="email" placeholder="Your Email Address" /></div>
-								<div class="col-4 col-12-xsmall"><input type="submit" value="Get Started" class="fit primary" /></div>
-							</div>
-						</form>
-					</div>
-				</section> -->
-
-	<!-- Footer -->
-	<!-- <footer id="footer">
-					<ul class="icons">
-						<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-						<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-						<li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+			{% if role != "sho" and role != "cm" and role != "sm" %}
+				<li>
+					<a href="#">Services <img style="vertical-align:middle;margin-left:4px;" src="{% static '/images/arrow.svg' %}" width="24" height="24"></a>
+					<ul>
+						<li><a href="/complaint">E-Complaint Registration</a></li>
+						<li><a href="/track_complaint">Complaint Tracking</a></li>
+						<li><a href="/download_complaint">Download Complaint</a></li>
 					</ul>
-					<ul class="copyright">
-						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</footer> -->
+				</li>
+			{% endif %}
 
+			<li><a href="/" class="button primary">Logout</a></li>
+		</ul>
+	</nav>
+</header>
+
+{% if notification %}
+<div class="desk-marquee">
+	{% for noti in notification %}<marquee style="color:rgba(255,255,255,0.85);font-weight:600;">{{ noti.message }}</marquee>{% endfor %}
+</div>
+{% endif %}
+
+<!-- ═══════════════════════════════════════════════════════
+     DESKTOP PAGE CONTENT (hidden on mobile via CSS)
+     ═══════════════════════════════════════════════════════ -->
+<section id="banner">
+	<div class="content">
+		<header>
+			<b><h2>COMPLAINT MANAGEMENT SYSTEM</h2></b>
+			<p style="font-family:Arial,Helvetica,sans-serif;">A smart and efficient platform to register,<br>track, and resolve complaints with ease.</p>
+		</header>
+		<span class="image"><img src="{% static 'images/Kerala_State_Police_Logo.png' %}" alt="" /></span>
+	</div>
+	<a href="#one" class="goto-next scrolly">Next</a>
+</section>
+
+<section id="one" class="spotlight style1 bottom">
+	<span class="image fit main"><img src="{% static 'images/cell.avif' %}" alt="" /></span>
+	<div class="content">
+		<div class="container">
+			<div class="row">
+				<div class="col-4 col-12-medium">
+					<header><h2 style="font-weight:bold;">Easily register and track your complaints online — fast, simple, and transparent</h2></header>
+				</div>
+				<div class="col-4 col-12-medium">
+					<p style="font-family:Arial,Helvetica,sans-serif;">Our system allows users to seamlessly register issues, monitor progress in real-time, and ensure timely resolution through a transparent process.</p>
+				</div>
+				<div class="col-4 col-12-medium">
+					<p style="font-family:Arial,Helvetica,sans-serif;">Submit complaints, receive acknowledgment, track status at every stage, and ensure issues are addressed in a timely and transparent manner.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a href="#two" class="goto-next scrolly">Next</a>
+</section>
+
+<section id="two" class="spotlight style2 right">
+	<span class="image fit main"><img src="{% static 'images/jdt1.jpg' %}" alt="" /></span>
+	<div class="content">
+		<header><h2>JDT ISLAM COLLEGE OF ARTS AND SCIENCE</h2></header>
+		<p>Final year BCA project — designed and developed by our team at JDT Islam College of Arts and Science.</p>
+	</div>
+	<a href="#four" class="goto-next scrolly">Next</a>
+</section>
+
+<section id="four" class="wrapper style1 special fade-up">
+	<div class="container">
+		<div class="box alt">
+			<div class="row gtr-uniform">
+				<section class="col-3 col-3-medium col-12-xsmall"><a href="/portfolio_adnan/"><img style="border-radius:50%;" src="{% static '/images/adnan.jpg' %}" width="150" height="150"><h3>MOHAMMED ADNAN A K</h3><p class="teamdesc">Team Lead</p></a></section>
+				<section class="col-3 col-3-medium col-12-xsmall"><a href="/portfolio_fadhis"><img style="border-radius:50%;" src="{% static '/images/fadis.jpg' %}" width="150" height="150"><h3>MUHAMMED FADHIS</h3><p class="teamdesc">Crew Member</p></a></section>
+				<section class="col-3 col-3-medium col-12-xsmall"><a href="/portfolio_sajas"><img style="border-radius:50%;" src="{% static '/images/sajas.jpg' %}" width="150" height="150"><h3>MOHAMMED SAJAS T</h3><p class="teamdesc">Crew Member</p></a></section>
+				<section class="col-3 col-3-medium col-12-xsmall"><a href="/portfolio_rahil"><img style="border-radius:50%;" src="{% static '/images/rahil.jpg' %}" width="150" height="150"><h3>MUHAMMED RAHIL P.P</h3><p class="teamdesc">Crew Member</p></a></section>
+			</div>
+		</div>
+		<footer class="major">
+			{% if role != "sho" %}
+			<center>
+				<textarea id="feedback_text" rows="5" placeholder="Enter your anonymous feedback here..." style="width:40%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px;"></textarea><br>
+				<button id="feedback_btn" class="button primary" style="margin:8px;">Send Feedback</button>
+				<p id="feedback_status" style="font-weight:bold;color:green;"></p>
+			</center>
+			{% endif %}
+		</footer>
+	</div>
+</section>
+
+</div><!-- /#page-wrapper -->
+
+<!-- ═══════════════════════════════════════════════════════
+     MOBILE APP UI  (hidden on desktop via CSS)
+     ═══════════════════════════════════════════════════════ -->
+
+<div id="mob-topbar">
+	<a href="/home" class="tb-brand">E-COPS</a>
+	<span class="tb-user">{{ request.session.external_username }}</span>
+</div>
+
+{% if notification %}
+<div id="mob-notif">
+	{% for noti in notification %}<marquee>{{ noti.message }}</marquee>{% endfor %}
+</div>
+{% endif %}
+
+<div id="mob-content">
+
+	<!-- Hero -->
+	<div id="mob-hero">
+		<div class="hero-text">
+			<h2>Welcome back 👋</h2>
+			<p>{{ request.session.external_username }}</p>
+		</div>
+		<img class="hero-logo" src="{% static 'images/Kerala_State_Police_Logo.png' %}" alt="Logo">
 	</div>
 
-	<!-- Scripts -->
-	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
-	<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
-	<script src="{% static 'assets/js/browser.min.js' %}"></script>
-	<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
-	<script src="{% static 'assets/js/util.js' %}"></script>
-	<script src="{% static 'assets/js/main.js' %}"></script>
-	<script>
-	// Enhance titleBar with SOS button and Sign Up button on mobile
-	$(document).ready(function() {
-		setTimeout(function() {
-			var $titleBar = $('#titleBar');
-			if ($titleBar.length) {
-				// Add SOS button to titleBar if it exists in nav
-				var $sosBtn = $('#nav #sos-btn');
-				if ($sosBtn.length && !$titleBar.find('.sos-btn-mobile').length) {
-					var sosImgSrc = $sosBtn.find('img').attr('src');
-					$titleBar.append(
-						'<a href="#" class="sos-btn-mobile" id="sos-btn-mobile" style="position: absolute; right: 80px; top: 0; height: 44px; width: 44px; display: flex; align-items: center; justify-content: center; z-index: 10002;"><img src="' + sosImgSrc + '" alt="SOS" style="max-width: 50px; max-height: 50px;"></a>'
-					);
-				}
+	<!-- ── PUBLIC USER ── -->
+	{% if role != "sho" and role != "cm" and role != "sm" %}
 
-				// Add Sign Up/Logout button to titleBar
-				var $logBtn = $('#nav').find('a.button.primary, #nav a[href="/signup"], #nav a.button:contains("Sign Up"), #nav a.button:contains("Login"), #nav a.button:contains("Logout")');
-				if ($logBtn.length && !$titleBar.find('.log-btn-mobile').length) {
-					var logHref = $logBtn.attr('href');
-					var logText = $logBtn.text().trim();
-					if (logText && (logText.includes('Sign Up') || logText.includes('Login') || logText.includes('Logout'))) {
-						$titleBar.append(
-							'<a href="' + logHref + '" class="log-btn-mobile" style="position: absolute; top: 0; height: 44px; line-height: 44px; padding: 0 10px; color: #ffffff; text-decoration: none; font-size: 0.85em; z-index: 10002;background:#e44c65;">' + logText + '</a>'
-						);
-					}
-				}
-			}
-		}, 150);
-	});
+		<!-- SOS -->
+		<div id="mob-sos-banner" onclick="triggerSOS()">
+			<div class="sos-icon">
+				<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+			</div>
+			<div class="sos-text">
+				<strong>SOS Emergency Alert</strong>
+				<span>Tap to send your location to CMS</span>
+			</div>
+			<div class="sos-chevron">
+				<svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg>
+			</div>
+		</div>
 
-	// Enhance mobile menu to include labels and images, and remove duplicate SOS buttons
-	$(document).ready(function() {
-		// Wait for navPanel to be created, then enhance it
-		setTimeout(function() {
-			var $navPanel = $('#navPanel');
-			if ($navPanel.length) {
-				// Remove Logout button from navPanel if it exists (it will be in titleBar instead)
-				$navPanel.find('a').each(function() {
-					var $link = $(this);
-					var linkText = $link.text().trim();
-					if (linkText === 'Logout' || $link.attr('href') === '/') {
-						// Check if this is the logout button (href="/" and text="Logout")
-						if ($link.attr('href') === '/' && linkText === 'Logout') {
-							$link.remove();
-						}
-					}
-				});
+		<!-- Services -->
+		<div class="mob-label">Services</div>
+		<div id="mob-quickactions">
+			<a href="/complaint" class="qcard">
+				<div class="qcard-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+				<span>Register Complaint</span>
+			</a>
+			<a href="/track_complaint" class="qcard">
+				<div class="qcard-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+				<span>Track Complaint</span>
+			</a>
+			<a href="/download_complaint" class="qcard">
+				<div class="qcard-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
+				<span>Download Complaint</span>
+			</a>
+			<a href="/manage_feedback" class="qcard">
+				<div class="qcard-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg></div>
+				<span>View Feedback</span>
+			</a>
+		</div>
 
-				// Remove all empty SOS button links from navPanel (SOS button is in titleBar, not in side panel)
-				$navPanel.find('a[href="#"]').each(function() {
-					var $link = $(this);
-					var linkText = $link.text().trim();
-					var hasOnlyIndent = $link.children().length > 0 && $link.children().filter(function() {
-						return $(this).hasClass('indent-0') || $(this).hasClass('indent-1') || $(this).hasClass('indent-2');
-					}).length === $link.children().length;
-					// Remove all empty SOS button links (has # href and no meaningful content)
-					if ($link.attr('href') === '#' && (linkText === '' || hasOnlyIndent) && $link.find('img').length === 0) {
-						$link.remove();
-					}
-				});
+		<!-- Feedback -->
+		<div class="mob-label">Anonymous Feedback</div>
+		<div id="mob-feedback">
+			<h3>Share your feedback</h3>
+			<textarea id="mob_feedback_text" rows="4" placeholder="Write your anonymous feedback here…"></textarea>
+			<button id="mob_feedback_btn">Send Feedback</button>
+			<p id="mob-feedback-status"></p>
+		</div>
 
-				// Find the SOS status label from original nav
-				var $originalStatus = $('#nav #sos-status');
-				if ($originalStatus.length && $originalStatus.text().trim()) {
-					var statusText = $originalStatus.text();
-					// Add status as first item in mobile menu if not already there
-					if ($navPanel.find('.sos-status-mobile').length === 0) {
-						$navPanel.find('nav').prepend(
-							'<div class="sos-status-mobile" style="color: rgba(255, 255, 255, 0.9); padding: 0.75em 0.5em; border-bottom: solid 1px rgba(255, 255, 255, 0.1); font-size: 0.9em; line-height: 1.5; word-wrap: break-word;">' + statusText + '</div>'
-						);
-					}
-				}
+	{% endif %}
 
-				// Enhance links with images in mobile menu (but skip SOS button duplicates)
-				$navPanel.find('a').each(function() {
-					var $link = $(this);
-					var href = $link.attr('href');
-					if (href && href !== '#') {
-						var $originalLink = $('#nav').find('a[href="' + href + '"]');
-						if ($originalLink.length) {
-							// Check if original link has an image
-							var $img = $originalLink.find('img');
-							if ($img.length && !$link.find('img').length) {
-								var imgSrc = $img.attr('src');
-								var imgAlt = $img.attr('alt') || '';
-								// Add image before text
-								$link.prepend('<img src="' + imgSrc + '" alt="' + imgAlt + '" style="max-width: 30px; max-height: 30px; vertical-align: middle; margin-right: 8px; display: inline-block;">');
-							}
-						}
-					}
-				});
-			}
-		}, 100);
-	});
+	<!-- ── STAFF UI ── -->
+	{% if role == "sho" or role == "cm" or role == "sm" %}
+		<div class="mob-label">Management</div>
+		<div id="mob-staffactions">
 
-	// SOS Button functionality (works for both desktop and mobile buttons)
-	function handleSOSClick(event) {
-		event.preventDefault();
-		const statusText = document.getElementById("sos-status");
+			<a href="{% if role == 'sm' %}/system_manager/sos_alerts{% else %}/home/sos_alerts{% endif %}" class="scard alert-card">
+				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+				<span class="sc-label">SOS Alerts</span>
+				<span class="sc-badge">LIVE</span>
+			</a>
 
-		if (!navigator.geolocation) {
-			if (statusText) statusText.textContent = "Geolocation not supported.";
-			$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Geolocation not supported.");
-			return;
-		}
+			<a href="{% if role == 'cm' %}/manage_complaint_cm{% elif role == 'sm' %}/manage_complaint_sm{% else %}/manage_complaint{% endif %}" class="scard">
+				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div>
+				<span class="sc-label">Manage Complaints</span>
+				<div class="sc-arrow"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
+			</a>
 
-		if (statusText) statusText.textContent = "Getting your location...";
-		$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Getting your location...");
+			<a href="/manage_feedback" class="scard">
+				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+				<span class="sc-label">Manage Feedback</span>
+				<div class="sc-arrow"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
+			</a>
 
-    navigator.geolocation.getCurrentPosition(
-        (pos) => {
+			{% if role == "sm" %}
+			<a href="/manage_users" class="scard">
+				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+				<span class="sc-label">Manage Users</span>
+				<div class="sc-arrow"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
+			</a>
+			<a href="/manage_notification" class="scard">
+				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div>
+				<span class="sc-label">Manage Notifications</span>
+				<div class="sc-arrow"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
+			</a>
+			{% endif %}
 
-            const latitude = pos.coords.latitude;
-            const longitude = pos.coords.longitude;
+		</div>
+	{% endif %}
 
-		setTimeout(() => {
-			if (statusText) statusText.textContent = "Preparing SOS message...";
-			$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Preparing SOS message...");
-		}, 1000);
+	<div class="mob-spacer"></div>
+</div><!-- /#mob-content -->
 
-		setTimeout(() => {
-			if (statusText) statusText.textContent = "Sending location to CMS...";
-			$('#navPanel .sos-status-mobile').text(statusText ? statusText.textContent : "Sending location to CMS...");
-		}, 2000);
+<!-- SOS toast -->
+<div id="sos-toast"></div>
 
-            // Now send to server immediately (don't wait)
-            fetch("{% url 'sos' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    latitude: latitude,
-                    longitude: longitude,
-                }),
-            })
-            .then((res) => res.json())
-            .then((data) => {
+<!-- ═══════════════════════════════════════════════════════
+     MOBILE BOTTOM NAV
+     ═══════════════════════════════════════════════════════ -->
+<nav id="bottom-nav">
+	<a href="/home" class="bnav-item active">
+		<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+		<span>Home</span>
+	</a>
 
-		setTimeout(() => {
-			if (data.ok) {
-				if (statusText) statusText.textContent = "SOS Request Sent Successfully";
-				$('#navPanel .sos-status-mobile').text("SOS Request Sent Successfully");
-			} else {
-				if (statusText) statusText.textContent = "Server Error: " + data.error;
-				$('#navPanel .sos-status-mobile').text("Server Error: " + data.error);
-			}
-		}, 2000);
-	})
-	.catch((err) => {
-		console.error("Fetch error:", err);
-		setTimeout(() => {
-			if (statusText) statusText.textContent = "Network Error: " + err.message;
-			$('#navPanel .sos-status-mobile').text("Network Error: " + err.message);
-		}, 1000);
-	});
-		},
-		(err) => {
-			if (statusText) statusText.textContent = "Geolocation error: " + err.message;
-			$('#navPanel .sos-status-mobile').text("Geolocation error: " + err.message);
-		}
-	);	
-	}
+	{% if role == "sho" or role == "cm" or role == "sm" %}
 
-	// Attach SOS functionality to both desktop and mobile buttons
-	const sosBtn = document.getElementById("sos-btn");
-	const sosBtnMobile = document.getElementById("sos-btn-mobile");
-	const statusText = document.getElementById("sos-status");
-	
-	if (sosBtn) {
-		sosBtn.addEventListener("click", handleSOSClick);
-	}
-	if (sosBtnMobile) {
-		sosBtnMobile.addEventListener("click", handleSOSClick);
-	}
+		<a href="{% if role == 'cm' %}/manage_complaint_cm{% elif role == 'sm' %}/manage_complaint_sm{% else %}/manage_complaint{% endif %}" class="bnav-item">
+			<svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+			<span>Complaints</span>
+		</a>
+		{% if role != "sho" %}
+		<a href="{% if role == 'sm' %}/system_manager/sos_alerts{% else %}/home/sos_alerts{% endif %}" class="bnav-item">
+			<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+			<span>SOS</span>
+		</a>
+		{% endif %}
 
-	// Update mobile menu status when it changes
-	if (statusText) {
-		var observer = new MutationObserver(function(mutations) {
-			$('#navPanel .sos-status-mobile').text(statusText.textContent);
-		});
-		observer.observe(statusText, { childList: true, characterData: true, subtree: true });
-	}
+		<a href="/manage_feedback" class="bnav-item">
+			<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+			<span>Feedback</span>
+		</a>
 
-</script>
+		{% if role == "sm" %}
+		<a href="/manage_users" class="bnav-item">
+			<svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+			<span>Users</span>
+		</a>
+		{% endif %}
+
+	{% else %}
+
+		<a href="/complaint" class="bnav-item">
+			<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+			<span>Complain</span>
+		</a>
+		<a href="/track_complaint" class="bnav-item">
+			<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+			<span>Track</span>
+		</a>
+		<a href="/download_complaint" class="bnav-item">
+			<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+			<span>Download</span>
+		</a>
+
+	{% endif %}
+
+	<a href="/" class="bnav-item bnav-logout">
+		<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+		<span>Logout</span>
+	</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════════════ -->
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
+<script src="{% static 'assets/js/browser.min.js' %}"></script>
+<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'assets/js/util.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
 
 <script>
-document.getElementById("feedback_btn").addEventListener("click", function () {
-    const message = document.getElementById("feedback_text").value.trim();
-    const statusBox = document.getElementById("feedback_status");
+/* ── SOS ── */
+function showToast(msg) {
+	clearTimeout(window._tt);
+	$('#sos-toast').text(msg).fadeIn(180);
+	window._tt = setTimeout(function(){ $('#sos-toast').fadeOut(350); }, 3200);
+}
+function triggerSOS() {
+	if (!navigator.geolocation) { showToast('Geolocation not supported.'); return; }
+	showToast('📍 Getting your location…');
+	navigator.geolocation.getCurrentPosition(
+		function(pos) {
+			showToast('📡 Sending SOS…');
+			fetch("{% url 'sos' %}", {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ latitude: pos.coords.latitude, longitude: pos.coords.longitude })
+			})
+			.then(function(r){ return r.json(); })
+			.then(function(d){ showToast(d.ok ? '✅ SOS sent!' : '❌ Error: ' + d.error); })
+			.catch(function(e){ showToast('❌ Network error.'); });
+		},
+		function(e){ showToast('❌ Location error: ' + e.message); }
+	);
+}
+$('#sos-btn').on('click', function(e){ e.preventDefault(); triggerSOS(); });
 
-    if (!message) {
-        statusBox.style.color = "red";
-        statusBox.textContent = "Feedback cannot be empty.";
-        return;
-    }
-
-    statusBox.style.color = "black";
-    statusBox.textContent = "Sending...";
-
-    fetch("{% url 'feedback' %}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "X-Requested-With": "XMLHttpRequest",
-            "X-CSRFToken": "{{ csrf_token }}",
-        },
-        body: new URLSearchParams({ feedback: message })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.ok) {
-            statusBox.style.color = "green";
-            statusBox.textContent = "Feedback submitted successfully!";
-            document.getElementById("feedback_text").value = ""; // clear box
-        } else {
-            statusBox.style.color = "red";
-            statusBox.textContent = data.error;
-        }
-    })
-    .catch(err => {
-        statusBox.style.color = "red";
-        statusBox.textContent = "Network error. Try again.";
-    });
+/* ── Desktop feedback ── */
+$('#feedback_btn').on('click', function() {
+	var msg = $('#feedback_text').val().trim(), $s = $('#feedback_status');
+	if (!msg) { $s.css('color','red').text('Feedback cannot be empty.'); return; }
+	$s.css('color','#aaa').text('Sending…');
+	fetch("{% url 'feedback' %}", {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': '{{ csrf_token }}' },
+		body: new URLSearchParams({ feedback: msg })
+	}).then(r => r.json()).then(function(d){
+		if (d.ok) { $s.css('color','green').text('Feedback submitted!'); $('#feedback_text').val(''); }
+		else { $s.css('color','red').text(d.error); }
+	}).catch(function(){ $s.css('color','red').text('Network error.'); });
 });
+
+/* ── Mobile feedback ── */
+$('#mob_feedback_btn').on('click', function() {
+	var msg = $('#mob_feedback_text').val().trim(), $s = $('#mob-feedback-status');
+	if (!msg) { $s.css('color','#e44c65').text('Feedback cannot be empty.'); return; }
+	$s.css('color','rgba(255,255,255,0.4)').text('Sending…');
+	fetch("{% url 'feedback' %}", {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': '{{ csrf_token }}' },
+		body: new URLSearchParams({ feedback: msg })
+	}).then(r => r.json()).then(function(d){
+		if (d.ok) { $s.css('color','#4caf50').text('✓ Submitted!'); $('#mob_feedback_text').val(''); }
+		else { $s.css('color','#e44c65').text(d.error); }
+	}).catch(function(){ $s.css('color','#e44c65').text('Network error.'); });
+});
+
+
 </script>
-
-
-
 </body>
-
 </html>
