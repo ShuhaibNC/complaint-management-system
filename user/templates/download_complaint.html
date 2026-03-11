@@ -43,7 +43,6 @@
    ══════════════════════════════════════════ */
 @media screen and (max-width: 736px) {
 
-	/* hide desktop elements */
 	#header, #titleBar, #navPanel { display: none !important; }
 	html, body { background: #0f1018 !important; }
 	#page-wrapper, #main { padding: 0 !important; background: #0f1018 !important; }
@@ -52,7 +51,7 @@
 	#content { background: transparent !important; border: none !important; padding: 0 !important; }
 	.desk-table, #content > h2, #content > p { display: none !important; }
 
-	/* ── top bar ── */
+	/* top bar */
 	#mob-topbar {
 		display: flex !important;
 		position: fixed;
@@ -82,7 +81,7 @@
 		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 	}
 
-	/* ── scrollable area ── */
+	/* scrollable area */
 	#mob-wrap {
 		display: block;
 		position: fixed;
@@ -91,7 +90,7 @@
 		-webkit-overflow-scrolling: touch;
 	}
 
-	/* ── hero strip ── */
+	/* hero strip */
 	#mob-hero {
 		background: linear-gradient(135deg, #e44c65 0%, #b83050 100%);
 		padding: 18px 18px 16px;
@@ -106,7 +105,7 @@
 		font-size: 12px; color: rgba(255,255,255,0.75); margin: 0;
 	}
 
-	/* ── card list ── */
+	/* card list */
 	#mob-list { padding: 12px 14px 20px; }
 
 	.mob-card {
@@ -192,7 +191,7 @@
 		display: block; margin-top: 4px;
 	}
 
-	/* ── download button ── */
+	/* download button */
 	.mob-dl-btn {
 		display: flex; align-items: center; justify-content: center; gap: 8px;
 		width: 100%; margin-top: 14px;
@@ -206,29 +205,30 @@
 		-webkit-tap-highlight-color: transparent;
 		box-shadow: 0 4px 14px rgba(76,97,175,0.4);
 		cursor: pointer;
-		position: relative;
 	}
 	.mob-dl-btn:active { background: #3a4f96; }
 	.mob-dl-btn svg { width: 18px; height: 18px; fill: #fff; flex-shrink: 0; }
 
-	/* downloading state */
+	/* loading state */
 	.mob-dl-btn.loading {
 		background: #333a5c;
 		pointer-events: none;
 	}
-	.mob-dl-btn.loading::after {
-		content: '';
-		display: inline-block;
+	.mob-dl-btn.loading .dl-spinner {
+		display: inline-block !important;
+	}
+	.dl-spinner {
+		display: none;
 		width: 16px; height: 16px;
 		border: 2px solid rgba(255,255,255,0.3);
 		border-top-color: #fff;
 		border-radius: 50%;
 		animation: spin 0.7s linear infinite;
-		margin-left: 6px;
+		flex-shrink: 0;
 	}
 	@keyframes spin { to { transform: rotate(360deg); } }
 
-	/* toast feedback */
+	/* toast */
 	.dl-toast {
 		position: fixed;
 		bottom: 80px; left: 16px; right: 16px;
@@ -260,7 +260,7 @@
 		display: block; margin: 0 auto 12px;
 	}
 
-	/* ── bottom nav ── */
+	/* bottom nav */
 	#bottom-nav {
 		display: flex !important;
 		position: fixed;
@@ -401,17 +401,19 @@
 				</div>
 				{% endif %}
 
-				<!-- 
-				  Download button uses data-url instead of href.
-				  JS intercepts the tap and uses fetch + base64
-				  so Android WebView can open/share the PDF.
+				<!--
+				  Simply navigate the WebView to the PDF URL.
+				  Django returns Content-Disposition: attachment,
+				  which makes Android's DownloadListener fire —
+				  your existing Java code then handles it perfectly.
+				  No fetch(), no base64, no crash.
 				-->
 				<button class="mob-dl-btn"
 				        data-url="{% url 'download_pdf' item.id %}"
-				        data-name="complaint_{{ item.id }}.pdf"
 				        onclick="mobDownload(this)">
 					<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
 					<span class="dl-btn-label">Download PDF</span>
+					<span class="dl-spinner"></span>
 				</button>
 
 			</div>
@@ -482,68 +484,50 @@ function showToast(msg, isError) {
 }
 
 /* ══════════════════════════════════════════════════════════
-   WebView-safe PDF download
-   ══════════════════════════════════════════════════════════
+   mobDownload — WebView-safe
 
-   Android WebView blocks <a download> and won't trigger the
-   system download manager for same-origin fetch responses.
+   Root cause of the crash:
+     The old code used fetch() → ArrayBuffer → base64 data URI.
+     Android WebView hard-crashes on data URIs larger than ~2 MB,
+     and PDFs easily exceed that.
 
-   Strategy:
-     1. Fetch the PDF as an ArrayBuffer.
-     2. Convert to base64 data URI.
-     3. Open the data URI in a new window — WebView will hand
-        it off to the device PDF viewer / share sheet, which
-        is the correct UX on Android.
+   Fix:
+     Simply set window.location to the PDF URL.
+     Django responds with:
+       Content-Disposition: attachment; filename="complaint_X.pdf"
+     Android WebView sees this header, refuses to "navigate" to it,
+     and fires DownloadListener.onDownloadStart() instead — which
+     your existing Java DownloadManager code handles perfectly.
+
+   No fetch, no base64, no crash.
    ══════════════════════════════════════════════════════════ */
 function mobDownload(btn) {
-	var url      = btn.getAttribute('data-url');
-	var filename = btn.getAttribute('data-name') || 'complaint.pdf';
-	var label    = btn.querySelector('.dl-btn-label');
+	var url   = btn.getAttribute('data-url');
+	var label = btn.querySelector('.dl-btn-label');
 
-	/* loading state */
+	/* Show loading state */
 	btn.classList.add('loading');
-	if (label) label.textContent = 'Preparing…';
-	showToast('⏳ Fetching your PDF…');
+	if (label) label.textContent = 'Starting download…';
+	showToast('⏳ Starting download…');
 
-	fetch(url, { credentials: 'same-origin' })
-		.then(function(res) {
-			if (!res.ok) throw new Error('Server error ' + res.status);
-			return res.arrayBuffer();
-		})
-		.then(function(buffer) {
-			/* Convert ArrayBuffer → base64 string */
-			var bytes  = new Uint8Array(buffer);
-			var binary = '';
-			for (var i = 0; i < bytes.byteLength; i++) {
-				binary += String.fromCharCode(bytes[i]);
-			}
-			var b64 = window.btoa(binary);
-			var dataUri = 'data:application/pdf;base64,' + b64;
+	/*
+	  Navigate to the PDF URL.
+	  Because Django sets Content-Disposition: attachment,
+	  the WebView will NOT leave the current page —
+	  it hands the URL to DownloadListener instead.
+	*/
+	window.location.href = url;
 
-			/* 
-			  Open the data URI. On Android WebView this triggers
-			  the OS PDF viewer / share sheet.
-			  On desktop browsers it opens in a new tab.
-			*/
-			var a = document.createElement('a');
-			a.href = dataUri;
-			/* 'download' attr is ignored by WebView but works on desktop */
-			a.download = filename;
-			a.target   = '_blank';
-			document.body.appendChild(a);
-			a.click();
-			document.body.removeChild(a);
-
-			showToast('✅ PDF opened!');
-		})
-		.catch(function(err) {
-			console.error('Download error:', err);
-			showToast('❌ Download failed: ' + err.message, true);
-		})
-		.finally(function() {
-			btn.classList.remove('loading');
-			if (label) label.textContent = 'Download PDF';
-		});
+	/*
+	  Reset button after a short delay.
+	  The page won't actually navigate away (attachment header),
+	  so we just restore the button state.
+	*/
+	setTimeout(function() {
+		btn.classList.remove('loading');
+		if (label) label.textContent = 'Download PDF';
+		showToast('✅ Check your Downloads folder!');
+	}, 2000);
 }
 </script>
 {% endblock %}

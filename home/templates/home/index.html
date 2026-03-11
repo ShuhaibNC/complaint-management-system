@@ -11,655 +11,172 @@
 
 	<style>
 	/* =====================================================
-	   DESKTOP HEADER — fixed, clean, no glitch
+	   DESKTOP HEADER
 	   ===================================================== */
-
-	/* 1. Reset any theme positioning on header */
 	#header {
-		display: flex !important;
-		align-items: center !important;
-		justify-content: space-between !important;
-		padding: 0 2em !important;
-		height: 3.75em !important;
-		position: fixed !important;
-		top: 0 !important;
-		left: 0 !important;
-		right: 0 !important;
-		width: 100% !important;
+		display: flex !important; align-items: center !important;
+		justify-content: space-between !important; padding: 0 2em !important;
+		height: 3.75em !important; position: fixed !important;
+		top: 0 !important; left: 0 !important; right: 0 !important; width: 100% !important;
 		background: rgba(27, 28, 38, 0.98) !important;
 		box-shadow: 0 1px 0 rgba(255,255,255,0.05), 0 2px 16px rgba(0,0,0,0.45) !important;
-		z-index: 10000 !important;
-		box-sizing: border-box !important;
-		backdrop-filter: blur(10px) !important;
-		-webkit-backdrop-filter: blur(10px) !important;
+		z-index: 10000 !important; box-sizing: border-box !important;
+		backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
 		border-bottom: 1px solid rgba(228,76,101,0.12) !important;
 	}
-
-	/* 2. Logo — static, not absolute */
 	#header h1#logo {
-		position: static !important;
-		transform: none !important;
-		margin: 0 !important;
-		padding: 0 !important;
-		line-height: 3.75em !important;  /* match header height exactly */
-		flex-shrink: 0 !important;
-		display: flex !important;
-		align-items: center !important;
-		height: 3.75em !important;
+		position: static !important; transform: none !important; margin: 0 !important; padding: 0 !important;
+		line-height: 3.75em !important; flex-shrink: 0 !important;
+		display: flex !important; align-items: center !important; height: 3.75em !important;
 	}
 	#header h1#logo a {
-		font-size: 1.35em !important;
-		font-weight: 900 !important;
-		letter-spacing: 2px !important;
-		color: #e44c65 !important;
-		text-decoration: none !important;
-		border: none !important;
-		line-height: 1 !important;
-		display: block !important;
+		font-size: 1.35em !important; font-weight: 900 !important; letter-spacing: 2px !important;
+		color: #e44c65 !important; text-decoration: none !important; border: none !important;
+		line-height: 1 !important; display: block !important;
 	}
-
-	/* 3. Nav — static, flex row */
-	#header nav#nav {
-		position: static !important;
-		transform: none !important;
-		margin: 0 !important;
-		padding: 0 !important;
-	}
+	#header nav#nav { position: static !important; transform: none !important; margin: 0 !important; padding: 0 !important; }
 	#header nav#nav > ul {
-		display: flex !important;
-		align-items: center !important;
-		flex-wrap: nowrap !important;
-		gap: 0.25em !important;
-		margin: 0 !important;
-		padding: 0 !important;
-		list-style: none !important;
+		display: flex !important; align-items: center !important; flex-wrap: nowrap !important;
+		gap: 0.25em !important; margin: 0 !important; padding: 0 !important; list-style: none !important;
 	}
-	#header nav#nav > ul > li {
-		margin: 0 !important;
-		padding: 0 !important;
-		position: relative !important;
-	}
-
-	/* 4. Greeting label */
+	#header nav#nav > ul > li { margin: 0 !important; padding: 0 !important; position: relative !important; }
 	#header nav#nav > ul > li > label {
-		color: rgba(255,255,255,0.5) !important;
-		font-size: 0.75em !important;
-		margin: 0 0.6em 0 0 !important;
-		white-space: nowrap !important;
-		display: inline-block !important;
-		padding: 0 !important;
-		border-right: 1px solid rgba(255,255,255,0.1) !important;
-		padding-right: 0.9em !important;
+		color: rgba(255,255,255,0.5) !important; font-size: 0.75em !important;
+		margin: 0 0.6em 0 0 !important; white-space: nowrap !important; display: inline-block !important;
+		padding: 0 !important; border-right: 1px solid rgba(255,255,255,0.1) !important; padding-right: 0.9em !important;
 	}
-
-	/* 5. Plain links */
 	#header nav#nav > ul > li > a:not(.button) {
-
-		white-space: nowrap !important;
-		font-size: 0.82em !important;
-		color: rgba(255,255,255,0.7) !important;
-		padding: 0 0.6em !important;
-		text-decoration: none !important;
-		border: none !important;
-		transition: color 0.15s !important;
+		white-space: nowrap !important; font-size: 0.82em !important; color: rgba(255,255,255,0.7) !important;
+		padding: 0 0.6em !important; text-decoration: none !important; border: none !important; transition: color 0.15s !important;
 	}
-	#header nav#nav > ul > li > a:not(.button):hover {
-		color: #e44c65 !important;
-	}
-
-	/* 6. Button links */
+	#header nav#nav > ul > li > a:not(.button):hover { color: #e44c65 !important; }
 	#header nav#nav > ul > li > a.button {
-		height: 2em !important;
-		line-height: 2em !important;
-		padding: 0 1.1em !important;
-		font-size: 0.78em !important;
-		white-space: nowrap !important;
-		border-radius: 4px !important;
-		margin: 0 0.15em !important;
+		height: 2em !important; line-height: 2em !important; padding: 0 1.1em !important;
+		font-size: 0.78em !important; white-space: nowrap !important; border-radius: 4px !important; margin: 0 0.15em !important;
 	}
-	#header nav#nav > ul > li > a.button.primary {
-		background: #e44c65 !important;
-		border-color: #e44c65 !important;
-		color: #fff !important;
-	}
-	#header nav#nav > ul > li > a.button.primary:hover {
-		background: #c03050 !important;
-		border-color: #c03050 !important;
-	}
-	#header nav#nav > ul > li > a.button:not(.primary) {
-		background: rgba(255,255,255,0.06) !important;
-		border: 1px solid rgba(255,255,255,0.14) !important;
-		color: rgba(255,255,255,0.8) !important;
-	}
-	#header nav#nav > ul > li > a.button:not(.primary):hover {
-		background: rgba(255,255,255,0.1) !important;
-		border-color: rgba(228,76,101,0.4) !important;
-		color: #fff !important;
-	}
-
-	/* 7. Dropdown arrow image fix */
-	#header nav#nav > ul > li > a img {
-
-		margin-left: 4px !important;
-		display: inline !important;
-		margin-bottom: 0 !important;
-	}
-
-	/* 8. Dropdown sub-menu — native ul AND dropotron-generated wrappers */
-
-	/* The theme's dropotron.js moves the <ul> out of the DOM and wraps it
-	   in a div.dropotron — we must style both the original ul and that wrapper */
-
-	/* Native ul (before dropotron activates) */
+	#header nav#nav > ul > li > a.button.primary { background: #e44c65 !important; border-color: #e44c65 !important; color: #fff !important; }
+	#header nav#nav > ul > li > a.button.primary:hover { background: #c03050 !important; border-color: #c03050 !important; }
+	#header nav#nav > ul > li > a.button:not(.primary) { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(255,255,255,0.14) !important; color: rgba(255,255,255,0.8) !important; }
+	#header nav#nav > ul > li > a.button:not(.primary):hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(228,76,101,0.4) !important; color: #fff !important; }
+	#header nav#nav > ul > li > a img { margin-left: 4px !important; display: inline !important; margin-bottom: 0 !important; }
 	#header nav#nav > ul > li > ul {
-		position: absolute !important;
-		top: 3.75em !important;
-		right: 0 !important;
-		background: #1a1b27 !important;
-		border: 1px solid rgba(255,255,255,0.1) !important;
-		border-radius: 8px !important;
-		box-shadow: 0 8px 32px rgba(0,0,0,0.55) !important;
-		min-width: 210px !important;
-		padding: 6px 0 !important;
-		list-style: none !important;
-		z-index: 10001 !important;
-		margin: 0 !important;
-		pointer-events: auto !important;
+		position: absolute !important; top: 3.75em !important; right: 0 !important;
+		background: #1a1b27 !important; border: 1px solid rgba(255,255,255,0.1) !important;
+		border-radius: 8px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.55) !important;
+		min-width: 210px !important; padding: 6px 0 !important; list-style: none !important;
+		z-index: 10001 !important; margin: 0 !important; pointer-events: auto !important;
 	}
-
-	/* dropotron styling — visual only, never override position/display/z-index */
-	.dropotron {
-		background: #1a1b27;
-		border: 1px solid rgba(255,255,255,0.1);
-		border-top: 2px solid #e44c65;
-		border-radius: 0 0 8px 8px;
-		box-shadow: 0 8px 32px rgba(0,0,0,0.55);
-		min-width: 210px;
-		padding: 6px 0;
-		list-style: none;
-	}
-	.dropotron li {
-		border-bottom: 1px solid rgba(255,255,255,0.04);
-		list-style: none;
-	}
+	.dropotron { background: #1a1b27; border: 1px solid rgba(255,255,255,0.1); border-top: 2px solid #e44c65; border-radius: 0 0 8px 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.55); min-width: 210px; padding: 6px 0; list-style: none; }
+	.dropotron li { border-bottom: 1px solid rgba(255,255,255,0.04); list-style: none; }
 	.dropotron li:last-child { border-bottom: none; }
-	.dropotron li a {
-		display: block;
-		padding: 10px 18px;
-		font-size: 0.83em;
-		color: rgba(255,255,255,0.75);
-		white-space: nowrap;
-		text-decoration: none;
-		border: none;
-		background: transparent;
-		transition: background 0.12s, color 0.12s;
-	}
-	.dropotron li a:hover {
-		background: rgba(228,76,101,0.12);
-		color: #e44c65;
-	}
-
-	/* ── Restore #header > h2 title block (used on inner pages) ── */
-	/* Some pages render a <h2> directly in #header for the page title.
-	   Make sure it's visible and properly positioned. */
-	#header > h2 {
-		position: static !important;
-		margin: 0 !important;
-		font-size: 1em !important;
-		font-weight: 600 !important;
-		color: rgba(255,255,255,0.85) !important;
-		letter-spacing: 1px !important;
-		text-transform: uppercase !important;
-
-		flex: 1 !important;
-		text-align: center !important;
-	}
-
-	/* ── .major header block (page-level section titles) ── */
-	.major {
-		text-align: center !important;
-		margin-bottom: 2em !important;
-	}
-	.major h2 {
-		font-size: 1.75em !important;
-		font-weight: 700 !important;
-		letter-spacing: 1px !important;
-		text-transform: uppercase !important;
-		border-bottom: 2px solid #e44c65 !important;
-		display: inline-block !important;
-		padding-bottom: 0.35em !important;
-		margin-bottom: 0.5em !important;
-	}
-	.major p {
-		color: rgba(255,255,255,0.55) !important;
-		font-size: 0.9em !important;
-	}
-
-	/* 9. SOS image button */
-	#sos-btn {
-		display: flex !important;
-		align-items: center !important;
-		border: none !important;
-	}
-	#sos-btn img {
-		display: block !important;
-		margin: 0 !important;
-
-	}
+	.dropotron li a { display: block; padding: 10px 18px; font-size: 0.83em; color: rgba(255,255,255,0.75); white-space: nowrap; text-decoration: none; border: none; background: transparent; transition: background 0.12s, color 0.12s; }
+	.dropotron li a:hover { background: rgba(228,76,101,0.12); color: #e44c65; }
+	#header > h2 { position: static !important; margin: 0 !important; font-size: 1em !important; font-weight: 600 !important; color: rgba(255,255,255,0.85) !important; letter-spacing: 1px !important; text-transform: uppercase !important; flex: 1 !important; text-align: center !important; }
+	.major { text-align: center !important; margin-bottom: 2em !important; }
+	.major h2 { font-size: 1.75em !important; font-weight: 700 !important; letter-spacing: 1px !important; text-transform: uppercase !important; border-bottom: 2px solid #e44c65 !important; display: inline-block !important; padding-bottom: 0.35em !important; margin-bottom: 0.5em !important; }
+	.major p { color: rgba(255,255,255,0.55) !important; font-size: 0.9em !important; }
+	#sos-btn { display: flex !important; align-items: center !important; border: none !important; }
+	#sos-btn img { display: block !important; margin: 0 !important; }
 
 	/* =====================================================
-	   NOTIFICATION MARQUEE — sits flush below header,
-	   never overlaps it, never jumps
+	   NOTIFICATION MARQUEE
 	   ===================================================== */
-	.desk-marquee {
-		position: fixed !important;
-		top: 3.75em !important;   /* exactly header height */
-		left: 0 !important;
-		right: 0 !important;
-		z-index: 9999 !important; /* just below header */
-		background: rgba(228,76,101,0.13) !important;
-		border-bottom: 1px solid rgba(228,76,101,0.2) !important;
-		padding: 3px 0 !important;
-		line-height: 1.6 !important;
-	}
-	.desk-marquee marquee {
-		color: rgba(255,255,255,0.85) !important;
-		font-size: 0.76em !important;
-		font-weight: 600 !important;
-		letter-spacing: 0.5px !important;
-	}
-
-	/* 10. Page body offset so content clears the fixed bars */
+	.desk-marquee { position: fixed !important; top: 3.75em !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; background: rgba(228,76,101,0.13) !important; border-bottom: 1px solid rgba(228,76,101,0.2) !important; padding: 3px 0 !important; line-height: 1.6 !important; }
+	.desk-marquee marquee { color: rgba(255,255,255,0.85) !important; font-size: 0.76em !important; font-weight: 600 !important; letter-spacing: 0.5px !important; }
 	body { padding-top: 3.75em !important; }
 	body.has-marquee { padding-top: 5.15em !important; }
-
-	/* Remove the old page-wrapper padding hack */
 	body.has-marquee #page-wrapper { padding-top: 0 !important; }
 
 	/* =====================================================
-	   MOBILE — show clean app UI, hide desktop elements
+	   MOBILE
 	   ===================================================== */
 	@media screen and (max-width: 736px) {
-
-		/* Override the desktop padding-top on mobile */
 		body, body.has-marquee { padding-top: 0 !important; }
-
-		/* ── Hide ALL desktop-only content ── */
-		#header,
-		.desk-marquee,
-		#banner,
-		#one, #two, #three, #four,
-		#titleBar, #navPanel {
-			display: none !important;
-		}
-
-		/* ── App shell ── */
+		#header, .desk-marquee, #banner, #one, #two, #three, #four, #titleBar, #navPanel { display: none !important; }
 		html, body { background: #0f1018 !important; }
-		#page-wrapper {
-			padding: 0 0 68px !important;
-			min-height: 100vh;
-			background: #0f1018;
-		}
+		#page-wrapper { padding: 0 0 68px !important; min-height: 100vh; background: #0f1018; }
 
-		/* ── Top app bar ── */
-		#mob-topbar {
-			display: flex;
-			position: fixed;
-			top: 0; left: 0; right: 0;
-			height: 56px;
-			background: #1a1b27;
-			align-items: center;
-			justify-content: space-between;
-			padding: 0 16px;
-			z-index: 9000;
-			box-shadow: 0 1px 10px rgba(0,0,0,0.55);
-		}
-		.tb-brand {
-			font-family: "Roboto", sans-serif;
-			font-weight: 700;
-			font-size: 20px;
-			color: #e44c65;
-			letter-spacing: 2px;
-			text-decoration: none;
-			border: none !important;
-		}
-		.tb-user {
-			font-family: "Roboto", sans-serif;
-			font-size: 12px;
-			color: rgba(255,255,255,0.5);
-			max-width: 55vw;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
+		#mob-topbar { display: flex; position: fixed; top: 0; left: 0; right: 0; height: 56px; background: #1a1b27; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 9000; box-shadow: 0 1px 10px rgba(0,0,0,0.55); }
+		.tb-brand { font-family: "Roboto", sans-serif; font-weight: 700; font-size: 20px; color: #e44c65; letter-spacing: 2px; text-decoration: none; border: none !important; }
+		.tb-user { font-family: "Roboto", sans-serif; font-size: 12px; color: rgba(255,255,255,0.5); max-width: 55vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-		/* ── Notification bar ── */
-		#mob-notif {
-			position: fixed;
-			top: 56px; left: 0; right: 0;
-			z-index: 8999;
-			background: rgba(228,76,101,0.18);
-			font-size: 11.5px;
-			font-weight: bold;
-			color: #fff;
-			overflow: hidden;
-		}
+		#mob-notif { position: fixed; top: 56px; left: 0; right: 0; z-index: 8999; background: rgba(228,76,101,0.18); font-size: 11.5px; font-weight: bold; color: #fff; overflow: hidden; }
 		#mob-notif marquee { display: block; padding: 3px 0; }
 
-		/* ── Scrollable content ── */
-		#mob-content {
-			display: block;
-			position: fixed;
-			top: 56px;
-			left: 0; right: 0;
-			bottom: 64px;
-			overflow-y: auto;
-			-webkit-overflow-scrolling: touch;
-			padding: 0;
-			margin: 0;
-		}
+		#mob-content { display: block; position: fixed; top: 56px; left: 0; right: 0; bottom: 64px; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0; margin: 0; }
 		{% if notification %}#mob-content { top: 78px; }{% endif %}
 
-		/* ── Section label ── */
-		.mob-label {
-			padding: 14px 16px 6px;
-			font-family: "Roboto", sans-serif;
-			font-size: 10.5px;
-			font-weight: 600;
-			color: rgba(255,255,255,0.28);
-			letter-spacing: 2px;
-			text-transform: uppercase;
-		}
+		.mob-label { padding: 14px 16px 6px; font-family: "Roboto", sans-serif; font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.28); letter-spacing: 2px; text-transform: uppercase; }
 
-		/* ── Hero greeting ── */
-		#mob-hero {
-			margin: 25px 16px 0;
-			background: linear-gradient(135deg, #e44c65 0%, #b83050 100%);
-			border-radius: 20px;
-			padding: 22px 20px;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			box-shadow: 0 6px 24px rgba(228,76,101,0.3);
-		}
-		.hero-text h2 {
-			font-family: "Roboto", sans-serif;
-			font-size: 18px;
-			font-weight: 700;
-			color: #fff;
-			margin: 0 0 4px;
-			line-height: 1.2;
-		}
-		.hero-text p {
-			font-family: "Roboto", sans-serif;
-			font-size: 12px;
-			color: rgba(255,255,255,0.75);
-			margin: 0;
-		}
-		.hero-logo {
-			width: 52px; height: 52px;
-			border-radius: 50%;
-			background: rgba(255,255,255,0.15);
-			padding: 7px;
-			flex-shrink: 0;
-			margin-left: 12px;
-			object-fit: contain;
-		}
+		#mob-hero { margin: 25px 16px 0; background: linear-gradient(135deg, #e44c65 0%, #b83050 100%); border-radius: 20px; padding: 22px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 6px 24px rgba(228,76,101,0.3); }
+		.hero-text h2 { font-family: "Roboto", sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin: 0 0 4px; line-height: 1.2; }
+		.hero-text p { font-family: "Roboto", sans-serif; font-size: 12px; color: rgba(255,255,255,0.75); margin: 0; }
+		.hero-logo { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.15); padding: 7px; flex-shrink: 0; margin-left: 12px; object-fit: contain; }
 
-		/* ── SOS banner ── */
-		#mob-sos-banner {
-			margin: 12px 16px 0;
-			background: #1a1b27;
-			border: 1.5px solid rgba(228,76,101,0.35);
-			border-radius: 16px;
-			padding: 15px 16px;
-			display: flex;
-			align-items: center;
-			gap: 13px;
-			cursor: pointer;
-			-webkit-tap-highlight-color: transparent;
-			text-decoration: none;
-		}
-		.sos-icon {
-			width: 44px; height: 44px;
-			border-radius: 50%;
-			background: #e44c65;
-			display: flex; align-items: center; justify-content: center;
-			flex-shrink: 0;
-			animation: sos-pulse 2s infinite;
-		}
+		#mob-sos-banner { margin: 12px 16px 0; background: #1a1b27; border: 1.5px solid rgba(228,76,101,0.35); border-radius: 16px; padding: 15px 16px; display: flex; align-items: center; gap: 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; text-decoration: none; }
+		.sos-icon { width: 44px; height: 44px; border-radius: 50%; background: #e44c65; display: flex; align-items: center; justify-content: center; flex-shrink: 0; animation: sos-pulse 2s infinite; }
 		.sos-icon svg { width: 22px; height: 22px; fill: #fff; }
-		@keyframes sos-pulse {
-			0%,100% { box-shadow: 0 0 0 0 rgba(228,76,101,0.55); }
-			60%      { box-shadow: 0 0 0 9px rgba(228,76,101,0); }
-		}
-		.sos-text strong {
-			display: block;
-			font-family: "Roboto", sans-serif;
-			font-size: 14px;
-			color: #fff;
-			font-weight: 600;
-		}
-		.sos-text span {
-			font-family: "Roboto", sans-serif;
-			font-size: 11px;
-			color: rgba(255,255,255,0.4);
-		}
+		@keyframes sos-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(228,76,101,0.55); } 60% { box-shadow: 0 0 0 9px rgba(228,76,101,0); } }
+		.sos-text strong { display: block; font-family: "Roboto", sans-serif; font-size: 14px; color: #fff; font-weight: 600; }
+		.sos-text span { font-family: "Roboto", sans-serif; font-size: 11px; color: rgba(255,255,255,0.4); }
 		.sos-chevron { margin-left: auto; opacity: 0.35; }
 		.sos-chevron svg { width: 20px; height: 20px; fill: #fff; }
 
-		/* ── Quick action grid ── */
-		#mob-quickactions {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 10px;
-			padding: 0 16px;
-		}
-		.qcard {
-			background: #1a1b27;
-			border-radius: 16px;
-			padding: 20px 10px 16px;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			gap: 10px;
-			text-decoration: none !important;
-			color: rgba(255,255,255,0.75);
-			font-family: "Roboto", sans-serif;
-			font-size: 12px;
-			font-weight: 400;
-			border: 1px solid rgba(255,255,255,0.04);
-			box-shadow: 0 2px 14px rgba(0,0,0,0.25);
-			transition: background 0.15s, transform 0.12s;
-			-webkit-tap-highlight-color: transparent;
-			min-height: 100px;
-		}
-		.qcard:active { transform: scale(0.96); background: #22233a; }
-		.qcard-icon {
-			width: 42px; height: 42px;
-			background: rgba(228,76,101,0.1);
-			border-radius: 13px;
-			display: flex; align-items: center; justify-content: center;
-		}
+		#mob-quickactions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px; }
+		.qcard-full { grid-column: 1 / -1; }
+		.qcard { background: #1a1b27; border-radius: 16px; padding: 20px 10px 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-decoration: none !important; color: rgba(255,255,255,0.75); font-family: "Roboto", sans-serif; font-size: 12px; font-weight: 400; border: 1px solid rgba(255,255,255,0.04); box-shadow: 0 2px 14px rgba(0,0,0,0.25); transition: background 0.15s, transform 0.12s; -webkit-tap-highlight-color: transparent; min-height: 100px; }
+		.qcard.qcard-full { flex-direction: row; justify-content: flex-start; padding: 18px 20px; gap: 16px; min-height: unset; }
+		.qcard.qcard-full span { text-align: left; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.85); }
+		.qcard:active { transform: scale(0.98); background: #22233a; }
+		.qcard-icon { width: 42px; height: 42px; background: rgba(228,76,101,0.1); border-radius: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 		.qcard-icon svg { width: 22px; height: 22px; fill: #e44c65; }
 		.qcard span { text-align: center; line-height: 1.35; color: rgba(255,255,255,0.7); }
 
-		/* ── Staff action list ── */
-		#mob-staffactions {
-			display: flex;
-			flex-direction: column;
-			gap: 8px;
-			padding: 0 16px;
-		}
-		.scard {
-			background: #1a1b27;
-			border-radius: 14px;
-			padding: 14px 16px;
-			display: flex;
-			align-items: center;
-			gap: 13px;
-			text-decoration: none !important;
-			color: rgba(255,255,255,0.8);
-			font-family: "Roboto", sans-serif;
-			font-size: 14px;
-			border: 1px solid rgba(255,255,255,0.04);
-			-webkit-tap-highlight-color: transparent;
-			transition: background 0.12s;
-		}
+		#mob-staffactions { display: flex; flex-direction: column; gap: 8px; padding: 0 16px; }
+		.scard { background: #1a1b27; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 13px; text-decoration: none !important; color: rgba(255,255,255,0.8); font-family: "Roboto", sans-serif; font-size: 14px; border: 1px solid rgba(255,255,255,0.04); -webkit-tap-highlight-color: transparent; transition: background 0.12s; }
 		.scard:active { background: #22233a; }
-		.sc-icon {
-			width: 38px; height: 38px;
-			border-radius: 11px;
-			background: rgba(228,76,101,0.1);
-			display: flex; align-items: center; justify-content: center;
-			flex-shrink: 0;
-		}
+		.sc-icon { width: 38px; height: 38px; border-radius: 11px; background: rgba(228,76,101,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 		.sc-icon svg { width: 20px; height: 20px; fill: #e44c65; }
 		.sc-label { flex: 1; }
 		.sc-arrow svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.18); }
 		.scard.alert-card { border-color: rgba(228,76,101,0.3); }
 		.scard.alert-card .sc-icon { background: rgba(228,76,101,0.18); }
-		.sc-badge {
-			background: #e44c65;
-			color: #fff;
-			font-size: 9.5px;
-			font-weight: 700;
-			border-radius: 20px;
-			padding: 2px 9px;
-			letter-spacing: 0.5px;
-		}
+		.sc-badge { background: #e44c65; color: #fff; font-size: 9.5px; font-weight: 700; border-radius: 20px; padding: 2px 9px; letter-spacing: 0.5px; }
 
-		/* ── Mobile feedback ── */
-		#mob-feedback {
-			margin: 0 16px;
-			background: #1a1b27;
-			border-radius: 16px;
-			padding: 18px;
-			border: 1px solid rgba(255,255,255,0.04);
-		}
-		#mob-feedback h3 {
-			font-family: "Roboto", sans-serif;
-			font-size: 14px;
-			font-weight: 500;
-			color: rgba(255,255,255,0.85);
-			margin: 0 0 12px;
-			line-height: 1;
-		}
-		#mob-feedback textarea {
-			width: 100%;
-			box-sizing: border-box;
-			background: #12131c;
-			border: 1px solid rgba(255,255,255,0.08);
-			border-radius: 10px;
-			color: rgba(255,255,255,0.8);
-			font-family: "Roboto", sans-serif;
-			font-size: 13px;
-			padding: 12px;
-			resize: none;
-			outline: none;
-			-webkit-appearance: none;
-		}
+		#mob-feedback { margin: 0 16px; background: #1a1b27; border-radius: 16px; padding: 18px; border: 1px solid rgba(255,255,255,0.04); }
+		#mob-feedback h3 { font-family: "Roboto", sans-serif; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); margin: 0 0 12px; line-height: 1; }
+		#mob-feedback textarea { width: 100%; box-sizing: border-box; background: #12131c; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: rgba(255,255,255,0.8); font-family: "Roboto", sans-serif; font-size: 13px; padding: 12px; resize: none; outline: none; -webkit-appearance: none; }
 		#mob-feedback textarea:focus { border-color: rgba(228,76,101,0.6); }
-		#mob-feedback button {
-			margin-top: 10px;
-			width: 100%;
-			background: #e44c65;
-			color: #fff;
-			border: none;
-			border-radius: 10px;
-			padding: 13px;
-			font-family: "Roboto", sans-serif;
-			font-size: 14px;
-			font-weight: 500;
-			cursor: pointer;
-			-webkit-tap-highlight-color: transparent;
-		}
+		#mob-feedback button { margin-top: 10px; width: 100%; background: #e44c65; color: #fff; border: none; border-radius: 10px; padding: 13px; font-family: "Roboto", sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 		#mob-feedback button:active { background: #c03050; }
-		#mob-feedback-status {
-			font-family: "Roboto", sans-serif;
-			font-size: 12px;
-			margin-top: 8px;
-			text-align: center;
-			min-height: 18px;
-		}
+		#mob-feedback-status { font-family: "Roboto", sans-serif; font-size: 12px; margin-top: 8px; text-align: center; min-height: 18px; }
 
-		/* ── SOS toast ── */
-		#sos-toast {
-			display: none;
-			position: fixed;
-			bottom: 76px; left: 16px; right: 16px;
-			background: #1e1f2e;
-			color: #fff;
-			font-family: "Roboto", sans-serif;
-			font-size: 13px;
-			padding: 13px 18px;
-			border-radius: 12px;
-			z-index: 20000;
-			box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-			border-left: 3px solid #e44c65;
-			text-align: center;
-		}
+		#sos-toast { display: none; position: fixed; bottom: 76px; left: 16px; right: 16px; background: #1e1f2e; color: #fff; font-family: "Roboto", sans-serif; font-size: 13px; padding: 13px 18px; border-radius: 12px; z-index: 20000; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border-left: 3px solid #e44c65; text-align: center; }
 
-		/* ── Bottom nav ── */
-		#bottom-nav {
-			display: flex;
-			position: fixed;
-			bottom: 0; left: 0; right: 0;
-			height: 64px;
-			background: #1a1b27;
-			border-top: 1px solid rgba(255,255,255,0.07);
-			z-index: 9000;
-			box-shadow: 0 -2px 16px rgba(0,0,0,0.4);
-		}
-		.bnav-item {
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			text-decoration: none !important;
-			color: rgba(255,255,255,0.3);
-			font-size: 9.5px;
-			font-family: "Roboto", sans-serif;
-			gap: 4px;
-			cursor: pointer;
-			-webkit-tap-highlight-color: transparent;
-			padding: 6px 1px;
-			transition: color 0.15s;
-			border: none !important;
-			background: none;
-		}
+		#bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; background: #1a1b27; border-top: 1px solid rgba(255,255,255,0.07); z-index: 9000; box-shadow: 0 -2px 16px rgba(0,0,0,0.4); }
+		.bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none !important; color: rgba(255,255,255,0.3); font-size: 9.5px; font-family: "Roboto", sans-serif; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; padding: 6px 1px; transition: color 0.15s; border: none !important; background: none; }
 		.bnav-item svg { width: 22px; height: 22px; fill: currentColor; display: block; }
 		.bnav-item span { display: block; line-height: 1; }
 		.bnav-item.active { color: #e44c65; }
 		.bnav-item:hover  { color: #e44c65; }
 		.bnav-logout { color: rgba(228,76,101,0.4); }
-
 		.mob-spacer { height: 24px; }
 	}
 
-	/* ── Hide all mobile elements on desktop ── */
 	@media screen and (min-width: 737px) {
-		#mob-topbar, #mob-notif, #mob-content,
-		#sos-toast, #bottom-nav,
-		.mob-label, .mob-spacer { display: none !important; }
+		#mob-topbar, #mob-notif, #mob-content, #sos-toast, #bottom-nav, .mob-label, .mob-spacer { display: none !important; }
 	}
-
 	</style>
 </head>
 <body class="is-preload landing{% if notification %} has-marquee{% endif %}">
 <div id="page-wrapper">
 
-<!-- ═══════════════════════════════════════════════════════
-     DESKTOP HEADER
-     ═══════════════════════════════════════════════════════ -->
+<!-- DESKTOP HEADER -->
 <header id="header">
 	<h1 id="logo"><a href="/home">E-COPS</a></h1>
 	<nav id="nav">
 		<ul>
 			<li><label id="sos-status">Hello, {{ request.session.external_username }}</label></li>
-
 			{% if role == "sm" %}
 				<li><a href="/system_manager/sos_alerts" class="button primary">SOS Alerts</a></li>
 				<li><a href="/home">Home</a></li>
@@ -670,20 +187,16 @@
 				<li><a href="#" id="sos-btn" title="Send SOS"><img width="44" height="42" src="{% static 'images/sos_button.png' %}" alt="SOS"></a></li>
 				<li><a href="/home">Home</a></li>
 			{% endif %}
-
 			{% if role == "sho" or role == "cm" or role == "sm" %}
-				{% if role == "cm" %}
-					<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
+				{% if role == "cm" %}<li><a href="/manage_complaint_cm" class="button">Manage Complaint</a></li>
 				{% elif role == "sm" %}
 					<li><a href="/manage_complaint_sm" class="button">Manage Complaint</a></li>
 					<li><a href="/manage_users" class="button">Manage Users</a></li>
 					<li><a href="/manage_notification" class="button">Manage Notification</a></li>
-				{% else %}
-					<li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
+				{% else %}<li><a href="/manage_complaint" class="button">Manage Complaint</a></li>
 				{% endif %}
 				<li><a href="/manage_feedback">Manage Feedback</a></li>
 			{% endif %}
-
 			{% if role != "sho" and role != "cm" and role != "sm" %}
 				<li>
 					<a href="#">Services <img style="vertical-align:middle;margin-left:4px;" src="{% static '/images/arrow.svg' %}" width="24" height="24"></a>
@@ -694,7 +207,6 @@
 					</ul>
 				</li>
 			{% endif %}
-
 			<li><a href="/" class="button primary">Logout</a></li>
 		</ul>
 	</nav>
@@ -706,9 +218,7 @@
 </div>
 {% endif %}
 
-<!-- ═══════════════════════════════════════════════════════
-     DESKTOP PAGE CONTENT (hidden on mobile via CSS)
-     ═══════════════════════════════════════════════════════ -->
+<!-- DESKTOP PAGE CONTENT -->
 <section id="banner">
 	<div class="content">
 		<header>
@@ -719,27 +229,19 @@
 	</div>
 	<a href="#one" class="goto-next scrolly">Next</a>
 </section>
-
 <section id="one" class="spotlight style1 bottom">
 	<span class="image fit main"><img src="{% static 'images/cell.avif' %}" alt="" /></span>
 	<div class="content">
 		<div class="container">
 			<div class="row">
-				<div class="col-4 col-12-medium">
-					<header><h2 style="font-weight:bold;">Easily register and track your complaints online — fast, simple, and transparent</h2></header>
-				</div>
-				<div class="col-4 col-12-medium">
-					<p style="font-family:Arial,Helvetica,sans-serif;">Our system allows users to seamlessly register issues, monitor progress in real-time, and ensure timely resolution through a transparent process.</p>
-				</div>
-				<div class="col-4 col-12-medium">
-					<p style="font-family:Arial,Helvetica,sans-serif;">Submit complaints, receive acknowledgment, track status at every stage, and ensure issues are addressed in a timely and transparent manner.</p>
-				</div>
+				<div class="col-4 col-12-medium"><header><h2 style="font-weight:bold;">Easily register and track your complaints online — fast, simple, and transparent</h2></header></div>
+				<div class="col-4 col-12-medium"><p style="font-family:Arial,Helvetica,sans-serif;">Our system allows users to seamlessly register issues, monitor progress in real-time, and ensure timely resolution through a transparent process.</p></div>
+				<div class="col-4 col-12-medium"><p style="font-family:Arial,Helvetica,sans-serif;">Submit complaints, receive acknowledgment, track status at every stage, and ensure issues are addressed in a timely and transparent manner.</p></div>
 			</div>
 		</div>
 	</div>
 	<a href="#two" class="goto-next scrolly">Next</a>
 </section>
-
 <section id="two" class="spotlight style2 right">
 	<span class="image fit main"><img src="{% static 'images/jdt1.jpg' %}" alt="" /></span>
 	<div class="content">
@@ -748,7 +250,6 @@
 	</div>
 	<a href="#four" class="goto-next scrolly">Next</a>
 </section>
-
 <section id="four" class="wrapper style1 special fade-up">
 	<div class="container">
 		<div class="box alt">
@@ -773,10 +274,7 @@
 
 </div><!-- /#page-wrapper -->
 
-<!-- ═══════════════════════════════════════════════════════
-     MOBILE APP UI  (hidden on desktop via CSS)
-     ═══════════════════════════════════════════════════════ -->
-
+<!-- MOBILE APP UI -->
 <div id="mob-topbar">
 	<a href="/home" class="tb-brand">E-COPS</a>
 	<span class="tb-user">{{ request.session.external_username }}</span>
@@ -789,8 +287,6 @@
 {% endif %}
 
 <div id="mob-content">
-
-	<!-- Hero -->
 	<div id="mob-hero">
 		<div class="hero-text">
 			<h2>Welcome back 👋</h2>
@@ -799,27 +295,19 @@
 		<img class="hero-logo" src="{% static 'images/Kerala_State_Police_Logo.png' %}" alt="Logo">
 	</div>
 
-	<!-- ── PUBLIC USER ── -->
 	{% if role != "sho" and role != "cm" and role != "sm" %}
-
-		<!-- SOS -->
 		<div id="mob-sos-banner" onclick="triggerSOS()">
-			<div class="sos-icon">
-				<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-			</div>
+			<div class="sos-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
 			<div class="sos-text">
 				<strong>SOS Emergency Alert</strong>
 				<span>Tap to send your location to CMS</span>
 			</div>
-			<div class="sos-chevron">
-				<svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg>
-			</div>
+			<div class="sos-chevron"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
 		</div>
 
-		<!-- Services -->
 		<div class="mob-label">Services</div>
 		<div id="mob-quickactions">
-			<a href="/complaint" class="qcard">
+			<a href="/complaint" class="qcard qcard-full">
 				<div class="qcard-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
 				<span>Register Complaint</span>
 			</a>
@@ -831,13 +319,8 @@
 				<div class="qcard-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
 				<span>Download Complaint</span>
 			</a>
-			<a href="/manage_feedback" class="qcard">
-				<div class="qcard-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg></div>
-				<span>View Feedback</span>
-			</a>
 		</div>
 
-		<!-- Feedback -->
 		<div class="mob-label">Anonymous Feedback</div>
 		<div id="mob-feedback">
 			<h3>Share your feedback</h3>
@@ -845,32 +328,26 @@
 			<button id="mob_feedback_btn">Send Feedback</button>
 			<p id="mob-feedback-status"></p>
 		</div>
-
 	{% endif %}
 
-	<!-- ── STAFF UI ── -->
 	{% if role == "sho" or role == "cm" or role == "sm" %}
 		<div class="mob-label">Management</div>
 		<div id="mob-staffactions">
-
 			<a href="{% if role == 'sm' %}/system_manager/sos_alerts{% else %}/home/sos_alerts{% endif %}" class="scard alert-card">
 				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
 				<span class="sc-label">SOS Alerts</span>
 				<span class="sc-badge">LIVE</span>
 			</a>
-
 			<a href="{% if role == 'cm' %}/manage_complaint_cm{% elif role == 'sm' %}/manage_complaint_sm{% else %}/manage_complaint{% endif %}" class="scard">
 				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg></div>
 				<span class="sc-label">Manage Complaints</span>
 				<div class="sc-arrow"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
 			</a>
-
 			<a href="/manage_feedback" class="scard">
 				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
 				<span class="sc-label">Manage Feedback</span>
 				<div class="sc-arrow"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
 			</a>
-
 			{% if role == "sm" %}
 			<a href="/manage_users" class="scard">
 				<div class="sc-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
@@ -883,27 +360,20 @@
 				<div class="sc-arrow"><svg viewBox="0 0 24 24"><path d="M9.29 6.71a1 1 0 0 0 0 1.41L13.17 12l-3.88 3.88a1 1 0 0 0 1.41 1.41l4.59-4.59a1 1 0 0 0 0-1.41L10.7 6.7a1 1 0 0 0-1.41.01z"/></svg></div>
 			</a>
 			{% endif %}
-
 		</div>
 	{% endif %}
 
 	<div class="mob-spacer"></div>
-</div><!-- /#mob-content -->
+</div>
 
-<!-- SOS toast -->
 <div id="sos-toast"></div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MOBILE BOTTOM NAV
-     ═══════════════════════════════════════════════════════ -->
 <nav id="bottom-nav">
 	<a href="/home" class="bnav-item active">
 		<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
 		<span>Home</span>
 	</a>
-
 	{% if role == "sho" or role == "cm" or role == "sm" %}
-
 		<a href="{% if role == 'cm' %}/manage_complaint_cm{% elif role == 'sm' %}/manage_complaint_sm{% else %}/manage_complaint{% endif %}" class="bnav-item">
 			<svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
 			<span>Complaints</span>
@@ -914,21 +384,17 @@
 			<span>SOS</span>
 		</a>
 		{% endif %}
-
 		<a href="/manage_feedback" class="bnav-item">
 			<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
 			<span>Feedback</span>
 		</a>
-
 		{% if role == "sm" %}
 		<a href="/manage_users" class="bnav-item">
 			<svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
 			<span>Users</span>
 		</a>
 		{% endif %}
-
 	{% else %}
-
 		<a href="/complaint" class="bnav-item">
 			<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
 			<span>Complain</span>
@@ -941,18 +407,14 @@
 			<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
 			<span>Download</span>
 		</a>
-
 	{% endif %}
-
 	<a href="/" class="bnav-item bnav-logout">
 		<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
 		<span>Logout</span>
 	</a>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════════
-     SCRIPTS
-     ═══════════════════════════════════════════════════════ -->
+<!-- SCRIPTS -->
 <script src="{% static 'assets/js/jquery.min.js' %}"></script>
 <script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
 <script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
@@ -963,30 +425,70 @@
 <script src="{% static 'assets/js/main.js' %}"></script>
 
 <script>
-/* ── SOS ── */
-function showToast(msg) {
+/* ══════════════════════════════════════════════════════════
+   SOS status display (updates both nav label + mobile toast)
+   ══════════════════════════════════════════════════════════ */
+function showSOSStatus(msg) {
+	$('#sos-status').text(msg);
 	clearTimeout(window._tt);
 	$('#sos-toast').text(msg).fadeIn(180);
-	window._tt = setTimeout(function(){ $('#sos-toast').fadeOut(350); }, 3200);
+	window._tt = setTimeout(function(){
+		$('#sos-toast').fadeOut(350);
+		$('#sos-status').text('Hello, {{ request.session.external_username }}');
+	}, 3200);
 }
+
+/* ── POST coords to Django ── */
+function sendSOS(lat, lng) {
+	showSOSStatus('📡 Sending SOS…');
+	fetch("{% url 'sos' %}", {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ latitude: lat, longitude: lng })
+	})
+	.then(function(r){ return r.json(); })
+	.then(function(d){ showSOSStatus(d.ok ? '✅ SOS sent!' : '❌ Error: ' + d.error); })
+	.catch(function(){ showSOSStatus('❌ Network error.'); });
+}
+
+/* ══════════════════════════════════════════════════════════
+   Android location bridge callbacks.
+   Called by Java after AndroidLocation.getLocation() finishes.
+   ══════════════════════════════════════════════════════════ */
+window.onAndroidLocation = function(lat, lng) {
+	sendSOS(lat, lng);
+};
+window.onAndroidLocationError = function(msg) {
+	showSOSStatus('❌ ' + msg);
+};
+
+/* ══════════════════════════════════════════════════════════
+   triggerSOS
+   - In the Android app  → uses window.AndroidLocation bridge
+     (bypasses HTTPS restriction, works on HTTP)
+   - In a desktop browser → uses navigator.geolocation
+     (requires HTTPS in Chrome/Firefox/Safari)
+   ══════════════════════════════════════════════════════════ */
 function triggerSOS() {
-	if (!navigator.geolocation) { showToast('Geolocation not supported.'); return; }
-	showToast('📍 Getting your location…');
+	showSOSStatus('📍 Getting your location…');
+
+	if (window.AndroidLocation) {
+		// Native bridge available — Java will call onAndroidLocation() with result
+		window.AndroidLocation.getLocation();
+		return;
+	}
+
+	// Desktop/HTTPS fallback
+	if (!navigator.geolocation) {
+		showSOSStatus('❌ Geolocation not supported.');
+		return;
+	}
 	navigator.geolocation.getCurrentPosition(
-		function(pos) {
-			showToast('📡 Sending SOS…');
-			fetch("{% url 'sos' %}", {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ latitude: pos.coords.latitude, longitude: pos.coords.longitude })
-			})
-			.then(function(r){ return r.json(); })
-			.then(function(d){ showToast(d.ok ? '✅ SOS sent!' : '❌ Error: ' + d.error); })
-			.catch(function(e){ showToast('❌ Network error.'); });
-		},
-		function(e){ showToast('❌ Location error: ' + e.message); }
+		function(pos) { sendSOS(pos.coords.latitude, pos.coords.longitude); },
+		function(e)   { showSOSStatus('❌ Location error: ' + e.message); }
 	);
 }
+
 $('#sos-btn').on('click', function(e){ e.preventDefault(); triggerSOS(); });
 
 /* ── Desktop feedback ── */
@@ -1018,8 +520,6 @@ $('#mob_feedback_btn').on('click', function() {
 		else { $s.css('color','#e44c65').text(d.error); }
 	}).catch(function(){ $s.css('color','#e44c65').text('Network error.'); });
 });
-
-
 </script>
 </body>
 </html>

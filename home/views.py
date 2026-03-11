@@ -41,13 +41,20 @@ def portfolio_rahil(request):
 def sos(request):
     try:
         data = json.loads(request.body.decode("utf-8"))
-
         lat = data.get("latitude")
         lng = data.get("longitude")
+
+        # ✅ Validate FIRST before using the values
+        if lat is None or lng is None:
+            return JsonResponse({"ok": False, "error": "Missing latitude or longitude"}, status=400)
+
+        lat = float(lat)
+        lng = float(lng)
 
         username = request.session.get("external_username")
         geolocator = Nominatim(user_agent="coord_to_district_example")
         location = geolocator.reverse((lat, lng), language="en")
+        # ... rest of your code
 
         if not location:
             return None
