@@ -111,6 +111,13 @@
   animation: pulse 1.6s infinite;
 }
 
+/* ── top-right cluster: timestamp + share ── */
+.card-top-right {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
 .card-timestamp {
   font-size: 11px;
   color: var(--muted);
@@ -118,6 +125,108 @@
   text-align: right;
   line-height: 1.4;
 }
+
+/* ── Share button ── */
+.share-btn {
+  position: relative;
+  flex-shrink: 0;
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s, border-color .15s;
+  outline: none;
+  padding: 0;
+}
+.share-btn:hover {
+  background: rgba(228,76,101,0.12);
+  border-color: rgba(228,76,101,0.35);
+  color: var(--accent);
+}
+.share-btn svg { width: 15px; height: 15px; fill: currentColor; }
+
+/* ── Share sheet (dropdown) ── */
+.share-sheet {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 9999;
+  background: #1e2233;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 10px;
+  min-width: 220px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(228,76,101,0.08);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  /* entrance anim */
+  animation: sheetIn 0.2s ease both;
+}
+.share-sheet.open { display: flex; }
+
+@keyframes sheetIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.share-sheet-title {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 6px 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 4px;
+}
+
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--body-font);
+  font-size: 13px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background .12s, color .12s;
+  text-decoration: none;
+}
+.share-option:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+.share-option .so-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+/* App icon colors */
+.so-icon.whatsapp  { background: #1fbe55; }
+.so-icon.telegram  { background: #2aabee; }
+.so-icon.maps      { background: #ea4335; }
+.so-icon.copy      { background: #6366f1; }
+.so-icon.native    { background: rgba(228,76,101,0.8); }
+
+.share-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 4px 0;
+}
+
+/* ════════════════════════════════════════ */
 
 .card-alert-title {
   font-size: 13px;
@@ -210,6 +319,29 @@
 .empty-state svg { opacity: 0.25; margin-bottom: 12px; }
 .empty-state p { font-size: 15px; margin: 0; }
 
+/* copy feedback toast */
+.copy-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #22c55e;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
+  z-index: 99999;
+  white-space: nowrap;
+}
+.copy-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* ════════════════════════════════════════
    MOBILE OVERRIDES
 ════════════════════════════════════════ */
@@ -220,7 +352,7 @@
     padding: 0 !important;
   }
 
-  .sos-page-title { display: none; } /* title shown in topbar */
+  .sos-page-title { display: none; }
 
   .cards-grid {
     display: flex;
@@ -235,11 +367,9 @@
     border-radius: 20px;
     padding: 16px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    /* slide-up entrance */
     animation: slideUp 0.35s ease both;
   }
 
-  /* Stagger card animations */
   .alert-card:nth-child(1) { animation-delay: 0.05s; }
   .alert-card:nth-child(2) { animation-delay: 0.10s; }
   .alert-card:nth-child(3) { animation-delay: 0.15s; }
@@ -248,7 +378,6 @@
 
   .map-box { height: 190px; }
 
-  /* Mobile info grid single col on very small screens */
   @media screen and (max-width: 380px) {
     .info-grid { grid-template-columns: 1fr; }
   }
@@ -301,19 +430,93 @@
   <h2>SOS ALERTS</h2>
 </div>
 
+<!-- Copy toast -->
+<div class="copy-toast" id="copy-toast">📋 Location copied!</div>
+
 <div class="cards-grid">
 {% for item in objects %}
   <div class="alert-card">
 
-    <!-- Top row: badge + timestamp -->
+    <!-- Top row: badge + timestamp + share -->
     <div class="card-top-row">
       <span class="sos-badge">
         <span class="dot"></span>
         SOS #{{ item.id }}
       </span>
-      <div class="card-timestamp">
-        {{ item.created_at|date:"d M Y" }}<br>
-        {{ item.created_at|date:"H:i:s" }}
+
+      <div class="card-top-right">
+        <div class="card-timestamp">
+          {{ item.created_at|date:"d M Y" }}<br>
+          {{ item.created_at|date:"H:i:s" }}
+        </div>
+
+        <!-- Share button -->
+        <div style="position:relative;">
+          <button
+            class="share-btn"
+            onclick="toggleShare(event, 'sheet-{{ item.id }}')"
+            title="Share location"
+            aria-label="Share location"
+          >
+            <!-- Upload/share icon -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.99 2.99 0 0 0 18 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81A2.99 2.99 0 0 0 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3a2.99 2.99 0 0 0 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+            </svg>
+          </button>
+
+          <!-- Share sheet -->
+          <div class="share-sheet" id="sheet-{{ item.id }}">
+            <div class="share-sheet-title">Share Location</div>
+
+            <!-- WhatsApp -->
+            <button class="share-option"
+               onclick="openApp('whatsapp', '{{ item.id }}', '{{ item.latitude }}', '{{ item.longitude }}', '{{ item.username }}', '{{ item.district }}'); closeSheet('sheet-{{ item.id }}');">
+              <span class="so-icon whatsapp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.487 2 2.003 6.484 2 11.996c-.001 1.956.52 3.868 1.507 5.546L2 22.004l4.604-1.487c1.617.876 3.439 1.341 5.397 1.341h.004c5.516 0 9.999-4.484 10.001-9.996.001-2.668-1.036-5.175-2.921-7.061A9.954 9.954 0 0 0 12.004 2z"/></svg>
+              </span>
+              WhatsApp
+            </button>
+
+            <!-- Telegram -->
+            <button class="share-option"
+               onclick="openApp('telegram', '{{ item.id }}', '{{ item.latitude }}', '{{ item.longitude }}', '{{ item.username }}', '{{ item.district }}'); closeSheet('sheet-{{ item.id }}');">
+              <span class="so-icon telegram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+              </span>
+              Telegram
+            </button>
+
+            <!-- Google Maps -->
+            <button class="share-option"
+               onclick="openApp('maps', '{{ item.id }}', '{{ item.latitude }}', '{{ item.longitude }}', '{{ item.username }}', '{{ item.district }}'); closeSheet('sheet-{{ item.id }}');">
+              <span class="so-icon maps">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </span>
+              Open in Maps
+            </button>
+
+            <div class="share-divider"></div>
+
+            <!-- Copy coords -->
+            <button class="share-option"
+                    onclick="copyCoords('{{ item.latitude }}', '{{ item.longitude }}', 'sheet-{{ item.id }}')">
+              <span class="so-icon copy">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              </span>
+              Copy Coordinates
+            </button>
+
+            <!-- Native share (mobile) -->
+            <button class="share-option" id="native-share-{{ item.id }}"
+                    onclick="nativeShare('{{ item.id }}', '{{ item.latitude }}', '{{ item.longitude }}', '{{ item.username }}', '{{ item.district }}', 'sheet-{{ item.id }}')"
+                    style="display:none;">
+              <span class="so-icon native">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.99 2.99 0 0 0 18 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81A2.99 2.99 0 0 0 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3a2.99 2.99 0 0 0 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+              </span>
+              More Options…
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -364,6 +567,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+/* ── Map init ── */
 function initMap(id, lat, lng) {
   const map = L.map(id, { zoomControl: false, attributionControl: false }).setView([lat, lng], 14);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
@@ -394,6 +598,126 @@ document.addEventListener("DOMContentLoaded", function () {
       initMap("map-{{ item.id }}", {{ item.latitude }}, {{ item.longitude }});
     {% endif %}
   {% endfor %}
+
+  /* Show "More Options…" only if Web Share API is available (mobile) */
+  if (navigator.share) {
+    document.querySelectorAll('[id^="native-share-"]').forEach(el => el.style.display = 'flex');
+  }
+
+  /* Close sheet on outside click */
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.share-btn') && !e.target.closest('.share-sheet')) {
+      document.querySelectorAll('.share-sheet.open').forEach(s => s.classList.remove('open'));
+    }
+  });
 });
+
+/* ── Toggle share sheet ── */
+function toggleShare(e, sheetId) {
+  e.stopPropagation();
+  const sheet = document.getElementById(sheetId);
+  const isOpen = sheet.classList.contains('open');
+  document.querySelectorAll('.share-sheet.open').forEach(s => s.classList.remove('open'));
+  if (!isOpen) sheet.classList.add('open');
+}
+
+function closeSheet(sheetId) {
+  setTimeout(() => document.getElementById(sheetId)?.classList.remove('open'), 120);
+}
+
+/* ── Open app — WebView-safe deep links ── */
+function openApp(app, id, lat, lng, username, district) {
+  const mapsUrl   = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  const waText    = encodeURIComponent(`🚨 SOS Alert #${id}\nUser: ${username} | District: ${district}\nLocation: ${mapsUrl}`);
+  const tgText    = encodeURIComponent(`🚨 SOS Alert #${id} — ${username}, ${district}`);
+  const tgUrl     = encodeURIComponent(mapsUrl);
+
+  let appUri   = null;   // deep-link / intent URI (opens the app)
+  let webUrl   = null;   // https fallback if app not installed
+
+  if (app === 'whatsapp') {
+    appUri = `whatsapp://send?text=${waText}`;
+    webUrl = `https://web.whatsapp.com/`;
+  } else if (app === 'telegram') {
+    appUri = `tg://msg?text=${tgText}%20${tgUrl}`;
+    webUrl = `https://t.me/share/url?url=${tgUrl}&text=${tgText}`;
+  } else if (app === 'maps') {
+    // geo: URI is handled natively by Android without WebView blocking
+    appUri = `geo:${lat},${lng}?q=${lat},${lng}(SOS+Alert+%23${id})`;
+    webUrl = mapsUrl;
+  }
+
+  if (!appUri) return;
+
+  /* Try the deep-link first. Android WebView will either:
+     - launch the installed app (success), OR
+     - throw an error (app not installed) → we catch and open the web fallback */
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  let launched = false;
+
+  // Use visibilitychange trick: if the app opens, the page goes hidden
+  const handleVis = () => {
+    if (document.hidden) launched = true;
+  };
+  document.addEventListener('visibilitychange', handleVis);
+
+  // Attempt deep link
+  try {
+    iframe.contentWindow.location.href = appUri;
+  } catch(e) {}
+
+  setTimeout(() => {
+    document.removeEventListener('visibilitychange', handleVis);
+    document.body.removeChild(iframe);
+    if (!launched) {
+      // App didn't open — fall back to https URL
+      window.open(webUrl, '_blank');
+    }
+  }, 1200);
+}
+
+/* ── Copy coordinates ── */
+function copyCoords(lat, lng, sheetId) {
+  const text = `${lat}, ${lng}`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast('📋 Coordinates copied!')).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+  closeSheet(sheetId);
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); showToast('📋 Coordinates copied!'); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+/* ── Native share (mobile) ── */
+function nativeShare(id, lat, lng, username, district, sheetId) {
+  closeSheet(sheetId);
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  if (navigator.share) {
+    navigator.share({
+      title: `SOS Alert #${id}`,
+      text: `🚨 SOS Alert #${id}\nUser: ${username} | District: ${district}`,
+      url: mapsUrl
+    });
+  }
+}
+
+/* ── Toast helper ── */
+function showToast(msg) {
+  const t = document.getElementById('copy-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
 </script>
 {% endblock %}
