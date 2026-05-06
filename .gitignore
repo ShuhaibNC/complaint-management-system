@@ -1,1 +1,3 @@
-complaint_management_system/settings.py
+__pycache__/
+.vscode/
+cmsenv/
