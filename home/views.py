@@ -24,17 +24,17 @@ def index(request):
 def base(request):
     return render(request, 'home/base.html')
 
-def portfolio_adnan(request):
-    return render(request, 'home/portfolio_adnan.html')
+# def portfolio_adnan(request):
+#     return render(request, 'home/portfolio_adnan.html')
 
-def portfolio_fadhis(request):
-    return render(request, 'home/portfolio_fadhis.html')
+# def portfolio_fadhis(request):
+#     return render(request, 'home/portfolio_fadhis.html')
 
-def portfolio_sajas(request):
-    return render(request, 'home/portfolio_sajas.html')
+# def portfolio_sajas(request):
+#     return render(request, 'home/portfolio_sajas.html')
 
-def portfolio_rahil(request):
-    return render(request, 'home/portfolio_rahil.html')
+# def portfolio_rahil(request):
+#     return render(request, 'home/portfolio_rahil.html')
 
 @csrf_exempt
 @require_POST
